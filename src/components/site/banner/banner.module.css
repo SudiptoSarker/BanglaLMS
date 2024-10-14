@@ -1,0 +1,19 @@
+.headerSection {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  font: 400 14px Inter, sans-serif;
+}
+
+.headerImage {
+  aspect-ratio: 3.91;
+  object-fit: contain;
+  object-position: center;
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .headerImage {
+    max-width: 100%;
+  }
+}

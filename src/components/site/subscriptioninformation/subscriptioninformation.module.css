@@ -1,0 +1,75 @@
+.subscriptionInformation {
+    background-color: #f4eded;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    color: #464952;
+    text-align: center;
+    justify-content: center;
+    padding: 74px 80px;
+    font: 400 14px/1 Inter, sans-serif;
+  }
+  
+  @media (max-width: 991px) {
+    .subscriptionInformation {
+      padding: 0 20px;
+    }
+  }
+  
+  .container {
+    display: flex;
+    width: 756px;
+    max-width: 100%;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .heading {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  
+  @media (max-width: 991px) {
+    .heading {
+      max-width: 100%;
+    }
+  }
+  
+  .infoText {
+    align-self: stretch;
+    margin-top: 42px;
+  }
+  
+  @media (max-width: 991px) {
+    .infoText {
+      max-width: 100%;
+      margin-top: 40px;
+    }
+  }
+  
+  .paymentInfo {
+    color: #000;
+    line-height: 20px;
+    margin-top: 187px;
+  }
+  
+  @media (max-width: 991px) {
+    .paymentInfo {
+      max-width: 100%;
+      margin-top: 40px;
+    }
+  }
+  
+  .subscriptionRelatedInfo {
+    color: #000;
+    line-height: 20px;
+    margin-top: 66px;
+  }
+  
+  @media (max-width: 991px) {
+    .subscriptionRelatedInfo {
+      max-width: 100%;
+      margin-top: 40px;
+    }
+  }

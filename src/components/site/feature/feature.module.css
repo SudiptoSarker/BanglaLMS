@@ -1,0 +1,48 @@
+.featureSections {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+  }
+  
+  .heading {
+    color: #000;
+    text-align: center;
+    font: 400 15px/1 Inter, sans-serif;
+  }
+  
+  .overview {
+    color: #464952;
+    text-align: center;
+    margin-top: 67px;
+    font: 400 14px/1 Inter, sans-serif;
+  }
+  
+  .servicesContainer {
+    align-self: stretch;
+    margin-top: 126px;
+    width: 100%;
+  }
+  
+  .servicesGrid {
+    display: flex;
+    gap: 20px;
+  }
+  
+  @media (max-width: 991px) {
+    .overview {
+      max-width: 100%;
+      margin-top: 40px;
+    }
+  
+    .servicesContainer {
+      max-width: 100%;
+      margin-top: 40px;
+    }
+  
+    .servicesGrid {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+  }

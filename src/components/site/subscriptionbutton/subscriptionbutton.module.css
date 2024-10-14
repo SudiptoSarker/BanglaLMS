@@ -1,0 +1,16 @@
+.button {
+    border-radius: 8px;
+    background-color: rgba(92, 76, 76, 0.57);
+    max-width: 619px;
+    color: #fff;
+    text-align: center;
+    padding: 25px 70px;
+    font: 700 14px/1 Inter, sans-serif;
+    border: 1px solid #b1252a;
+  }
+  
+  @media (max-width: 991px) {
+    .button {
+      padding: 0 20px;
+    }
+  }

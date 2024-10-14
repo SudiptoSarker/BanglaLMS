@@ -1,0 +1,16 @@
+.loginForm {
+    border-radius: 8px;
+    background-color: rgba(92, 76, 76, 0.57);
+    max-width: 619px;
+    color: #fff;
+    text-align: center;
+    padding: 30px 70px;
+    font: 700 14px/1 Inter, sans-serif;
+    border: 1px solid rgba(177, 37, 42, 1);
+  }
+  
+  @media (max-width: 991px) {
+    .loginForm {
+      padding: 20px;
+    }
+  }

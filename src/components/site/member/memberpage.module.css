@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    max-width: 905px;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    font-family: Inter, sans-serif;
+    color: #000;
+    font-weight: 700;
+    text-align: center;
+  }
+  
+  .instruction {
+    font-size: 15px;
+    line-height: 1;
+  }
+  
+  .title {
+    font-size: 18px;
+    line-height: 1;
+    margin-top: 36px;
+  }
+  
+  .licenseKey {
+    border-radius: 8px;
+    background-color: #fff;
+    align-self: stretch;
+    margin-top: 30px;
+    width: 100%;
+    font-size: 24px;
+    color: #008000;
+    white-space: nowrap;
+    line-height: 1;
+    padding: 25px 70px;
+    border: 1px solid #b1252a;
+  }
+  
+  @media (max-width: 991px) {
+    .licenseKey {
+      max-width: 100%;
+      white-space: initial;
+      padding: 25px 20px;
+    }
+  }

@@ -1,0 +1,40 @@
+.serviceCard {
+    display: flex;
+    min-height: 285px;
+    flex-direction: column;
+    overflow: hidden;
+    align-items: center;
+    color: #000;
+    text-align: center;
+    justify-content: center;
+    font: 400 14px Inter, sans-serif;
+  }
+  
+  .serviceIcon {
+    aspect-ratio: 1;
+    object-fit: contain;
+    object-position: center;
+    width: 148px;
+    max-width: 100%;
+  }
+  
+  .serviceTitle {
+    line-height: 1;
+    margin-top: 18px;
+  }
+  
+  .serviceDescription {
+    line-height: 20px;
+    margin-top: 18px;
+  }
+  
+  @media (max-width: 991px) {
+    .serviceCard {
+      max-width: 100%;
+      margin-top: 40px;
+    }
+  
+    .serviceDescription {
+      max-width: 100%;
+    }
+  }

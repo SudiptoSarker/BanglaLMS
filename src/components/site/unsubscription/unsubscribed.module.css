@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    max-width: 480px;
+    width: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    color: #000;
+    white-space: nowrap;
+    text-align: center;
+    margin: 0 auto;
+    font: 400 24px/1 Inter, sans-serif;
+  }
+  
+  .confirmationImage {
+    aspect-ratio: 0.9;
+    object-fit: contain;
+    object-position: center;
+    width: 100%;
+    align-self: start;
+  }
+  
+  .contentWrapper {
+    display: flex;
+    margin-top: 185px;
+    width: 100%;
+    padding-left: 15px;
+    flex-direction: column;
+    align-items: start;
+  }
+  
+  .thankYouMessage {
+    align-self: stretch;
+    margin-top: 48px;
+  }
+  
+  .returnButton {
+    align-self: stretch;
+    border-radius: 10px;
+    background-color: rgba(0, 128, 0, 0.6);
+    min-height: 58px;
+    color: #fff;
+    margin: 113px 0 0 40px;
+    padding: 19px 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    font-family: Inter, sans-serif;
+  }
