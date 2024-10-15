@@ -1,8 +1,28 @@
 import { queryDatabase } from '@/lib/config';
+import fs from 'fs'
+import path from 'path'
 
 export default async function handler(req, res) {
 
     try{
+
+        // custom log
+        {
+            let fileName = Date.now() + Math.random()+'_release.txt';
+
+            const filePath = path.resolve('.', 'custom_logs/'+fileName);
+            
+            let requestString = '';
+            requestString += 'headers: '+JSON.stringify(req.headers);
+            requestString += '\nbody: '+JSON.stringify(req.body);
+            requestString += '\nquery: '+JSON.stringify(req.query);
+            requestString += '\ncookies: '+JSON.stringify(req.cookies);
+            fs.writeFile(filePath,requestString,{flag: 'a+'},(err)=>{
+                console.log('File written!');
+            });
+        }
+
+
         let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002750","act":"rel","cs":"20241001000000000","iai_tms":"20240904192455905","iai_paytype":"00","iai_ordid":"202409046fc1693bf60e81e074","arg":""};
         //let jsonBody = JSON.stringify(req.body);
         //let cs = jsonBody['cs'];
@@ -12,7 +32,7 @@ export default async function handler(req, res) {
 
         // get site id from ci
         // code here for site id
-        let siteId=95;
+        let siteId=4;
 
         
          const query = `
