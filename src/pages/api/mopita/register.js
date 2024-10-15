@@ -33,7 +33,7 @@ export default async function handler(req, res) {
 
         // get site id from ci
         // code here for site id
-        let siteId=4;
+        let siteId=1;
 
          const query = `
             SELECT id, name, source, reglink, rellink, sourcetable AS tableName
@@ -45,7 +45,7 @@ export default async function handler(req, res) {
         if(siteDataList.length > 0){
             let siteData = siteDataList[0];
 
-            if(siteData.tableName==null){
+            if(siteData.source.toLowerCase() == 'webapi'){
                 // url get from db.
                 //let _url = `http://localhost:3000/api/license-issue?purchase={cs}&subscription={ci}&user={uid}&act={act}`;
                 
@@ -87,7 +87,36 @@ export default async function handler(req, res) {
                 
             }
             else{
-                res.status(200).send('for db');
+
+                const queryLicense = `
+                        SELECT * from [${siteId}_licensetbl] where ci='${ci}'
+                    `;
+                let licenseData = await queryDatabase(queryLicense);
+                if(licenseData.length > 0){
+                    let _validity = new Date(licenseData[0].validity).toISOString();
+                    let insertQuery = `insert into membertable (siteid,ci,muid,licensekey,validity,status) values
+                                        ('${siteId}','${ci}','${uid}','${licenseData[0].licensekey}','${_validity}',1);SELECT SCOPE_IDENTITY() AS newId;`;
+                    let insertResults = await queryDatabase(insertQuery);
+
+                    if(insertResults[0].newId > 0){
+                        const deactivateQuery = `
+                            update [${siteId}_licensetbl] set active=0 where id=${licenseData[0].id}; SELECT @@ROWCOUNT  AS affectedRow;
+                        `;
+                        let deactivateResult = await queryDatabase(deactivateQuery);
+                        if(deactivateResult[0].affectedRow > 0){
+                            res.status(200).send('OK¥n')
+                        }
+                        else{
+                            res.status(200).send('NG¥n');
+                        }
+                    }
+                    else{
+                        res.status(200).send('NG¥n');
+                    }
+                }
+                else{
+                    res.status(200).send('NG¥n');
+                }
             }
         }
         else{

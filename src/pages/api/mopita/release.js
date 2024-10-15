@@ -32,7 +32,7 @@ export default async function handler(req, res) {
 
         // get site id from ci
         // code here for site id
-        let siteId=4;
+        let siteId=1;
 
         
          const query = `
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
         if(siteDataList.length > 0){
             let siteData = siteDataList[0];
 
-            if(siteData.tableName==null){
+            if(siteData.source.toLowerCase() == 'webapi'){
                 let _url = siteData.rellink;
 
                 //_url = _url.replace('{cs}',cs);
@@ -83,7 +83,15 @@ export default async function handler(req, res) {
                 }
             }
             else{
-                res.status(200).send('for db');
+                let insertQuery = `update membertable set status=0 where ci='${ci}' and muid='${uid}'; SELECT @@ROWCOUNT  AS affectedRow;`;
+                let insertResults = await queryDatabase(insertQuery);
+
+                if(insertResults[0].affectedRow > 0){
+                    res.status(200).send('OK¥n')
+                }
+                else{
+                    res.status(200).send('NG¥n');
+                }
             }
         }
         else{
