@@ -3,7 +3,7 @@ import styles from './loginbutton.module.css';
 import Cookies from 'js-cookie';
 import { useState,useEffect } from 'react';
 
-function LoginButton() {
+function LoginButton({ data }) {
   const [cookieData,setCookieData] = useState(null);
 
   useEffect(()=>{
@@ -19,9 +19,22 @@ function LoginButton() {
   return (    
     <section>
       {cookieData==null &&
-        <button className={styles.loginForm} type="submit" onClick={handleLogin}>
-          <h1>mopitaにログイン</h1>
-        </button>
+        <>
+          <form id={data.formId} method="post" action={data.submitlink}>
+            <p>        
+              <button className={styles.loginForm} type="submit" onClick={handleLogin}>
+                {data.buttonhtml ? (
+                  <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
+                ) : (            
+                  <>              
+                    <p>mopitaにログイン</p> 
+                  </>       
+                )}
+              </button>
+            </p>
+            <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />      
+          </form>
+        </>
       }
     </section>
   );
