@@ -1,16 +1,20 @@
 .button {
-    border-radius: 8px;
-    background-color: rgba(92, 76, 76, 0.57);
-    max-width: 619px;
-    color: #fff;
-    text-align: center;
-    padding: 25px 70px;
-    font: 700 14px/1 Inter, sans-serif;
-    border: 1px solid #b1252a;
+  border-radius: 8px;
+  background-color: rgba(92, 76, 76, 0.57);
+  width: 100%; /* Full width for consistency */
+  max-width: 619px;
+  color: #fff;
+  text-align: center;
+  padding: 25px 70px;
+  font: 700 14px/1 Inter, sans-serif;
+  border: 1px solid #b1252a;
+  margin: 0 auto 20px auto; /* Center align and add bottom margin for spacing */
+  display: block; /* To make sure the buttons stack */
+  cursor: pointer;
+}
+
+@media (max-width: 991px) {
+  .button {
+      padding: 20px;
   }
-  
-  @media (max-width: 991px) {
-    .button {
-      padding: 0 20px;
-    }
-  }
+}

@@ -18,7 +18,7 @@ function SubscriptionInfo() {
         <p className={styles.paymentInfo}>
           本サービスは、mopitaの会員ログイン・課金決済機能を利用しています。お支払いに関しては、mopitaが対応してい
           る決済方法、mopitaアカウントに登録されている支払い方法に準じます。
-        </p>
+        </p>        
         <p className={styles.subscriptionRelatedInfo}>
           本サービスは登録完了後から、解約まで1ヶ月ごとの自動契約更新となり、毎月月額料金がかかります。月の途中で本
           サービスを申し込んだ場合や解約した場合でも、月額料金満額をお支払いいただきます。
