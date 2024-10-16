@@ -33,48 +33,59 @@ export default async function handler(req, res) {
 
         // get site id from ci
         // code here for site id
-        let siteId=1;
+        
 
-         const query = `
+        const queryGetSite = `select * from resources  where resource='${ci}'`;
+        let resourceList = await queryDatabase(queryGetSite);
+        if(resourceList.length > 0){
+
+            let siteId=resourceList[0].siteId;
+
+            const query = `
             SELECT id, name, source, reglink, rellink, sourcetable AS tableName
             FROM [dbo].[sites]
             WHERE active = 1 and id=${siteId}
-        `;
-        let siteDataList = await queryDatabase(query);
+            `;
+            let siteDataList = await queryDatabase(query);
 
-        if(siteDataList.length > 0){
-            let siteData = siteDataList[0];
+            if(siteDataList.length > 0){
+                let siteData = siteDataList[0];
 
-            if(siteData.source.toLowerCase() == 'webapi'){
-                // url get from db.
-                //let _url = `http://localhost:3000/api/license-issue?purchase={cs}&subscription={ci}&user={uid}&act={act}`;
-                
-                let _url = siteData.reglink;
-                _url = _url.replace('{cs}',cs);
-                _url = _url.replace('{ci}',ci);
-                _url = _url.replace('{uid}',uid);
-                _url = _url.replace('{act}',act);
-
-                let queryString = _url.substring(_url.indexOf('?')+1,_url.length);
-
-                const response = await fetch(_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
-                    query: queryString
-                });
-
-                let result = await response.json();
-
-                if(result.success){
+                if(siteData.source.toLowerCase() == 'webapi'){
+                    // url get from db.
+                    //let _url = `http://localhost:3000/api/license-issue?purchase={cs}&subscription={ci}&user={uid}&act={act}`;
                     
-                    let insertQuery = `insert into membertable (siteid,ci,muid,licensekey,validity,status) values
-                                        ('${siteId}','${ci}','${uid}','${result.key}',${new Date().toISOString().split('T')[0]},1);SELECT SCOPE_IDENTITY() AS newId;`;
-                    let insertResults = await queryDatabase(insertQuery);
+                    let _url = siteData.reglink;
+                    _url = _url.replace('{cs}',cs);
+                    _url = _url.replace('{ci}',ci);
+                    _url = _url.replace('{uid}',uid);
+                    _url = _url.replace('{act}',act);
 
-                    if(insertResults[0].newId > 0){
-                        res.status(200).send('OK¥n')
+                    let queryString = _url.substring(_url.indexOf('?')+1,_url.length);
+
+                    const response = await fetch(_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json',
+                        },
+                        query: queryString
+                    });
+
+                    let result = await response.json();
+
+                    if(result.success){
+                        
+                        let insertQuery = `insert into membertable (siteid,ci,muid,licensekey,validity,status) values
+                                            ('${siteId}','${ci}','${uid}','${result.key}',${new Date().toISOString().split('T')[0]},1);SELECT SCOPE_IDENTITY() AS newId;`;
+                        let insertResults = await queryDatabase(insertQuery);
+
+                        if(insertResults[0].newId > 0){
+                            res.status(200).send('OK¥n')
+                        }
+                        else{
+                            res.status(200).send('NG¥n');
+                        }
+                        
                     }
                     else{
                         res.status(200).send('NG¥n');
@@ -82,29 +93,28 @@ export default async function handler(req, res) {
                     
                 }
                 else{
-                    res.status(200).send('NG¥n');
-                }
-                
-            }
-            else{
 
-                const queryLicense = `
-                        SELECT * from [${siteId}_licensetbl] where ci='${ci}'
-                    `;
-                let licenseData = await queryDatabase(queryLicense);
-                if(licenseData.length > 0){
-                    let _validity = new Date(licenseData[0].validity).toISOString();
-                    let insertQuery = `insert into membertable (siteid,ci,muid,licensekey,validity,status) values
-                                        ('${siteId}','${ci}','${uid}','${licenseData[0].licensekey}','${_validity}',1);SELECT SCOPE_IDENTITY() AS newId;`;
-                    let insertResults = await queryDatabase(insertQuery);
-
-                    if(insertResults[0].newId > 0){
-                        const deactivateQuery = `
-                            update [${siteId}_licensetbl] set active=0 where id=${licenseData[0].id}; SELECT @@ROWCOUNT  AS affectedRow;
+                    const queryLicense = `
+                            SELECT * from [${siteId}_licensetbl] where ci='${ci}'
                         `;
-                        let deactivateResult = await queryDatabase(deactivateQuery);
-                        if(deactivateResult[0].affectedRow > 0){
-                            res.status(200).send('OK¥n')
+                    let licenseData = await queryDatabase(queryLicense);
+                    if(licenseData.length > 0){
+                        let _validity = new Date(licenseData[0].validity).toISOString();
+                        let insertQuery = `insert into membertable (siteid,ci,muid,licensekey,validity,status) values
+                                            ('${siteId}','${ci}','${uid}','${licenseData[0].licensekey}','${_validity}',1);SELECT SCOPE_IDENTITY() AS newId;`;
+                        let insertResults = await queryDatabase(insertQuery);
+
+                        if(insertResults[0].newId > 0){
+                            const deactivateQuery = `
+                                update [${siteId}_licensetbl] set active=0 where id=${licenseData[0].id}; SELECT @@ROWCOUNT  AS affectedRow;
+                            `;
+                            let deactivateResult = await queryDatabase(deactivateQuery);
+                            if(deactivateResult[0].affectedRow > 0){
+                                res.status(200).send('OK¥n')
+                            }
+                            else{
+                                res.status(200).send('NG¥n');
+                            }
                         }
                         else{
                             res.status(200).send('NG¥n');
@@ -114,9 +124,9 @@ export default async function handler(req, res) {
                         res.status(200).send('NG¥n');
                     }
                 }
-                else{
-                    res.status(200).send('NG¥n');
-                }
+            }
+            else{
+                res.status(200).send('NG¥n');
             }
         }
         else{

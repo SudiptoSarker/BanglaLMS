@@ -32,41 +32,60 @@ export default async function handler(req, res) {
 
         // get site id from ci
         // code here for site id
-        let siteId=1;
+        const queryGetSite = `select * from resources  where resource='${ci}'`;
+        let resourceList = await queryDatabase(queryGetSite);
+        if(resourceList.length > 0){
 
-        
-         const query = `
+            let siteId=resourceList[0].siteId;
+
+            const query = `
             SELECT id, name, source, reglink, rellink, sourcetable AS tableName
             FROM [dbo].[sites]
             WHERE active = 1 and id=${siteId}
-        `;
-        let siteDataList = await queryDatabase(query);
-        //let _url = `http://localhost:3000/api/license-release?cancel={ci}&user={uid}&act={act}`;
-        
-        if(siteDataList.length > 0){
-            let siteData = siteDataList[0];
+                `;
+            let siteDataList = await queryDatabase(query);
+            //let _url = `http://localhost:3000/api/license-release?cancel={ci}&user={uid}&act={act}`;
+            
+            if(siteDataList.length > 0){
+                let siteData = siteDataList[0];
 
-            if(siteData.source.toLowerCase() == 'webapi'){
-                let _url = siteData.rellink;
+                if(siteData.source.toLowerCase() == 'webapi'){
+                    let _url = siteData.rellink;
 
-                //_url = _url.replace('{cs}',cs);
-                _url = _url.replace('{ci}',ci);
-                _url = _url.replace('{uid}',uid);
-                _url = _url.replace('{act}',act);
+                    //_url = _url.replace('{cs}',cs);
+                    _url = _url.replace('{ci}',ci);
+                    _url = _url.replace('{uid}',uid);
+                    _url = _url.replace('{act}',act);
 
-                let queryString = _url.substring(_url.indexOf('?')+1,_url.length);
+                    let queryString = _url.substring(_url.indexOf('?')+1,_url.length);
 
-                const response = await fetch(_url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/json',
-                    },
-                    query: queryString
-                });
-                let result = await response.json();
+                    const response = await fetch(_url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/json',
+                        },
+                        query: queryString
+                    });
+                    let result = await response.json();
 
-                if(result.success){
+                    if(result.success){
 
+                        let insertQuery = `update membertable set status=0 where ci='${ci}' and muid='${uid}'; SELECT @@ROWCOUNT  AS affectedRow;`;
+                        let insertResults = await queryDatabase(insertQuery);
+
+                        if(insertResults[0].affectedRow > 0){
+                            res.status(200).send('OK¥n')
+                        }
+                        else{
+                            res.status(200).send('NG¥n');
+                        }
+
+                    }
+                    else{
+                        res.status(200).send('NG¥n');
+                    }
+                }
+                else{
                     let insertQuery = `update membertable set status=0 where ci='${ci}' and muid='${uid}'; SELECT @@ROWCOUNT  AS affectedRow;`;
                     let insertResults = await queryDatabase(insertQuery);
 
@@ -76,22 +95,10 @@ export default async function handler(req, res) {
                     else{
                         res.status(200).send('NG¥n');
                     }
-
-                }
-                else{
-                    res.status(200).send('NG¥n');
                 }
             }
             else{
-                let insertQuery = `update membertable set status=0 where ci='${ci}' and muid='${uid}'; SELECT @@ROWCOUNT  AS affectedRow;`;
-                let insertResults = await queryDatabase(insertQuery);
-
-                if(insertResults[0].affectedRow > 0){
-                    res.status(200).send('OK¥n')
-                }
-                else{
-                    res.status(200).send('NG¥n');
-                }
+                res.status(200).send('NG¥n');
             }
         }
         else{
