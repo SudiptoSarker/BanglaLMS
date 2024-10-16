@@ -4,17 +4,48 @@
   width: 100%; /* Full width for consistency */
   max-width: 619px;
   color: #fff;
-  text-align: center;
-  padding: 25px 70px;
+  text-align: center; /* Center align the text */
+  padding: 15px 20px; /* Adjust padding for a better look */
   font: 700 14px/1 Inter, sans-serif;
   border: 1px solid #b1252a;
   margin: 0 auto 20px auto; /* Center align and add bottom margin for spacing */
-  display: block; /* To make sure the buttons stack */
+  display: flex; /* Use flexbox to align items */
+  justify-content: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
   cursor: pointer;
+  white-space: nowrap; /* Prevent button text from wrapping */
+  overflow: hidden; /* Hide overflow text if necessary */
+  text-overflow: ellipsis; /* Optional: Show ellipsis if text is too long */
 }
 
-@media (max-width: 991px) {
-  .button {
-      padding: 20px;
-  }
+.deviceInfo {
+  display: flex;
+  gap: 10px; /* Increase gap for better spacing */
+  align-items: center; /* Align items center */
+  white-space: nowrap; /* Prevent wrapping */
+}
+
+.deviceLabel {
+  font: 11px Abel, sans-serif;
+  margin: 0; /* Remove margin for a cleaner look */
+}
+
+.deviceCount {
+  display: flex;
+  gap: 3px;
+  align-items: center; /* Align items center */
+}
+
+.countNumber {
+  font: 28px Abel, sans-serif;
+}
+
+.countUnit {
+  font: 11px Abel, sans-serif;
+}
+
+.subscriptionInfo {
+  margin-top: 0; /* Remove top margin */
+  font: 11px Abel, sans-serif;
+  white-space: nowrap; /* Prevent wrapping */
 }

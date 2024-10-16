@@ -6,8 +6,8 @@ import SubscriptionInfo from "@/components/site/subscriptioninformation/subscrip
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
 import { useState,useEffect } from 'react';
+import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi";
 
-// import { fetchSubscriptionData } from "../api/queryApi";
 // const [cookieData,setCookieData] = useState(null);
 
 export default function Home() {
@@ -15,33 +15,59 @@ export default function Home() {
     const noticeLink = 'https://example.com/notice'; // Replace with your desired URL
     const maintenanceLink = 'https://example.com/maintenance'; // Replace with your desired URL
 
-    const [subscriptionData, setSubscriptionData] = useState([]);
     const [domain, setDomain] = useState("");
+    const [subscriptionData, setSubscriptionData] = useState([]);
+    const [loginData, setLoginData] = useState([]);
 
-
-    useEffect(()=>{
-        // let cookieValue = Cookies.get('iai_mtisess_secure');
-        // if(cookieValue!=null || cookieValue !='' || cookieValue!=undefined){
-        //   setCookieData(cookieValue);
-        // }
+    useEffect(() => {
     // Get the domain name when the component mounts
-        if (typeof window !== "undefined") {
-            const currentDomain = window.location.hostname;
-            setDomain(currentDomain);
-            console.log("Current domain:", currentDomain); // For debugging
-        }
+    if (typeof window !== "undefined") {
+        const currentDomain = window.location.hostname;
+        setDomain(currentDomain);
+        console.log("Current domain:", currentDomain); // For debugging
+    }
+    }, []); // This useEffect runs only once, when the component mounts
+
+    useEffect(() => {
+    // Fetch subscription data once the domain is set
+    if (domain) {
+        const getSiteInformation = async () => {
+            try {
+                const siteIdResult = await getSiteId(domain);
+                if (!siteIdResult) {
+                    throw new Error(`Site with name '${domain}' not found.`);
+                }
+                
+                const siteId = siteIdResult.data[0]?.id;
+                console.log("Extracted site ID:", siteId);
+                getSubscriptionData(siteId);       
+                getLoginData(siteId);        
+            } catch (error) {
+                console.log("Error fetching subscription data:", error);
+            }
+        };
         
-        const getSubscriptionData = async () => {
-          try {
-            const response = await fetchSubscriptionData();
+        const getSubscriptionData = async (siteId) => {
+        try {            
+            const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
             setSubscriptionData(response.data);
-          } catch (error) {
-            console.log("Error fetching subscripton data:", error);
-          }
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
         }
-        getSubscriptionData();
-    
-      },[]);
+        };
+        const getLoginData = async (siteId) => {
+            try {            
+                const response = await fetchSubscriptionLoginData(siteId,"loginbutton");
+                setLoginData(response.data);
+            } catch (error) {
+                console.log("Error fetching subscription data:", error);
+            }
+        };
+        getSiteInformation();
+        // console.log(''siteId);
+        // getSubscriptionData(siteId);
+    }
+    }, [domain]);  
 
     return (
         <Layout>  
@@ -52,12 +78,13 @@ export default function Home() {
             <br />
             <br />
             <FeatureSection  />
-            <SubscriptionInfo  />
-            <SubscriptionButton  />
+            <SubscriptionInfo  />            
             {subscriptionData.map((option, index) => (
                 <SubscriptionButton key={index} data={option} />
             ))}
-            <LoginButton  />          
+            {loginData.map((option, index) => (
+                <LoginButton key={index} data={option} />
+            ))}              
         </Layout>
     );
 }

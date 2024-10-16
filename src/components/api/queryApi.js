@@ -246,3 +246,34 @@ export const deleteTableData = async (tableName,rowId) => {
     const values = [];
     return await calltoApi(query, values);
 };
+
+// export const fetchSubscriptionData = async (sitename,sectionname) => {
+//     let siteIdQuery = ``;
+//     const query = `SELECT * FROM buttondata where section='subscriptionbutton'`;
+//     const values = [];
+//     return await calltoApi(query,values);
+// };
+export const getSiteId = async (sitename) => {
+    const siteIdQuery = `SELECT id FROM [dbo].[sites] WHERE name = '${sitename}'`;
+    const siteIdResult =  await calltoApi(siteIdQuery);    
+    return siteIdResult;    
+}
+export const fetchSubscriptionLoginData = async (siteId, sectionname) => {
+    try {
+        if (!siteId) {
+            throw new Error(`Site with name '${sitename}' not found.`);
+        }
+
+        // Step 2: Use the site id to fetch the subscription data
+        const subscriptionQuery = `SELECT * FROM [dbo].[${siteId}_subscriptiondata] WHERE section = '${sectionname}'`;
+        
+        const subscriptionResult = await calltoApi(subscriptionQuery);
+
+        // Return the subscription data
+        return subscriptionResult;
+
+    } catch (error) {
+        console.error('Error fetching subscription data:', error);
+        throw error;
+    }
+};
