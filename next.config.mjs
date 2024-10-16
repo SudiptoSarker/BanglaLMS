@@ -8,14 +8,13 @@ const nextConfig = BuilderDevTools()(
       async redirects() {
         return [
           {
-            source: "/planner",
-            destination: "/planner/login",
+            source: "/mopita/register",
+            destination: "/api/mopita/register",
             permanent: true,
           },
           {
-            // this will match `/english(default)/something` being requested
-            source: "/mopita/register",
-            destination: "/api/mopita/register",
+            source: "/mopita/release",
+            destination: "/api/mopita/release",
             permanent: true,
           },
         ];
