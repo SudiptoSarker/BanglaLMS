@@ -76,11 +76,27 @@ export default async function handler(req, res) {
                     if(result.success){
                         
                         let insertQuery = `insert into membertable (siteid,ci,muid,licensekey,validity,status) values
-                                            ('${siteId}','${ci}','${uid}','${result.key}',${new Date().toISOString().split('T')[0]},1);SELECT SCOPE_IDENTITY() AS newId;`;
+                                            ('${siteId}','${ci}','${uid}','${result.key}','${new Date().toISOString().split('T')[0]}',1);SELECT SCOPE_IDENTITY() AS newId;`;
                         let insertResults = await queryDatabase(insertQuery);
 
                         if(insertResults[0].newId > 0){
-                            res.status(200).send('OK¥n')
+
+                            {
+                                let siteName = siteDataList[0].name;
+                                let query = `
+                                    INSERT INTO userlogs (muid, pagelink, activity, time)
+                                    VALUES (@uid, @pagelink, @activity, @time)
+                                `;
+                                
+                                let params = {
+                                    uid: uid,
+                                    pagelink: siteName,
+                                    activity: 'subscriptions',
+                                    time: new Date().toISOString().split('T')[0] 
+                                };    
+                                await queryDatabase(query, params);  
+                            }
+                            res.status(200).send('OK¥n');
                         }
                         else{
                             res.status(200).send('NG¥n');
@@ -95,13 +111,13 @@ export default async function handler(req, res) {
                 else{
 
                     const queryLicense = `
-                            SELECT * from [${siteId}_licensetbl] where ci='${ci}'
+                            SELECT * from [${siteId}_licensetbl] where ci='${ci}' and active=1
                         `;
                     let licenseData = await queryDatabase(queryLicense);
                     if(licenseData.length > 0){
                         let _validity = new Date(licenseData[0].validity).toISOString();
                         let insertQuery = `insert into membertable (siteid,ci,muid,licensekey,validity,status) values
-                                            ('${siteId}','${ci}','${uid}','${licenseData[0].licensekey}','${_validity}',1);SELECT SCOPE_IDENTITY() AS newId;`;
+                                            ('${siteId}','${ci}','${uid}','${licenseData[0].licensekey}','${_validity.split('T')[0]}',1);SELECT SCOPE_IDENTITY() AS newId;`;
                         let insertResults = await queryDatabase(insertQuery);
 
                         if(insertResults[0].newId > 0){
@@ -110,7 +126,23 @@ export default async function handler(req, res) {
                             `;
                             let deactivateResult = await queryDatabase(deactivateQuery);
                             if(deactivateResult[0].affectedRow > 0){
-                                res.status(200).send('OK¥n')
+
+                                {
+                                    let siteName = siteDataList[0].name;
+                                    let query = `
+                                        INSERT INTO userlogs (muid, pagelink, activity, time)
+                                        VALUES (@uid, @pagelink, @activity, @time)
+                                    `;
+                                    
+                                    let params = {
+                                        uid: uid,
+                                        pagelink: siteName,
+                                        activity: 'subscriptions',
+                                        time: new Date().toISOString().split('T')[0] 
+                                    };    
+                                    await queryDatabase(query, params);  
+                                }
+                                res.status(200).send('OK¥n');
                             }
                             else{
                                 res.status(200).send('NG¥n');

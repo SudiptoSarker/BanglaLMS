@@ -74,7 +74,22 @@ export default async function handler(req, res) {
                         let insertResults = await queryDatabase(insertQuery);
 
                         if(insertResults[0].affectedRow > 0){
-                            res.status(200).send('OK¥n')
+                            {
+                                let siteName = siteDataList[0].name;
+                                let query = `
+                                    INSERT INTO userlogs (muid, pagelink, activity, time)
+                                    VALUES (@uid, @pagelink, @activity, @time)
+                                `;
+                                
+                                let params = {
+                                    uid: uid,
+                                    pagelink: siteName,
+                                    activity: 'unsubscriptions',
+                                    time: new Date().toISOString().split('T')[0] 
+                                };    
+                                await queryDatabase(query, params);  
+                            }
+                            res.status(200).send('OK¥n');
                         }
                         else{
                             res.status(200).send('NG¥n');
@@ -90,7 +105,22 @@ export default async function handler(req, res) {
                     let insertResults = await queryDatabase(insertQuery);
 
                     if(insertResults[0].affectedRow > 0){
-                        res.status(200).send('OK¥n')
+                        {
+                            let siteName = siteDataList[0].name;
+                            let query = `
+                                INSERT INTO userlogs (muid, pagelink, activity, time)
+                                VALUES (@uid, @pagelink, @activity, @time)
+                            `;
+                            
+                            let params = {
+                                uid: uid,
+                                pagelink: siteName,
+                                activity: 'unsubscriptions',
+                                time: new Date().toISOString().split('T')[0] 
+                            };    
+                            await queryDatabase(query, params);  
+                        }
+                        res.status(200).send('OK¥n');
                     }
                     else{
                         res.status(200).send('NG¥n');
