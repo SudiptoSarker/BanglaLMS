@@ -14,7 +14,7 @@ export default function Home({ globalData }) {
     const router = useRouter();
     useEffect(() => {
         if(!globalData.auth){
-            //router.push('/');
+            router.push('/');
         }
     }, [router]);
 

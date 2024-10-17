@@ -7,6 +7,7 @@ import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptio
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
 import { useState,useEffect } from 'react';
 import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi";
+import TopPageComponent from "@/components/site/top/toppagecomponent";
 
 // const [cookieData,setCookieData] = useState(null);
 
@@ -77,12 +78,26 @@ export default function Home({ globalData }) {
             <br />
             <FeatureSection  />
             <SubscriptionInfo  />                       
-            {subscriptionData.map((option, index) => (
-                <SubscriptionButton key={index} data={option} />
-            ))}
-            {loginData.map((option, index) => (
-                <LoginButton key={index} data={option} />
-            ))}              
+
+            {/* Show SubscriptionButton if auth is false or if auth is true but not subscribed */}
+            {(!globalData.auth || (globalData.auth && !globalData.isSubscribed)) && (
+                subscriptionData.map((option, index) => (
+                    <SubscriptionButton key={index} data={option} />
+                ))
+            )}
+
+            {/* Show TopPageComponent if user is authenticated and subscribed */}
+            {globalData.auth && globalData.isSubscribed && (
+                <TopPageComponent />
+            )}
+
+            {/* Show LoginButton if user is not authenticated */}
+            {!globalData.auth && (
+                loginData.map((option, index) => (
+                    <LoginButton key={index} data={option} />
+                ))
+            )}
         </Layout>
+
     );
 }

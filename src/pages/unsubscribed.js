@@ -16,7 +16,7 @@ export default function Home({ globalData }) {
         console.log('auth: ',globalData.auth);
         console.log('isSubscribed: ',globalData.isSubscribed);
         if(!globalData.auth){
-            // router.push('/');
+            router.push('/');
         }
     }, [router]);
 
