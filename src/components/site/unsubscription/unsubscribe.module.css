@@ -1,113 +1,145 @@
 .container {
-    display: flex;
-    max-width: 906px;
-    flex-direction: column;
-    overflow: hidden;
-    color: #000;
-    font: 400 24px/1 Inter, sans-serif;
-  }
-  
-  .title {
-    color: rgba(0, 128, 0, 0.5);
-    font-size: 32px;
-    line-height: 1;
-    text-align: center;
-    align-self: center;
-  }
-  
-  .warning {
-    text-align: center;
-    margin-top: 76px;
-    width: 100%;
-  }
-  
-  .featureSection {
-    display: flex;
-    margin-top: 67px;
-    width: 100%;
-    flex-direction: column;
-    align-items: center;
-    white-space: nowrap;
-    padding: 0 38px;
-  }
-  
-  .featureTitle {
-    align-self: start;
-  }
-  
-  .featureList {
-    line-height: 20px;
-    align-self: start;
-    margin: 63px 0 0 48px;
-  }
-  
-  .cancellationTitle {
-    color: rgba(0, 128, 0, 0.5);
-    font-size: 32px;
-    line-height: 1;
-    text-align: center;
-    margin-top: 109px;
-  }
-  
-  .thankYouMessage {
-    text-align: center;
-    margin-top: 69px;
-  }
-  
-  .cancellationInstructions {
-    text-align: center;
-    align-self: end;
-    margin-top: 60px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align items */
+  max-width: 906px;
+  margin: 0 auto; /* Center the container */
+  padding: 20px; /* Add padding around the container */
+  color: #000;
+  font-family: 'Inter', sans-serif;
+}
+
+.title {
+  color: rgba(0, 128, 0, 0.8); /* Slightly darker green */
+  font-size: 24px; /* Increased font size */
+  line-height: 1.2;
+  text-align: center;
+  margin-bottom: 20px; /* Space below title */
+}
+
+.warning {
+  text-align: center;
+  font-size: 15px; /* Slightly larger font size */
+  color: #b1252a; /* Red color for warning */
+  margin: 20px 0; /* Space above and below */
+  padding: 0 15px; /* Add padding for small screens */
+}
+
+.featureSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the feature section */
+  width: 100%;
+  margin-top: 20px; /* Adjust margin for spacing */
+  padding: 0 20px; /* Padding for responsiveness */
+}
+
+.featureTitle {
+  font-size: 24px; /* Font size for feature title */
+  color: rgba(0, 128, 0, 0.8); /* Darker green */
+  text-align: center;
+  margin-bottom: 15px; /* Space below title */
+}
+
+.featureList {
+  list-style-type: disc; /* Use bullet points */
+  padding-left: 20px; /* Indent the list */
+  text-align: left; /* Left-align list items for readability */
+  margin: 0; /* Remove default margin */
+  color: #333; /* Darker color for text */
+  font-size: 15px; /* Consistent font size */
+}
+
+.cancellationSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center align the cancellation section */
+  margin-top: 40px; /* Space above section */
+}
+
+.cancellationTitle {
+  color: rgba(0, 128, 0, 0.8);
+  font-size: 24px;
+  line-height: 1.2;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.thankYouMessage,
+.cancellationInstructions,
+.farewell {
+  text-align: center;
+  margin: 15px 0; /* Space above and below */
+  font-size: 15px; /* Consistent font size */
+}
+
+.buttonContainer {
+  display: flex;
+  flex-direction: column; /* Stack buttons vertically */
+  align-items: center; /* Center buttons */
+  margin-top: 30px; /* Space above button container */
+}
+.button {
+  border-radius: 10px; /* Rounded corners */
+  background-color: #66b574; /* Green background */
+  min-height: 40px; /* Decrease the minimum height */
+  width: 200px; /* Full width on small screens */
+  max-width: 400px; /* Increase max width */
+  color: #fff; /* White text */
+  text-align: center;
+  padding: 5px; /* Reduced padding for smaller height */
+  border: 2px solid #55a063; /* Border with a slightly darker shade */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover */
+  margin-bottom: 15px; /* Space between buttons */
+  font-size: 15px; /* Consistent font size for buttons */
+}
+
+.backButton {
+  composes: button; /* Inherit button styles */
+}
+
+.cancelButton {
+  composes: button; /* Inherit button styles */
+  background-color: #b1252a; /* Red background for cancel button */
+  border: 2px solid #9f1d2b; /* Darker red border */
+}
+
+.backButton:hover,
+.cancelButton:hover {
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+
+.backButton:hover {
+  background-color: #57a057; /* Darker shade on hover for back button */
+}
+
+.cancelButton:hover {
+  background-color: #a1191f; /* Darker shade on hover for cancel button */
+}
+
+@media (max-width: 768px) {
+  .warning,
+  .featureTitle,
+  .cancellationTitle,
+  .thankYouMessage,
+  .cancellationInstructions,
   .farewell {
-    text-align: center;
-    margin-top: 45px;
+    font-size: 15px; /* Responsive font size */
+    padding: 0 10px; /* Padding for small screens */
   }
-  
+
   .button {
-    align-self: stretch;
-    border-radius: 10px;
-    background-color: rgba(0, 128, 0, 0.6);
-    min-height: 58px;
-    width: 298px;
-    max-width: 100%;
-    color: #fff;
-    text-align: center;
-    padding: 19px 10px;
-    border: none;
-    cursor: pointer;
+    width: 90%; /* More flexible button width */
   }
-  
-  .backButton {
-    composes: button;
-    margin-top: 105px;
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 24px; /* Smaller title on mobile */
   }
-  
-  .cancelButton {
-    composes: button;
-    margin-top: 20px;
+
+  .button {
+    width: 90%; /* More flexible button width */
   }
-  
-  @media (max-width: 991px) {
-    .warning,
-    .featureSection,
-    .featureList,
-    .cancellationTitle,
-    .thankYouMessage,
-    .cancellationInstructions,
-    .farewell {
-      max-width: 100%;
-      margin-top: 40px;
-    }
-  
-    .featureSection {
-      white-space: initial;
-      padding: 0 20px;
-    }
-  
-    .backButton,
-    .cancelButton {
-      white-space: initial;
-    }
-  }
+}

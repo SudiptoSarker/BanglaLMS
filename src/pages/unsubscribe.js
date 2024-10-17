@@ -11,8 +11,7 @@ export default function Home() {
     const maintenanceLink = 'https://example.com/maintenance'; // Replace with your desired URL
 
     return (
-        <Layout>  
-            
+        <Layout>              
             <UnsubscribeComponent  />                        
         </Layout>
     );

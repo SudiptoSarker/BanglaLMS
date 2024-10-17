@@ -78,7 +78,7 @@ export default function Home() {
             <br />
             <br />
             <FeatureSection  />
-            <SubscriptionInfo  />            
+            <SubscriptionInfo  />                       
             {subscriptionData.map((option, index) => (
                 <SubscriptionButton key={index} data={option} />
             ))}
