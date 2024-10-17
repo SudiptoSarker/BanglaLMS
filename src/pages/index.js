@@ -12,8 +12,8 @@ import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi"
 
 export default function Home({ globalData }) {
     // Demo URLs to pass as props
-    const noticeLink = 'https://example.com/notice'; // Replace with your desired URL
-    const maintenanceLink = 'https://example.com/maintenance'; // Replace with your desired URL
+    const noticeLink = '/notice'; // Replace with your desired URL
+    const maintenanceLink = '/maintenance'; // Replace with your desired URL
 
     const [domain, setDomain] = useState("");
     const [subscriptionData, setSubscriptionData] = useState([]);

@@ -9,8 +9,8 @@ import { useEffect } from "react";
 
 export default function Home({ globalData }) {
     // Demo URLs to pass as props
-    const noticeLink = 'https://example.com/notice'; // Replace with your desired URL
-    const maintenanceLink = 'https://example.com/maintenance'; // Replace with your desired URL
+    const noticeLink = '/notice'; // Replace with your desired URL
+    const maintenanceLink = '/maintenance'; // Replace with your desired URL
     const router = useRouter();
     useEffect(() => {
         if(!globalData.auth){

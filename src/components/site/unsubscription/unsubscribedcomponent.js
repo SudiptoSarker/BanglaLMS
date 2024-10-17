@@ -10,11 +10,11 @@ function UnsubscribedComponent() {
         className={styles.confirmationImage}
       />
       <section className={styles.contentWrapper}>
-        <h1>BDGuardの解約手続きが完了しました。</h1>
+        <h1 className={styles.title}>BDGuardの解約手続きが完了しました。</h1>
         <p className={styles.thankYouMessage}>
           ご利用いただき、ありがとうございました。
         </p>
-        <button className={styles.returnButton}>TOPへ戻る</button>
+        <button className={styles.returnButton} type="button" onclick="location.href='/'">TOPへ戻る</button>
       </section>
     </main>
   );

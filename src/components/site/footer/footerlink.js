@@ -3,7 +3,7 @@ export const footerLinks = [
       id: 'contact-cancel',
       links: [
         { text: 'お問い合わせ', href: '/contact' },
-        { text: '会員解除', href: '/cancel-membership' }
+        { text: '会員解除', href: '/unsubscribe' }
       ]
     },
     {
