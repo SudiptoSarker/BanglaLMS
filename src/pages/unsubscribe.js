@@ -19,7 +19,7 @@ export default function Home({ globalData }) {
     }, [router]);
 
     return (
-        <Layout>              
+        <Layout globalData={globalData}>         
             <UnsubscribeComponent  />                        
         </Layout>
     );
