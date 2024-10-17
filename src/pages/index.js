@@ -76,7 +76,7 @@ export default function Home({ globalData }) {
             <br />
             <br />
             <FeatureSection  />
-            <SubscriptionInfo  />            
+            <SubscriptionInfo  />                       
             {subscriptionData.map((option, index) => (
                 <SubscriptionButton key={index} data={option} />
             ))}

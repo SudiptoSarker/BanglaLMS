@@ -1,11 +1,13 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useState,useEffect } from 'react';
+import { useRouter } from 'next/router';
 import BannerSection from '../banner/bannercomponent';
 import Footer from '../footer/footercomponent';
 import './layout.module.css';
 import { useRouter } from 'next/router';
 
-const Layout = ({ children, globalData }) => {
+const Layout = ({ children }) => {        
     return (
         <div className="layout-container">
             <BannerSection />            

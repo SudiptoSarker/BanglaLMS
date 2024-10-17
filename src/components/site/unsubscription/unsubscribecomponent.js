@@ -12,6 +12,8 @@ function UnsubscribeComponent() {
       <section className={styles.featureSection}>
         <h2 className={styles.featureTitle}>BDGuardの主な機能</h2>
         <FeatureList />
+      </section>
+      <section className={styles.cancellationSection}>
         <h2 className={styles.cancellationTitle}>解約</h2>
         <p className={styles.thankYouMessage}>
           BDGuardをご利用いただきありがとうございます。
@@ -22,8 +24,37 @@ function UnsubscribeComponent() {
         <p className={styles.farewell}>
           これまでのご愛顧、誠にありがとうございました。
         </p>
-        <button className={styles.backButton}>戻る</button>
-        <button className={styles.cancelButton}>解約する</button>
+        <div className={styles.buttonContainer}>
+          {/* Back Button */}
+          <button
+            className={styles.backButton}
+            type="button"
+            onClick={() => history.back()} // Go back on click
+          >
+            戻る
+          </button>
+
+          {/* Cancel Button */}
+          <form
+            id="formWithDraw"
+            action="https://devwww.mopita.com/cp/regist"
+            method="post"
+          >
+            <p>
+              <button
+                className={styles.cancelButton}
+                type="submit" // Submit the form
+              >
+                解約する
+              </button>
+            </p>
+            <input type="hidden" name="ci" value="R000002007" />
+            <input type="hidden" name="act" value="rel" />
+            <input type="hidden" name="nl" value="https://stgadg.mopita.com/unsubscribed" />
+            <input type="hidden" name="cl" value="https://stgadg.mopita.com/top" />
+            <input type="hidden" name="fl" value="https://stgadg.mopita.com/top" />
+          </form>
+        </div>
       </section>
     </main>
   );

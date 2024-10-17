@@ -28,6 +28,7 @@ export default function Home({ globalData }) {
             <br />
             <FeatureSection  />            
             <TopPageComponent  />            
+            <br />
         </Layout>
     );
 }

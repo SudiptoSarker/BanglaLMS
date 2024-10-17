@@ -16,6 +16,7 @@ function LoginButton({ data }) {
   const handleLogin = () => {
     console.log('Login button clicked');
   };
+  
   return (    
     <section>
       {cookieData==null &&
