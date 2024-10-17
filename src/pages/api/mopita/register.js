@@ -34,7 +34,10 @@ export default async function handler(req, res) {
         // get site id from ci
         // code here for site id
         
-
+        const date = new Date();
+        date.setFullYear(date.getFullYear() + 100);
+        res.setHeader('Set-Cookie', `muid=${uid}; Path=/; HttpOnly; Secure; SameSite=Strict; Expires=${date.toUTCString()}`);
+        
         const queryGetSite = `select * from resources  where resource='${ci}'`;
         let resourceList = await queryDatabase(queryGetSite);
         if(resourceList.length > 0){
