@@ -1,48 +1,42 @@
 .featureSections {
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    align-items: center;
-  }
-  
-  .heading {
-    color: #000;
-    text-align: center;
-    font: 400 15px/1 Inter, sans-serif;
-  }
-  
-  .overview {
-    color: #464952;
-    text-align: center;
-    margin-top: 67px;
-    font: 400 14px/1 Inter, sans-serif;
-  }
-  
-  .servicesContainer {
-    align-self: stretch;
-    margin-top: 126px;
-    width: 100%;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 60px auto;
+  padding: 0 20px;
+  max-width: 1200px;
+}
+
+.heading {
+  color: #2c3e50;
+  text-align: center;
+  font-size: 24px; /* Increased font size for better readability */
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.overview {
+  color: #7f8c8d;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 16px; /* Slightly larger font size */
+  max-width: 800px;
+  line-height: 1.6; /* Improved readability */
+}
+
+.servicesContainer {
+  margin-top: 50px;
+  width: 100%;
+}
+
+.servicesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* More responsive layout */
+  gap: 20px;
+}
+
+@media (max-width: 991px) {
   .servicesGrid {
-    display: flex;
-    gap: 20px;
+      grid-template-columns: 1fr;
   }
-  
-  @media (max-width: 991px) {
-    .overview {
-      max-width: 100%;
-      margin-top: 40px;
-    }
-  
-    .servicesContainer {
-      max-width: 100%;
-      margin-top: 40px;
-    }
-  
-    .servicesGrid {
-      flex-direction: column;
-      align-items: stretch;
-      gap: 0;
-    }
-  }
+}

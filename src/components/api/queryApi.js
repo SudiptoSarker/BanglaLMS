@@ -253,11 +253,17 @@ export const deleteTableData = async (tableName,rowId) => {
 //     const values = [];
 //     return await calltoApi(query,values);
 // };
-export const getSiteId = async (sitename) => {
-    const siteIdQuery = `SELECT id FROM [dbo].[sites] WHERE name = '${sitename}'`;
+export const getSiteId = async (domain) => {
+    const siteIdQuery = `SELECT id FROM [dbo].[sites] WHERE name LIKE '%${domain}'`;
     const siteIdResult =  await calltoApi(siteIdQuery);    
     return siteIdResult;    
 }
+
+export const getSubscribedData = async (siteid, muid) => {
+    const query = `SELECT * FROM [dbo].[membertable] WHERE siteid='${siteid}' AND muid='${muid}' AND status=1`;
+    return await calltoApi(query,[]);
+}
+
 export const fetchSubscriptionLoginData = async (siteId, sectionname) => {
     try {
         if (!siteId) {

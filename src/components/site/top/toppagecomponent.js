@@ -8,7 +8,13 @@ function TopPageComponent() {
       <p className={styles.membershipInfo}>
         ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
       </p>
-      <a href="#" className={styles.membershipLink}>BDGuardメンバーシップページへ</a>
+      <button 
+        className={`${styles.membershipLink} btn`} 
+        type="button" 
+        onClick={() => location.href='/member'}
+      >
+        BDGuardメンバーシップページへ
+      </button>
     </section>
   );
 }

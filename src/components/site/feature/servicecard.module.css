@@ -1,40 +1,34 @@
 .serviceCard {
-    display: flex;
-    min-height: 285px;
-    flex-direction: column;
-    overflow: hidden;
-    align-items: center;
-    color: #000;
-    text-align: center;
-    justify-content: center;
-    font: 400 14px Inter, sans-serif;
-  }
-  
-  .serviceIcon {
-    aspect-ratio: 1;
-    object-fit: contain;
-    object-position: center;
-    width: 148px;
-    max-width: 100%;
-  }
-  
-  .serviceTitle {
-    line-height: 1;
-    margin-top: 18px;
-  }
-  
-  .serviceDescription {
-    line-height: 20px;
-    margin-top: 18px;
-  }
-  
-  @media (max-width: 991px) {
-    .serviceCard {
-      max-width: 100%;
-      margin-top: 40px;
-    }
-  
-    .serviceDescription {
-      max-width: 100%;
-    }
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow */
+  transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.serviceCard:hover {
+  transform: translateY(-5px); /* Slight lift on hover */
+}
+
+.serviceIcon {
+  width: 120px;
+  max-width: 100%;
+  margin-bottom: 15px;
+}
+
+.serviceTitle {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.serviceDescription {
+  font-size: 14px;
+  color: #7f8c8d;
+  margin-top: 10px;
+  text-align: center;
+  line-height: 1.5;
+}

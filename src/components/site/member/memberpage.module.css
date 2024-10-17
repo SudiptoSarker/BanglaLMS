@@ -1,44 +1,61 @@
 .container {
     display: flex;
-    max-width: 905px;
-    flex-direction: column;
+    max-width: 905px; /* Sets a maximum width for the container */
+    flex-direction: column; /* Stacks children vertically */
     overflow: hidden;
-    align-items: center;
-    font-family: Inter, sans-serif;
-    color: #000;
-    font-weight: 700;
-    text-align: center;
-  }
-  
-  .instruction {
-    font-size: 15px;
-    line-height: 1;
-  }
-  
-  .title {
-    font-size: 18px;
-    line-height: 1;
-    margin-top: 36px;
-  }
-  
-  .licenseKey {
-    border-radius: 8px;
-    background-color: #fff;
-    align-self: stretch;
-    margin-top: 30px;
-    width: 100%;
-    font-size: 24px;
-    color: #008000;
-    white-space: nowrap;
-    line-height: 1;
-    padding: 25px 70px;
-    border: 1px solid #b1252a;
-  }
-  
-  @media (max-width: 991px) {
-    .licenseKey {
-      max-width: 100%;
-      white-space: initial;
-      padding: 25px 20px;
+    align-items: center; /* Centers items horizontally */
+    justify-content: center; /* Centers items vertically */
+    font-family: 'Inter', sans-serif; /* Ensures consistent font usage */
+    color: #000; /* Default text color */
+    font-weight: 700; /* Makes the text bold */
+    text-align: center; /* Centers text within the container */
+    padding: 40px 20px; /* Adds padding for better spacing */
+    margin: 0 auto; /* Centers the container on the page */
+}
+
+.instruction {
+    font-size: 15px; /* Adjusts font size */
+    line-height: 1.5; /* Adds line height for better readability */
+    margin-bottom: 20px; /* Adds spacing below the instruction text */
+}
+
+.licenseContainer {
+    border: 1px solid #b1252a; /* Border for the entire license container */
+    border-radius: 8px; /* Rounds the corners */
+    padding: 20px; /* Adds padding inside the container */
+    background-color: #fff; /* Background color for contrast */
+    width: 100%; /* Ensures full width */
+    max-width: 905px; /* Limits max width to match container */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Adds shadow for depth */
+}
+
+.title {
+    font-size: 24px; /* Increases title font size */
+    line-height: 1.5; /* Adds line height for better readability */
+    margin: 0; /* Removes default margin */
+}
+
+.licenseKey {
+    font-size: 24px; /* Larger font size for the key */
+    color: #008000; /* Green color for the license key */
+    white-space: nowrap; /* Prevents text wrapping */
+    line-height: 1.5; /* Better line height for readability */
+    padding: 15px 0; /* Padding for spacing around the key */
+}
+
+@media (max-width: 991px) {
+    .licenseContainer {
+        max-width: 100%; /* Ensures full width on smaller screens */
+        padding: 15px; /* Adjusts padding for smaller screens */
     }
-  }
+
+    .title {
+        font-size: 20px; /* Slightly smaller font size for titles on mobile */
+    }
+
+    .licenseKey {
+        font-size: 20px; /* Adjusts font size for the license key on mobile */
+        white-space: normal; /* Allows wrapping on smaller screens */
+        padding: 10px 0; /* Adjusts padding for mobile view */
+    }
+}
