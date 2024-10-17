@@ -10,7 +10,7 @@ import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi"
 
 // const [cookieData,setCookieData] = useState(null);
 
-export default function Home() {
+export default function Home({ globalData }) {
     // Demo URLs to pass as props
     const noticeLink = 'https://example.com/notice'; // Replace with your desired URL
     const maintenanceLink = 'https://example.com/maintenance'; // Replace with your desired URL
@@ -64,13 +64,11 @@ export default function Home() {
             }
         };
         getSiteInformation();
-        // console.log(''siteId);
-        // getSubscriptionData(siteId);
     }
     }, [domain]);  
 
     return (
-        <Layout>  
+        <Layout globalData={globalData}>  
             <InformationSection 
                 noticeLink={noticeLink} 
                 maintenanceLink={maintenanceLink} 
