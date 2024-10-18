@@ -1,4 +1,3 @@
-// Import the Layout component
 import Layout from "@/components/site/layout/layout";
 import HeaderComponent from "@/components/site/header/headercomponent";
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
@@ -11,8 +10,7 @@ import { useState,useEffect } from 'react';
 import { fetchSubscriptionLoginData,getSiteId,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 
-export default function HomePage({ globalData }) {
-    // Demo URLs to pass as props
+export default function HomePage({ globalData }) {    
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
 
