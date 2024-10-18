@@ -1,20 +1,20 @@
 // Import the Layout component
 import Layout from "@/components/site/layout/layout";
-import InformationSection from "@/components/site/information/informationcomponent";
+import HeaderComponent from "@/components/site/header/headercomponent";
+import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
+import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import SubscriptionInfo from "@/components/site/subscriptioninformation/subscriptioninformationcomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
 import { useState,useEffect } from 'react';
-import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi";
+import { fetchSubscriptionLoginData,getSiteId,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 
-// const [cookieData,setCookieData] = useState(null);
-
-export default function Home({ globalData }) {
+export default function HomePage({ globalData }) {
     // Demo URLs to pass as props
-    const noticeLink = '/notice'; // Replace with your desired URL
-    const maintenanceLink = '/maintenance'; // Replace with your desired URL
+    const [notifications, setNotifications] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
 
     const [domain, setDomain] = useState("");
     const [subscriptionData, setSubscriptionData] = useState([]);
@@ -30,52 +30,82 @@ export default function Home({ globalData }) {
     }, []); // This useEffect runs only once, when the component mounts
 
     useEffect(() => {
-    // Fetch subscription data once the domain is set
-    if (domain) {
-        const getSiteInformation = async () => {
-            try {
-                const siteIdResult = await getSiteId(domain);
-                if (!siteIdResult) {
-                    throw new Error(`Site with name '${domain}' not found.`);
+        // Fetch subscription data once the domain is set
+        if (domain) {
+            const getSiteInformation = async () => {
+                try {
+                    const siteIdResult = await getSiteId(domain);
+                    if (!siteIdResult) {
+                        throw new Error(`Site with name '${domain}' not found.`);
+                    }
+                    
+                    const siteId = siteIdResult.data[0]?.id;
+                    console.log("Extracted site ID:", siteId);
+                    getSubscriptionData(siteId);       
+                    getLoginData(siteId);     
+                    getNotifications(siteId);
+                    getAnnouncements(siteId);
+                } catch (error) {
+                    console.log("Error fetching subscription data:", error);
                 }
-                
-                const siteId = siteIdResult.data[0]?.id;
-                console.log("Extracted site ID:", siteId);
-                getSubscriptionData(siteId);       
-                getLoginData(siteId);        
-            } catch (error) {
-                console.log("Error fetching subscription data:", error);
-            }
-        };
-        
-        const getSubscriptionData = async (siteId) => {
-        try {            
-            const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
-            setSubscriptionData(response.data);
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
-        }
-        };
-        const getLoginData = async (siteId) => {
+            };
+            
+            const getSubscriptionData = async (siteId) => {
             try {            
-                const response = await fetchSubscriptionLoginData(siteId,"loginbutton");
-                setLoginData(response.data);
+                const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
+                setSubscriptionData(response.data);
             } catch (error) {
                 console.log("Error fetching subscription data:", error);
             }
-        };
-        getSiteInformation();
-    }
+            };
+            const getLoginData = async (siteId) => {
+                try {            
+                    const response = await fetchSubscriptionLoginData(siteId,"loginbutton");
+                    setLoginData(response.data);
+                } catch (error) {
+                    console.log("Error fetching subscription data:", error);
+                }
+            };
+
+            const getNotifications = async (siteId) => {
+                try {
+                  const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
+                  setNotifications(data.data);
+                } catch (error) {
+                  console.error("Error fetching notifications:", error);
+                }
+              };
+
+              const getAnnouncements = async (siteId) => {
+                try{
+                  const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+                  setAnnouncements(data.data);
+                }catch(error) {
+                  console.error("Error fetching announcements:", error);
+                }
+              };
+
+            getSiteInformation();
+        }
     }, [domain]);  
 
+      
     return (
         <Layout globalData={globalData}>  
-            <InformationSection 
-                noticeLink={noticeLink} 
-                maintenanceLink={maintenanceLink} 
-            />
-            <br />
-            <br />
+            <HeaderComponent  />                     
+            {notifications.map((notification, index) => (
+                <NotificationComponent
+                key={index}
+                text={notification.text}
+                href={notification.link}
+                />
+            ))}                                    
+            {announcements.map((announcement, index) => (
+                <AnnounceComponent 
+                    key={index}
+                    {...announcement}          
+                />
+            ))}
             <FeatureSection  />
             <SubscriptionInfo  />                       
 

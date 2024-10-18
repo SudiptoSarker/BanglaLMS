@@ -283,3 +283,9 @@ export const fetchSubscriptionLoginData = async (siteId, sectionname) => {
         throw error;
     }
 };
+
+export const fetchNotificationsAndAnnouncements = async (siteId, sectionname) => {
+    const query = `SELECT * FROM [dbo].[${siteId}_textlinks] WHERE section = '${sectionname}'`;    
+    const values = [];
+    return await calltoApi(query,values);
+};
