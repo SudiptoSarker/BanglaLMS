@@ -23,14 +23,20 @@ export default function MemberPage({ globalData }) {
     const [licenseKey,setLicenseKey] = useState('');
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
+    useEffect(() => {
+        if(!globalData.auth){
+            router.push('/');
+        }
+    }, [router]);
 
     useEffect(() => {
         // Get the domain name when the component mounts
-        if (typeof window !== "undefined") {
-            const currentDomain = window.location.hostname;
-            setDomain(currentDomain);
-            console.log("Current domain:", currentDomain); // Debugging
-        }
+        // if (typeof window !== "undefined") {
+        //     const currentDomain = window.location.hostname;
+        //     setDomain(currentDomain);
+        //     console.log("Current domain:", currentDomain); // Debugging
+        // }
+        setDomain(process.env.NEXT_PUBLIC_DOMAIN);
 
         // Get 'muid' from cookies        
         const uidCookie = Cookies.get('muid') || null;       

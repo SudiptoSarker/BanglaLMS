@@ -21,15 +21,7 @@ export default function HomePage({ globalData }) {
     const [loginData, setLoginData] = useState([]);
 
     useEffect(() => {
-    // Get the domain name when the component mounts
-    if (typeof window !== "undefined") {
-        const currentDomain = window.location.hostname;
-        setDomain(currentDomain);
-        console.log("Current domain:", currentDomain); // For debugging
-    }
-    }, []); // This useEffect runs only once, when the component mounts
-
-    useEffect(() => {
+        setDomain(process.env.NEXT_PUBLIC_DOMAIN);
         // Fetch subscription data once the domain is set
         if (domain) {
             const getSiteInformation = async () => {

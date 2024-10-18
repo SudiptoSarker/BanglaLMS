@@ -254,7 +254,7 @@ export const deleteTableData = async (tableName,rowId) => {
 //     return await calltoApi(query,values);
 // };
 export const getSiteId = async (domain) => {
-    const siteIdQuery = `SELECT id FROM [dbo].[sites] WHERE name LIKE '%${domain}'`;
+    const siteIdQuery = `SELECT id FROM [dbo].[sites] WHERE name='${domain}'`;
     const siteIdResult =  await calltoApi(siteIdQuery, []);    
     return siteIdResult;    
 }

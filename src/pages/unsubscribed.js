@@ -13,8 +13,8 @@ export default function UnsubscribedPage({ globalData }) {
     const maintenanceLink = '/maintenance'; // Replace with your desired URL
     const router = useRouter();
     useEffect(() => {
-        console.log('auth: ',globalData.auth);
-        console.log('isSubscribed: ',globalData.isSubscribed);
+        // console.log('auth: ',globalData.auth);
+        // console.log('isSubscribed: ',globalData.isSubscribed);
         if(!globalData.auth){
             router.push('/');
         }

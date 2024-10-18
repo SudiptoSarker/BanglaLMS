@@ -1,7 +1,5 @@
 // Import the Layout component
 import Layout from "@/components/site/layout/layout";
-import InformationSection from "@/components/site/information/informationcomponent";
-import FeatureSection from "@/components/site/feature/featurecomponent";
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
 import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
@@ -9,8 +7,6 @@ import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi"
 
 export default function UnsubscribePage({ globalData }) {
     // Demo URLs to pass as props
-    const noticeLink = '/notice'; // Replace with your desired URL
-    const maintenanceLink = '/maintenance'; // Replace with your desired URL
     const router = useRouter();
     useEffect(() => {
         if(!globalData.auth){
@@ -22,16 +18,20 @@ export default function UnsubscribePage({ globalData }) {
     const [unSubscriptionData, setUnubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
 
+    useEffect(()=>{
+        setDomain(process.env.NEXT_PUBLIC_DOMAIN);
+    },[domain]);
 
-    useEffect(() => {
+
+    // useEffect(() => {
         // Get the domain name when the component mounts
-        if (typeof window !== "undefined") {
-            const currentDomain = window.location.hostname;
-            setDomain(currentDomain);
-            console.log("Current domain:", currentDomain); // For debugging
-        }
-        }, []); // This useEffect runs only once, when the component mounts
-    
+        // if (typeof window !== "undefined") {
+        //     const currentDomain = window.location.hostname;
+        //     setDomain(currentDomain);
+        //     console.log("Current domain:", currentDomain); // For debugging
+        // }
+        // }, []); // This useEffect runs only once, when the component mounts
+        
         useEffect(() => {
         // Fetch subscription data once the domain is set
         if (domain) {
