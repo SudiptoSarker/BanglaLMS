@@ -255,7 +255,7 @@ export const deleteTableData = async (tableName,rowId) => {
 // };
 export const getSiteId = async (domain) => {
     const siteIdQuery = `SELECT id FROM [dbo].[sites] WHERE name LIKE '%${domain}'`;
-    const siteIdResult =  await calltoApi(siteIdQuery);    
+    const siteIdResult =  await calltoApi(siteIdQuery, []);    
     return siteIdResult;    
 }
 
@@ -273,7 +273,7 @@ export const fetchSubscriptionLoginData = async (siteId, sectionname) => {
         // Step 2: Use the site id to fetch the subscription data
         const subscriptionQuery = `SELECT * FROM [dbo].[${siteId}_subscriptiondata] WHERE section = '${sectionname}'`;
         
-        const subscriptionResult = await calltoApi(subscriptionQuery);
+        const subscriptionResult = await calltoApi(subscriptionQuery,[]);
 
         // Return the subscription data
         return subscriptionResult;
