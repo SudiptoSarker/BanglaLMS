@@ -1,38 +1,33 @@
-// Import the Layout component
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "@/components/site/layout/layout";
 import HeaderComponent from "@/components/site/header/headercomponent";
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
-import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
-import { useState } from 'react';
 import { fetchSubscriptionLoginData, getSiteId,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
-import TopPageComponent from "@/components/site/top/toppagecomponent";
-import Cookies from 'js-cookie'; // Import js-cookie
+import Cookies from 'js-cookie'; 
 import { checkSubscription } from "@/helper/helper";
+import { siteid } from '@/helper/helper';
 
-export default function MemberPage({ globalData }) { 
-    const [domain, setDomain] = useState("");
+export default function MemberPage({ globalData }) {     
     const [subscriptionData, setSubscriptionData] = useState([]);
-    const [loginData, setLoginData] = useState([]);
-    const [muid, setMuid] = useState(null); // State to hold 'muid'
     const [licenseKey,setLicenseKey] = useState('');
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
-
+    
+    const router = useRouter();
     useEffect(() => {
-        // Get the domain name when the component mounts
-        if (typeof window !== "undefined") {
-            const currentDomain = window.location.hostname;
-            setDomain(currentDomain);
-            console.log("Current domain:", currentDomain); // Debugging
+        if(!globalData.auth){
+            router.push('/');
         }
+    }, [router]);
 
-        // Get 'muid' from cookies        
+    const domain = process.env.NEXT_PUBLIC_DOMAIN;
+
+    useEffect(() => {                        
         const uidCookie = Cookies.get('muid') || null;       
         if (uidCookie){
             console.log('uidCookie: ',uidCookie);
@@ -51,14 +46,9 @@ export default function MemberPage({ globalData }) {
         if (domain) {
             const getSiteInformation = async () => {
                 try {
-                    const siteIdResult = await getSiteId(domain);
-                    if (!siteIdResult) {
-                        throw new Error(`Site with name '${domain}' not found.`);
-                    }
-                    const siteId = siteIdResult.data[0]?.id;
-                    console.log("Extracted site ID:", siteId);
+                    const siteId = await siteid();
+
                     getSubscriptionData(siteId);
-                    getLoginData(siteId);
                     getNotifications(siteId);
                     getAnnouncements(siteId);
                 } catch (error) {
@@ -72,15 +62,6 @@ export default function MemberPage({ globalData }) {
                     setSubscriptionData(response.data);
                 } catch (error) {
                     console.log("Error fetching subscription data:", error);
-                }
-            };
-
-            const getLoginData = async (siteId) => {
-                try {
-                    const response = await fetchSubscriptionLoginData(siteId, "loginbutton");
-                    setLoginData(response.data);
-                } catch (error) {
-                    console.log("Error fetching login data:", error);
                 }
             };
             const getNotifications = async (siteId) => {

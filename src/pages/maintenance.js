@@ -6,9 +6,6 @@ import { useEffect } from "react";
 
 
 export default function MaintenancePage({ globalData }) {
-    // Demo URLs to pass as props
-    const noticeLink = '/notice'; // Replace with your desired URL
-    const maintenanceLink = '/maintenance'; // Replace with your desired URL
     const router = useRouter();
     useEffect(() => {
         if(!globalData.auth){

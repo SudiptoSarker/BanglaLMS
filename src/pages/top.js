@@ -1,21 +1,19 @@
-// Import the Layout component
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "@/components/site/layout/layout";
 import HeaderComponent from "@/components/site/header/headercomponent";
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
-import { fetchSubscriptionLoginData,getSiteId,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+import { fetchSubscriptionLoginData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+import { siteid } from '@/helper/helper';
 
 export default function TopPage({ globalData }) {
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
-    const [domain, setDomain] = useState("");
     const [subscriptionData, setSubscriptionData] = useState([]);
-    const [loginData, setLoginData] = useState([]);
     const router = useRouter();
     useEffect(() => {
         if(!globalData.auth){
@@ -23,29 +21,15 @@ export default function TopPage({ globalData }) {
         }
     }, [router]);
 
-   useEffect(() => {
-   // Get the domain name when the component mounts
-   if (typeof window !== "undefined") {
-       const currentDomain = window.location.hostname;
-       setDomain(currentDomain);
-       console.log("Current domain:", currentDomain); // For debugging
-   }
-   }, []); // This useEffect runs only once, when the component mounts
+    const domain = process.env.NEXT_PUBLIC_DOMAIN;
 
-   useEffect(() => {
-   // Fetch subscription data once the domain is set
+   useEffect(() => {   
     if (domain) {
         const getSiteInformation = async () => {
            try {
-                const siteIdResult = await getSiteId(domain);
-                if (!siteIdResult) {
-                throw new Error(`Site with name '${domain}' not found.`);
-                }
-               
-                const siteId = siteIdResult.data[0]?.id;
-                console.log("Extracted site ID:", siteId);
+                const siteId = await siteid();   
+
                 getSubscriptionData(siteId);       
-                getLoginData(siteId);   
                 getNotifications(siteId);
                 getAnnouncements(siteId);        
            } catch (error) {
@@ -60,14 +44,6 @@ export default function TopPage({ globalData }) {
        } catch (error) {
            console.log("Error fetching subscription data:", error);
        }
-       };
-       const getLoginData = async (siteId) => {
-           try {            
-               const response = await fetchSubscriptionLoginData(siteId,"loginbutton");
-               setLoginData(response.data);
-           } catch (error) {
-               console.log("Error fetching subscription data:", error);
-           }
        };
        const getNotifications = async (siteId) => {
         try {
