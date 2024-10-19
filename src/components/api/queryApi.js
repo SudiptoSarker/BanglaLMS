@@ -1,6 +1,7 @@
 const calltoApi = async (query, values) => {
     try {
-        const response = await fetch("/api/db", {
+        const api = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(api+"api/db", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
