@@ -8,7 +8,8 @@ function SubscriptionButton({ data }) {
   };
   
   return (  
-    <form id={data.formId} method="post" action={data.submitlink}>
+    // <form id={data.formId} method="post" action={data.submitlink}>
+    <form id="formSubscribe" action="https://devwww.mopita.com/cp/regist" method="post">
       <p>        
         <button className={styles.button} type="submit" onClick={handleSubscription}>
           {data.buttonhtml ? (
@@ -27,11 +28,21 @@ function SubscriptionButton({ data }) {
           )}
         </button>
       </p>
-      <input type="hidden" name="ci" className={styles.hiddenInput} value={data.ci} />
+      
+      {/* <input type="hidden" name="ci" className={styles.hiddenInput} value={data.ci} />
       <input type="hidden" name="act" className={styles.hiddenInput} value={data.act} />
       <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />
       <input type="hidden" name="cl" className={styles.hiddenInput} value={data.cl} />
-      <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />
+      <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} /> */}
+
+        <input type="hidden" name="ci" value="R000002750" />
+        {/* <input type="hidden" name="ci" value="R000002007" /> */}
+        
+        <input type="hidden" name="act" value="reg" />
+        <input type="hidden" name="nl" value="https://stgbanglalms.mopita.com/member" />
+        <input type="hidden" name="cl" value="https://stgbanglalms.mopita.com/top" />
+        <input type="hidden" name="fl" value="https://stgbanglalms.mopita.com/top" />
+
     </form>
   );
 };
