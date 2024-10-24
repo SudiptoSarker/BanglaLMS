@@ -3,9 +3,7 @@ import fs from 'fs'
 import path from 'path'
 
 export default async function handler(req, res) {
-    // custom log
     {
-
         let fileName = Date.now() + Math.random()+'_register.txt';
 
         const filePath = path.resolve('.', 'custom_logs/'+fileName);
@@ -15,14 +13,18 @@ export default async function handler(req, res) {
         requestString += '\nbody: '+JSON.stringify(req.body);
         requestString += '\nquery: '+JSON.stringify(req.query);
         requestString += '\ncookies: '+JSON.stringify(req.cookies);
+        requestString += '\nBodyType: '+ typeof(JSON.stringify(req.body));
+        requestString += '\nBodyType2: '+ typeof(req.body);
         fs.writeFile(filePath,requestString,{flag: 'a+'},(err)=>{
-            console.log('Register File written!');
+            console.log('File written!');
         });
     }
+
     
     try{
         //let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002750","act":"reg","cs":"20241001000000000","iai_tms":"20240904192455905","iai_paytype":"00","iai_ordid":"202409046fc1693bf60e81e074","arg":""};
-        let jsonBody = JSON.parse(req.body);
+        // let jsonBody = JSON.parse(req.body);
+        let jsonBody = req.body;
         let cs = jsonBody.cs;
         let ci = jsonBody.ci;
         let uid = jsonBody.uid;
@@ -33,7 +35,7 @@ export default async function handler(req, res) {
         
         const date = new Date();
         date.setFullYear(date.getFullYear() + 100);
-        res.setHeader('Set-Cookie', `muid=${uid}; Path=/; HttpOnly; Secure; SameSite=Strict; Expires=${date.toUTCString()}`);
+        res.setHeader('Set-Cookie', `muid=${uid}; Path=/; HttpOnly; Secure; SameSite=None; Expires=${date.toUTCString()}`);
         
         const queryGetSite = `select * from resources  where resource='${ci}'`;
         
@@ -97,7 +99,7 @@ export default async function handler(req, res) {
                                     uid: uid,
                                     pagelink: siteName,
                                     activity: 'subscriptions',
-                                    time: new Date().toISOString().split('T')[0] 
+                                    time: new Date().toISOString().replace('T', ' ').substring(0, 19)
                                 };   
                                  
                                 await queryDatabase(query, params);  
@@ -106,14 +108,14 @@ export default async function handler(req, res) {
                             res.status(200).send('OK¥n');
                         }
                         else{
-                            // res.status(200).send('NG¥n');
-                            res.status(200).send({body: 'NG¥n', message: "WebAPI: member table insertion failed"});
+                            res.status(200).send('NG¥n');
+                            // res.status(200).send({body: 'NG¥n', message: "WebAPI: member table insertion failed"});
                         }
                         
                     }
                     else{
-                        // res.status(200).send('NG¥n');
-                        res.status(200).send({body: 'NG¥n', message: "WebAPI: issuance API data failed"});
+                        res.status(200).send('NG¥n');
+                        // res.status(200).send({body: 'NG¥n', message: "WebAPI: issuance API data failed"});
                     }
                     
                 }
@@ -154,34 +156,34 @@ export default async function handler(req, res) {
                                 res.status(200).send('OK¥n');
                             }
                             else{
-                                // res.status(200).send('NG¥n');
-                                res.status(200).send({body: 'NG¥n', message: "DB: deactive key in license table failed"});
+                                res.status(200).send('NG¥n');
+                                // res.status(200).send({body: 'NG¥n', message: "DB: deactive key in license table failed"});
                             }
                         }
                         else{
-                            // res.status(200).send('NG¥n');
-                            res.status(200).send({body: 'NG¥n', message: "DB: member table insertion failed"});
+                            res.status(200).send('NG¥n');
+                            // res.status(200).send({body: 'NG¥n', message: "DB: member table insertion failed"});
                         }
                     }
                     else{
-                        // res.status(200).send('NG¥n');
-                        res.status(200).send({body: 'NG¥n', message: "DB: resource id not found"});
+                        res.status(200).send('NG¥n');
+                        // res.status(200).send({body: 'NG¥n', message: "DB: resource id not found"});
                     }
                 }
             }
             else{
-                // res.status(200).send('NG¥n');
-                res.status(200).send({body: 'NG¥n', message: "site data not found"});
+                res.status(200).send('NG¥n');
+                // res.status(200).send({body: 'NG¥n', message: "site data not found"});
             }
         }
         else{
-            // res.status(200).send('NG¥n');
-            res.status(200).send({body: 'NG¥n', message: "resource id not found"});
+            res.status(200).send('NG¥n');
+            // res.status(200).send({body: 'NG¥n', message: "resource id not found"});
         } 
     }
     catch(error){
-        // res.status(200).send('NG¥n');
-        res.status(200).send({body: 'NG¥n', message: error.message});
+        res.status(200).send('NG¥n');
+        // res.status(200).send({body: 'NG¥n', message: error.message});
     }
 
     

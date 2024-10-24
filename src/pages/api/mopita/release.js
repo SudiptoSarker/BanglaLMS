@@ -25,7 +25,8 @@ export default async function handler(req, res) {
 
 
         //let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002750","act":"rel","cs":"20241001000000000","iai_tms":"20240904192455905","iai_paytype":"00","iai_ordid":"202409046fc1693bf60e81e074","arg":""};
-        let jsonBody = JSON.parse(req.body);
+        // let jsonBody = JSON.parse(req.body);
+        let jsonBody = req.body;
         //let cs = jsonBody['cs'];
         let ci = jsonBody.ci;
         let uid = jsonBody.uid;
@@ -117,7 +118,7 @@ export default async function handler(req, res) {
                                 uid: uid,
                                 pagelink: siteName,
                                 activity: 'unsubscriptions',
-                                time: new Date().toISOString().split('T')[0] 
+                                time: new Date().toISOString().replace('T', ' ').substring(0, 19) 
                             };    
                             await queryDatabase(query, params);  
                         }
