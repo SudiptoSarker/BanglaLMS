@@ -92,7 +92,7 @@ export default async function handler(req, res) {
                                     uid: uid,
                                     pagelink: siteName,
                                     activity: 'subscriptions',
-                                    time: new Date().toISOString().split('T')[0] 
+                                    time: new Date().toISOString().replace('T', ' ').substring(0, 19) 
                                 };    
                                 await queryDatabase(query, params);  
                             }
@@ -138,7 +138,7 @@ export default async function handler(req, res) {
                                         uid: uid,
                                         pagelink: siteName,
                                         activity: 'subscriptions',
-                                        time: new Date().toISOString().split('T')[0] 
+                                        time: new Date().toISOString().replace('T', ' ').substring(0, 19) 
                                     };    
                                     await queryDatabase(query, params);  
                                 }
