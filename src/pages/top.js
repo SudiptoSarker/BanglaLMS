@@ -1,25 +1,100 @@
-// Import the Layout component
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Layout from "@/components/site/layout/layout";
-import InformationSection from "@/components/site/information/informationcomponent";
+import HeaderComponent from "@/components/site/header/headercomponent";
+import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
+import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
+import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
+import { fetchSubscriptionLoginData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+import { siteid } from '@/helper/helper';
 
+export default function TopPage({ globalData }) {
+    const [notifications, setNotifications] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);
+    const [subscriptionData, setSubscriptionData] = useState([]);
+    const router = useRouter();
+    useEffect(() => {
+        if(!globalData.auth){
+            router.push('/');
+        }
+    }, [router]);
 
-export default function Home() {
-    // Demo URLs to pass as props
-    const noticeLink = 'https://example.com/notice'; // Replace with your desired URL
-    const maintenanceLink = 'https://example.com/maintenance'; // Replace with your desired URL
+    const domain = process.env.NEXT_PUBLIC_DOMAIN;
+
+   useEffect(() => {   
+    if (domain) {
+        const getSiteInformation = async () => {
+           try {
+                const siteId = await siteid();   
+
+                getSubscriptionData(siteId);       
+                getNotifications(siteId);
+                getAnnouncements(siteId);        
+           } catch (error) {
+               console.log("Error fetching subscription data:", error);
+           }
+       };
+       
+       const getSubscriptionData = async (siteId) => {
+       try {            
+           const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
+           setSubscriptionData(response.data);
+       } catch (error) {
+           console.log("Error fetching subscription data:", error);
+       }
+       };
+       const getNotifications = async (siteId) => {
+        try {
+          const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
+          setNotifications(data.data);
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      };
+
+      const getAnnouncements = async (siteId) => {
+        try{
+          const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+          setAnnouncements(data.data);
+        }catch(error) {
+          console.error("Error fetching announcements:", error);
+        }
+      };
+       getSiteInformation();
+   }
+   }, [domain]);  
 
     return (
-        <Layout>  
-            <InformationSection 
-                noticeLink={noticeLink} 
-                maintenanceLink={maintenanceLink} 
-            />
+        <Layout globalData={globalData}>  
+            <HeaderComponent  />         
+            {notifications.map((notification, index) => (
+                <NotificationComponent
+                key={index}
+                text={notification.text}
+                href={notification.link}
+                />
+            ))}                                    
+            {announcements.map((announcement, index) => (
+                <AnnounceComponent 
+                    key={index}
+                    {...announcement}          
+                />
+            ))}   
+            <FeatureSection  />                   
+            {(globalData.auth && !globalData.isSubscribed) && (
+                subscriptionData.map((option, index) => (
+                    <SubscriptionButton key={index} data={option} />
+                ))
+            )}
+
+            {/* Show TopPageComponent if user is authenticated and subscribed */}
+            {globalData.auth && globalData.isSubscribed && (
+                <TopPageComponent />
+            )}
+
             <br />
-            <br />
-            <FeatureSection  />            
-            <TopPageComponent  />            
         </Layout>
     );
 }

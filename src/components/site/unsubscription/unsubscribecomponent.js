@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './unsubscribe.module.css';
 import FeatureList from './unsubscribefeaturelist';
 
-function UnsubscribeComponent() {
+function UnsubscribeComponent({ data }) {
   return (
     <main className={styles.container}>
       <h1 className={styles.title}>解約前のご注意</h1>
@@ -12,6 +12,8 @@ function UnsubscribeComponent() {
       <section className={styles.featureSection}>
         <h2 className={styles.featureTitle}>BDGuardの主な機能</h2>
         <FeatureList />
+      </section>
+      <section className={styles.cancellationSection}>
         <h2 className={styles.cancellationTitle}>解約</h2>
         <p className={styles.thankYouMessage}>
           BDGuardをご利用いただきありがとうございます。
@@ -22,8 +24,34 @@ function UnsubscribeComponent() {
         <p className={styles.farewell}>
           これまでのご愛顧、誠にありがとうございました。
         </p>
-        <button className={styles.backButton}>戻る</button>
-        <button className={styles.cancelButton}>解約する</button>
+        <div className={styles.buttonContainer}>
+          {/* Back Button */}
+          <button
+            className={styles.backButton}
+            type="button"
+            onClick={() => history.back()} // Go back on click
+          >
+            戻る
+          </button>         
+          <form id={data.formId} method="post" action={data.submitlink}>
+            <p>        
+              <button className={styles.cancelButton} type="submit">
+                {data.buttonhtml ? (
+                  <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
+                ) : (            
+                  <>                    
+                    <p>解約する</p> 
+                  </>       
+                )}
+              </button>
+            </p>
+            <input type="hidden" name="ci" className={styles.hiddenInput} value={data.ci} />
+            <input type="hidden" name="act" className={styles.hiddenInput} value={data.act} />
+            <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />
+            <input type="hidden" name="cl" className={styles.hiddenInput} value={data.cl} />
+            <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />
+          </form>
+        </div>
       </section>
     </main>
   );

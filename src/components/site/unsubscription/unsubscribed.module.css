@@ -1,48 +1,102 @@
 .container {
-    display: flex;
-    max-width: 480px;
-    width: 100%;
-    flex-direction: column;
-    overflow: hidden;
-    color: #000;
-    white-space: nowrap;
-    text-align: center;
-    margin: 0 auto;
-    font: 400 24px/1 Inter, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center the content */
+  justify-content: center;
+  max-width: 600px; /* Increased max-width for larger screens */
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px; /* Added padding for breathing space */
+  color: #333; /* Slightly darker text color for readability */
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.confirmationImage {
+  width: 80%; /* Make image more responsive */
+  max-width: 400px; /* Set max-width for larger screens */
+  margin-top: 20px;
+  object-fit: contain;
+  object-position: center;
+}
+
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center-align content */
+  width: 100%;
+  margin-top: 40px;
+  padding: 0 20px;
+}
+
+.title {
+  font-size: 28px; /* Increase font size for title */
+  color: rgba(0, 128, 0, 0.85); /* Darker green for emphasis */
+  margin-bottom: 20px;
+}
+
+.thankYouMessage {
+  font-size: 18px; /* Standardize font size for message */
+  color: #555; /* Softer color for secondary text */
+  margin-bottom: 40px; /* Increased margin for better spacing */
+}
+
+.returnButton {
+  background-color: #66b574; /* Bright green for call-to-action */
+  color: #fff;
+  border-radius: 10px;
+  padding: 15px 30px; /* Reduced padding for a more compact button */
+  font-size: 20px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; /* Smooth hover effect */
+}
+
+.returnButton:hover {
+  background-color: #57a057; /* Darker shade on hover */
+  transform: translateY(-3px); /* Lift effect on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+      padding: 15px;
   }
-  
+
   .confirmationImage {
-    aspect-ratio: 0.9;
-    object-fit: contain;
-    object-position: center;
-    width: 100%;
-    align-self: start;
+      width: 90%;
   }
-  
-  .contentWrapper {
-    display: flex;
-    margin-top: 185px;
-    width: 100%;
-    padding-left: 15px;
-    flex-direction: column;
-    align-items: start;
+
+  .title {
+      font-size: 24px;
   }
-  
+
   .thankYouMessage {
-    align-self: stretch;
-    margin-top: 48px;
+      font-size: 16px;
   }
-  
+
   .returnButton {
-    align-self: stretch;
-    border-radius: 10px;
-    background-color: rgba(0, 128, 0, 0.6);
-    min-height: 58px;
-    color: #fff;
-    margin: 113px 0 0 40px;
-    padding: 19px 10px;
-    border: none;
-    cursor: pointer;
-    font-size: 24px;
-    font-family: Inter, sans-serif;
+      width: 100%; /* Full width on small screens */
+      font-size: 18px;
+      padding: 12px 20px;
   }
+}
+
+@media (max-width: 480px) {
+  .confirmationImage {
+      width: 100%;
+  }
+
+  .title {
+      font-size: 22px;
+  }
+
+  .thankYouMessage {
+      font-size: 14px;
+  }
+
+  .returnButton {
+      font-size: 16px;
+      padding: 10px 18px;
+  }
+}
