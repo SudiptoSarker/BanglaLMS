@@ -24,7 +24,7 @@ export default function MemberPage({ globalData }) {
             router.push('/');
         }
     }, [router]);
-
+    
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
 
     useEffect(() => {                        
@@ -87,7 +87,11 @@ export default function MemberPage({ globalData }) {
 
     return (
         <Layout globalData={globalData}>  
+            {globalData.auth && globalData.isSubscribed && (
+                <MemberPageComponent licenseKey={licenseKey} />  
+            )} 
             <HeaderComponent  />         
+             {/* Show TopPageComponent if user is authenticated and subscribed */}                          
             {notifications.map((notification, index) => (
                 <NotificationComponent
                 key={index}
@@ -107,12 +111,7 @@ export default function MemberPage({ globalData }) {
                 subscriptionData.map((option, index) => (
                     <SubscriptionButton key={index} data={option} />
                 ))
-            )}
-
-            {/* Show TopPageComponent if user is authenticated and subscribed */}
-            {globalData.auth && globalData.isSubscribed && (
-                <MemberPageComponent licenseKey={licenseKey} />  
-            )}                        
+            )}                                  
         </Layout>
     );
 }

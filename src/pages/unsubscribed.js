@@ -7,11 +7,11 @@ import { useEffect } from "react";
 
 export default function UnsubscribedPage({ globalData }) {
     const router = useRouter();
-    useEffect(() => {
-        if(!globalData.auth){
-            router.push('/');
-        }
-    }, [router]);
+    // useEffect(() => {
+    //     if(!globalData.auth){
+    //         router.push('/');
+    //     }
+    // }, [router]);
 
     return (
         <Layout globalData={globalData}>              
