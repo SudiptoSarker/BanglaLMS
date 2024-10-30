@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }) {
 
     if(authCookie && uidCookie){        
         subcribeData(uidCookie);
-    }
+    }    
     setGlobalData({auth: authCookie, isSubscribed: isSubscribed});
   },[])
 

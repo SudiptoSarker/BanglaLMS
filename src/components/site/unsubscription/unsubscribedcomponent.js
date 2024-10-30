@@ -2,6 +2,9 @@ import React from "react";
 import styles from './unsubscribed.module.css';
 
 function UnsubscribedComponent() {
+  const handleReturnClick = () => {
+    window.location.href = "/top"; // Redirect to the top page
+  };
   return (
     <main className={styles.container}>
       <img 
@@ -14,7 +17,13 @@ function UnsubscribedComponent() {
         <p className={styles.thankYouMessage}>
           ご利用いただき、ありがとうございました。
         </p>
-        <button className={styles.returnButton} type="button" onclick="location.href='/'">TOPへ戻る</button>
+        <button 
+          className={styles.returnButton} 
+          type="button" 
+          onClick={handleReturnClick}
+        >
+          TOPへ戻る
+        </button>
       </section>
     </main>
   );
