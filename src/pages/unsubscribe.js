@@ -4,12 +4,13 @@ import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
 import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi";
 import { siteid } from '@/helper/helper';
+import Cookies from 'js-cookie'; 
 
-
-export default function UnsubscribePage({ globalData }) {
+export default function UnsubscribePage() {
     const router = useRouter();
     useEffect(() => {
-        if(!globalData.auth){
+        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
+        if(!authCookie){
             router.push('/');
         }
     }, [router]);
@@ -43,7 +44,7 @@ export default function UnsubscribePage({ globalData }) {
 
         
     return (
-        <Layout globalData={globalData}>                      
+        <Layout globalData={{}}>                      
             {unSubscriptionData.map((option, index) => (
                 <UnsubscribeComponent key={index} data={option} />
             ))}                  
