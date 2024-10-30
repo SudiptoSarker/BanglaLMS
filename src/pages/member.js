@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "@/components/site/layout/layout";
@@ -13,77 +14,87 @@ import { checkSubscription } from "@/helper/helper";
 import { siteid } from '@/helper/helper';
 
 export default function MemberPage({ globalData }) {     
+    const router = useRouter();
+    const {query} = router;
+    
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [licenseKey,setLicenseKey] = useState('');
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
+    const [uId, setUid] = useState(null);
+
+    const getSiteInformation = async () => {
+        try {
+            const siteId = await siteid();
+
+            getSubscriptionData(siteId);
+            getNotifications(siteId);
+            getAnnouncements(siteId);
+        } catch (error) {
+            console.log("Error fetching site information:", error);
+        }
+    };
+
+    const getSubscriptionData = async (siteId) => {
+        try {
+            const response = await fetchSubscriptionLoginData(siteId, "DeviceSubscriptionButton");
+            setSubscriptionData(response.data);
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };
+    const getNotifications = async (siteId) => {
+        try {
+          const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
+          setNotifications(data.data);
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+      };
+
+      const getAnnouncements = async (siteId) => {
+        try{
+          const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+          setAnnouncements(data.data);
+        }catch(error) {
+          console.error("Error fetching announcements:", error);
+        }
+      };
     
-    const router = useRouter();
+
     useEffect(() => {
         if(!globalData.auth){
             router.push('/');
         }
-    }, [router]);
+        
+        let uidparam = query.uid || null;
+        let uidFromCookie = Cookies.get('muid') || null;
+        setUid(uidFromCookie || uidparam);
 
-    const domain = process.env.NEXT_PUBLIC_DOMAIN;
+        // if((uidFromCookie =='' || uidFromCookie==null) && uidparam){
+        //     Cookies.set('muid', uId, {expires: 365, path: '/', secure:true });
+        // }
 
-    useEffect(() => {                        
-        const uidCookie = Cookies.get('muid') || null;       
-        if (uidCookie){
+        getSiteInformation();
+
+    }, []);
+
+    useEffect(() => {   
+        Cookies.set('muid', uId, {expires: 365, path: '/', secure:true });
+        //const uidCookie = Cookies.get('muid') || null; 
+        const uidCookie = uId;      
+        if (!uidCookie){
             console.log('uidCookie: ',uidCookie);
             const getLicenseKey = async(uidCookie) => {
                 const result = await checkSubscription(uidCookie);
-
                 const  responseKey = result.licensekey;
                 setLicenseKey(responseKey);
             };   
             
             getLicenseKey(uidCookie);
         }
-    }, []);
+    }, [uId]);
 
-    useEffect(() => {
-        if (domain) {
-            const getSiteInformation = async () => {
-                try {
-                    const siteId = await siteid();
-
-                    getSubscriptionData(siteId);
-                    getNotifications(siteId);
-                    getAnnouncements(siteId);
-                } catch (error) {
-                    console.log("Error fetching site information:", error);
-                }
-            };
-
-            const getSubscriptionData = async (siteId) => {
-                try {
-                    const response = await fetchSubscriptionLoginData(siteId, "DeviceSubscriptionButton");
-                    setSubscriptionData(response.data);
-                } catch (error) {
-                    console.log("Error fetching subscription data:", error);
-                }
-            };
-            const getNotifications = async (siteId) => {
-                try {
-                  const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
-                  setNotifications(data.data);
-                } catch (error) {
-                  console.error("Error fetching notifications:", error);
-                }
-              };
-
-              const getAnnouncements = async (siteId) => {
-                try{
-                  const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
-                  setAnnouncements(data.data);
-                }catch(error) {
-                  console.error("Error fetching announcements:", error);
-                }
-              };
-            getSiteInformation();
-        }
-    }, [domain]);
 
     return (
         <Layout globalData={globalData}>  
