@@ -12,6 +12,7 @@ import { siteid } from '@/helper/helper';
 import { checkSubscription } from "@/helper/helper";
 import Cookies from 'js-cookie'; 
 import { useCookies,CookiesProvider } from "react-cookie";
+import * as CryptoJS from 'crypto-js';
 
 export default function TopPage() {
     const [notifications, setNotifications] = useState([]);
@@ -24,6 +25,8 @@ export default function TopPage() {
 
     const router = useRouter();
     const {query} = router;
+
+    const secretKey = process.env.REACT_APP_SECRET_KEY ? process.env.REACT_APP_SECRET_KEY : 'banglalms';
 
     const getSubscriptionData = async (siteId) => {
         try {            
@@ -84,13 +87,16 @@ export default function TopPage() {
         let uidparam = query.uid;
 
         if(uidparam){
-            setCookie('muid',uidparam);
+            const cipherText = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
+            setCookie('muid',cipherText);
             subcribeData(uidparam);
         }
         else{
             let uidFromCookie = cookies.muid;
             if(uidFromCookie){
-                subcribeData(uidFromCookie);
+                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
+                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
+                subcribeData(decryptedUid);
             }
             else{
                 setIsSubscribed(false);
