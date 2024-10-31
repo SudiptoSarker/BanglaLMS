@@ -22,12 +22,44 @@ export default function MemberPage({ globalData }) {
     const [licenseKey,setLicenseKey] = useState('');
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
-    const [cookies, setCookie] = useCookies(['muid']);
-    const [isSubscribed, setIsSubscribed] = useState(false);
-    const [auth, setAuth] = useState(false);
+    
+    const router = useRouter();
+    useEffect(() => {
+        if(!globalData.auth){
+            router.push('/');
+        }
+    }, [router]);
     
 
-   
+    useEffect(() => {                        
+        const uidCookie = Cookies.get('muid') || null;       
+        if (uidCookie){
+            console.log('uidCookie: ',uidCookie);
+            const getLicenseKey = async(uidCookie) => {
+                const result = await checkSubscription(uidCookie);
+
+                const  responseKey = result.licensekey;
+                setLicenseKey(responseKey);
+            };   
+            
+            getLicenseKey(uidCookie);
+        }
+    }, []);
+
+    useEffect(() => {
+        getSiteInformation();
+    }, []);
+    const getSiteInformation = async () => {
+        try {
+            const siteId = await siteid();
+
+            getSubscriptionData(siteId);
+            getNotifications(siteId);
+            getAnnouncements(siteId);
+        } catch (error) {
+            console.log("Error fetching site information:", error);
+        }
+    };
 
     const getSubscriptionData = async (siteId) => {
         try {
@@ -44,72 +76,16 @@ export default function MemberPage({ globalData }) {
         } catch (error) {
           console.error("Error fetching notifications:", error);
         }
-    };
+      };
 
-    const getAnnouncements = async (siteId) => {
+      const getAnnouncements = async (siteId) => {
         try{
           const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
           setAnnouncements(data.data);
         }catch(error) {
           console.error("Error fetching announcements:", error);
         }
-    };
-
-    const getSiteInformation = async () => {
-        try {
-            const siteId = await siteid();
-
-            getSubscriptionData(siteId);
-            getNotifications(siteId);
-            getAnnouncements(siteId);
-        } catch (error) {
-            console.log("Error fetching site information:", error);
-        }
-    };
-    
-    const getLicenseKey = async(uidCookie) => {
-        setLicenseKey('');
-        const result = await checkSubscription(uidCookie);
-        const  responseKey = result.licensekey;
-        console.log('key',responseKey)
-        setLicenseKey(responseKey);
-    }; 
-
-
-    const subcribeData = async(uidCookie) => {
-        const result = await checkSubscription(uidCookie);
-        const  susbscribeStatus = result ? true : false;
-        if(susbscribeStatus){
-            getLicenseKey(uidCookie);
-        }
-        setIsSubscribed(susbscribeStatus);
       };
-
-    useEffect(() => {
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
-        if(!authCookie){
-            router.push('/');
-        }
-        getSiteInformation();
-
-        setAuth(authCookie);
-        let uidparam = query.uid;
-
-        if(uidparam){
-            setCookie('muid',uidparam);
-            subcribeData(uidparam);
-        }
-        else{
-            let uidFromCookie = cookies.muid;
-            if(uidFromCookie){
-                subcribeData(uidFromCookie);
-            }
-            else{
-                setIsSubscribed(false);
-            }
-        }
-
-    }, [router]);
 
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>

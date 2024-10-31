@@ -23,83 +23,52 @@ export default function TopPage() {
 
 
     const router = useRouter();
-    const {query} = router;
-
-    const getSubscriptionData = async (siteId) => {
-        try {            
-            const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
-            setSubscriptionData(response.data);
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
-        }
-    };
-
-    const getNotifications = async (siteId) => {
-         try {
-           const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
-           setNotifications(data.data);
-         } catch (error) {
-           console.error("Error fetching notifications:", error);
-         }
-    };
- 
-    const getAnnouncements = async (siteId) => {
-         try{
-           const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
-           setAnnouncements(data.data);
-         }catch(error) {
-           console.error("Error fetching announcements:", error);
-         }
-    };
-
-    const getSiteInformation = async () => {
-        try {
-             const siteId = await siteid();   
-
-             getSubscriptionData(siteId);       
-             getNotifications(siteId);
-             getAnnouncements(siteId);        
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
-        }
-    };
-
-    const subcribeData = async(uidCookie) => {
-        const result = await checkSubscription(uidCookie);
-        const  susbscribeStatus = result ? true : false;
-        setIsSubscribed(susbscribeStatus);
-      };
-
-
     useEffect(() => {
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
-        if(!authCookie){
+        if(!globalData.auth){
             router.push('/');
         }
-
-        getSiteInformation();
-
-        setAuth(authCookie);
-
-        let uidparam = query.uid;
-
-        if(uidparam){
-            setCookie('muid',uidparam);
-            subcribeData(uidparam);
-        }
-        else{
-            let uidFromCookie = cookies.muid;
-            if(uidFromCookie){
-                subcribeData(uidFromCookie);
-            }
-            else{
-                setIsSubscribed(false);
-            }
-        }
-
     }, [router]);
 
+   useEffect(() => {   
+    getSiteInformation();
+   }, []);  
+   const getSiteInformation = async () => {
+        try {
+            const siteId = await siteid();   
 
+            getSubscriptionData(siteId);       
+            getNotifications(siteId);
+            getAnnouncements(siteId);        
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };
+
+    const getSubscriptionData = async (siteId) => {
+    try {            
+        const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
+        setSubscriptionData(response.data);
+    } catch (error) {
+        console.log("Error fetching subscription data:", error);
+    }
+    };
+    const getNotifications = async (siteId) => {
+    try {
+    const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
+    setNotifications(data.data);
+    } catch (error) {
+    console.error("Error fetching notifications:", error);
+    }
+    };
+
+    const getAnnouncements = async (siteId) => {
+    try{
+    const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+    setAnnouncements(data.data);
+    }catch(error) {
+    console.error("Error fetching announcements:", error);
+    }
+    };
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout globalData={{}}>  

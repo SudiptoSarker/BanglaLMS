@@ -20,20 +20,31 @@ export default function HomePage() {
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
-    const [cookies, setCookie] = useCookies(['muid']);
-    const [isSubscribed, setIsSubscribed] = useState(false);
-    const [auth, setAuth] = useState(false);
+    
+    useEffect(() => {        
+        getSiteInformation();
+    }, []);  
 
-    const router = useRouter();
-    const {query} = router;
-
-    const getSubscriptionData = async (siteId) => {                
-        try {            
-            const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
-            setSubscriptionData(response.data);
+    const getSiteInformation = async () => {
+        try {
+            const siteId = await siteid();     
+                                 
+            getSubscriptionData(siteId);       
+            getLoginData(siteId);     
+            getNotifications(siteId);
+            getAnnouncements(siteId);
         } catch (error) {
             console.log("Error fetching subscription data:", error);
         }
+    };
+    
+    const getSubscriptionData = async (siteId) => {                
+    try {            
+        const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
+        setSubscriptionData(response.data);
+    } catch (error) {
+        console.log("Error fetching subscription data:", error);
+    }
     };
     const getLoginData = async (siteId) => {
         try {            
@@ -46,66 +57,21 @@ export default function HomePage() {
 
     const getNotifications = async (siteId) => {
         try {
-            const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
-            setNotifications(data.data);
+          const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
+          setNotifications(data.data);
         } catch (error) {
-            console.error("Error fetching notifications:", error);
+          console.error("Error fetching notifications:", error);
         }
-    };
-
-    const getAnnouncements = async (siteId) => {
-    try{
-        const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
-        setAnnouncements(data.data);
-    }catch(error) {
-        console.error("Error fetching announcements:", error);
-    }
-    };
-
-    const getSiteInformation = async () => {
-        try {
-            const siteId = await siteid();     
-                                    
-            getSubscriptionData(siteId);       
-            getLoginData(siteId);     
-            getNotifications(siteId);
-            getAnnouncements(siteId);
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
-        }
-    };
-
-    const subcribeData = async(uidCookie) => {
-        const result = await checkSubscription(uidCookie);
-        const  susbscribeStatus = result ? true : false;
-        setIsSubscribed(susbscribeStatus);
       };
 
-    useEffect(() => {
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
-        getSiteInformation();
-
-        setAuth(authCookie);
-        let uidparam = query.uid;
-
-        if(uidparam){
-            setCookie('muid',uidparam);
-            subcribeData(uidparam);
-            
+      const getAnnouncements = async (siteId) => {
+        try{
+          const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+          setAnnouncements(data.data);
+        }catch(error) {
+          console.error("Error fetching announcements:", error);
         }
-        else{
-            let uidFromCookie = cookies.muid;
-            if(uidFromCookie){
-                subcribeData(uidFromCookie);
-            }
-            else{
-                setIsSubscribed(false);
-            }
-        }
-
-    }, [router]); 
-
-      
+      };
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout globalData={{}}>  

@@ -16,33 +16,28 @@ export default function UnsubscribePage() {
     }, [router]);
     const [unSubscriptionData, setUnubscriptionData] = useState([]);
 
-    const domain = process.env.NEXT_PUBLIC_DOMAIN;
-
     useEffect(() => {
         // Fetch subscription data once the domain is set
-        if (domain) {
-            const getSiteInformation = async () => {
-                try {                    
-                    const siteId = await siteid();
-                    getSubscriptionData(siteId);       
-                } catch (error) {
-                    console.log("Error fetching subscription data:", error);
-                }
-            };
-            
-            const getSubscriptionData = async (siteId) => {
-            try {            
-                const response = await fetchSubscriptionLoginData(siteId,"unsubscriptionbutton");
-                setUnubscriptionData(response.data);
-            } catch (error) {
-                console.log("Error fetching subscription data:", error);
-            }
-            };           
-            getSiteInformation();
-        }
-    }, [domain]);  
+        getSiteInformation();
+    }, []);  
 
-        
+    const getSiteInformation = async () => {
+        try {                    
+            const siteId = await siteid();
+            getSubscriptionData(siteId);       
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };
+    
+    const getSubscriptionData = async (siteId) => {
+    try {            
+        const response = await fetchSubscriptionLoginData(siteId,"unsubscriptionbutton");
+        setUnubscriptionData(response.data);
+    } catch (error) {
+        console.log("Error fetching subscription data:", error);
+    }
+    };
     return (
         <Layout globalData={{}}>                      
             {unSubscriptionData.map((option, index) => (
