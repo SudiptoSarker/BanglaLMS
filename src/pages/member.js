@@ -1,3 +1,4 @@
+'use client'
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import Layout from "@/components/site/layout/layout";
@@ -9,109 +10,137 @@ import MemberPageComponent from "@/components/site/member/memberpagecomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import { fetchSubscriptionLoginData, getSiteId,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import Cookies from 'js-cookie'; 
+import { useCookies,CookiesProvider } from "react-cookie";
 import { checkSubscription } from "@/helper/helper";
 import { siteid } from '@/helper/helper';
 
 export default function MemberPage({ globalData }) {     
+    const router = useRouter();
+    const {query} = router;
+    
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [licenseKey,setLicenseKey] = useState('');
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
+    const [cookies, setCookie] = useCookies(['muid']);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [auth, setAuth] = useState(false);
     
-    const router = useRouter();
-    useEffect(() => {
-        if(!globalData.auth){
-            router.push('/');
+
+   
+
+    const getSubscriptionData = async (siteId) => {
+        try {
+            const response = await fetchSubscriptionLoginData(siteId, "DeviceSubscriptionButton");
+            setSubscriptionData(response.data);
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
         }
-    }, [router]);
+    };
+    const getNotifications = async (siteId) => {
+        try {
+          const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
+          setNotifications(data.data);
+        } catch (error) {
+          console.error("Error fetching notifications:", error);
+        }
+    };
+
+    const getAnnouncements = async (siteId) => {
+        try{
+          const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+          setAnnouncements(data.data);
+        }catch(error) {
+          console.error("Error fetching announcements:", error);
+        }
+    };
+
+    const getSiteInformation = async () => {
+        try {
+            const siteId = await siteid();
+
+            getSubscriptionData(siteId);
+            getNotifications(siteId);
+            getAnnouncements(siteId);
+        } catch (error) {
+            console.log("Error fetching site information:", error);
+        }
+    };
     
-    const domain = process.env.NEXT_PUBLIC_DOMAIN;
+    const getLicenseKey = async(uidCookie) => {
+        setLicenseKey('');
+        const result = await checkSubscription(uidCookie);
+        const  responseKey = result.licensekey;
+        console.log('key',responseKey)
+        setLicenseKey(responseKey);
+    }; 
 
-    useEffect(() => {                        
-        const uidCookie = Cookies.get('muid') || null;       
-        if (uidCookie){
-            console.log('uidCookie: ',uidCookie);
-            const getLicenseKey = async(uidCookie) => {
-                const result = await checkSubscription(uidCookie);
 
-                const  responseKey = result.licensekey;
-                setLicenseKey(responseKey);
-            };   
-            
+    const subcribeData = async(uidCookie) => {
+        const result = await checkSubscription(uidCookie);
+        const  susbscribeStatus = result ? true : false;
+        if(susbscribeStatus){
             getLicenseKey(uidCookie);
         }
-    }, []);
+        setIsSubscribed(susbscribeStatus);
+      };
 
     useEffect(() => {
-        if (domain) {
-            const getSiteInformation = async () => {
-                try {
-                    const siteId = await siteid();
-
-                    getSubscriptionData(siteId);
-                    getNotifications(siteId);
-                    getAnnouncements(siteId);
-                } catch (error) {
-                    console.log("Error fetching site information:", error);
-                }
-            };
-
-            const getSubscriptionData = async (siteId) => {
-                try {
-                    const response = await fetchSubscriptionLoginData(siteId, "DeviceSubscriptionButton");
-                    setSubscriptionData(response.data);
-                } catch (error) {
-                    console.log("Error fetching subscription data:", error);
-                }
-            };
-            const getNotifications = async (siteId) => {
-                try {
-                  const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
-                  setNotifications(data.data);
-                } catch (error) {
-                  console.error("Error fetching notifications:", error);
-                }
-              };
-
-              const getAnnouncements = async (siteId) => {
-                try{
-                  const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
-                  setAnnouncements(data.data);
-                }catch(error) {
-                  console.error("Error fetching announcements:", error);
-                }
-              };
-            getSiteInformation();
+        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
+        if(!authCookie){
+            router.push('/');
         }
-    }, [domain]);
+        getSiteInformation();
+
+        setAuth(authCookie);
+        let uidparam = query.uid;
+
+        if(uidparam){
+            setCookie('muid',uidparam);
+            subcribeData(uidparam);
+        }
+        else{
+            let uidFromCookie = cookies.muid;
+            if(uidFromCookie){
+                subcribeData(uidFromCookie);
+            }
+            else{
+                setIsSubscribed(false);
+            }
+        }
+
+    }, [router]);
 
     return (
-        <Layout globalData={globalData}>  
-            {globalData.auth && globalData.isSubscribed && (
-                <MemberPageComponent licenseKey={licenseKey} />  
-            )} 
-            <HeaderComponent  />         
-             {/* Show TopPageComponent if user is authenticated and subscribed */}                          
-            {notifications.map((notification, index) => (
-                <NotificationComponent
-                key={index}
-                text={notification.text}
-                href={notification.link}
-                />
-            ))}                                    
-            {announcements.map((announcement, index) => (
-                <AnnounceComponent 
+        <CookiesProvider defaultSetOptions={{ path: '/' }}>
+            <Layout globalData={{}}>  
+                <HeaderComponent  />         
+                {notifications.map((notification, index) => (
+                    <NotificationComponent
                     key={index}
-                    {...announcement}          
-                />
-            ))}
-            <FeatureSection  />     
+                    text={notification.text}
+                    href={notification.link}
+                    />
+                ))}                                    
+                {announcements.map((announcement, index) => (
+                    <AnnounceComponent 
+                        key={index}
+                        {...announcement}          
+                    />
+                ))}
+                <FeatureSection  />     
 
-            {(globalData.auth && !globalData.isSubscribed) && (
-                subscriptionData.map((option, index) => (
-                    <SubscriptionButton key={index} data={option} />
-                ))
-            )}                                  
-        </Layout>
+                {(auth && !isSubscribed) && (
+                    subscriptionData.map((option, index) => (
+                        <SubscriptionButton key={index} data={option} />
+                    ))
+                )}
+
+                {/* Show TopPageComponent if user is authenticated and subscribed */}
+                {auth && isSubscribed && (
+                    <MemberPageComponent licenseKey={licenseKey} />  
+                )}                        
+            </Layout>
+        </CookiesProvider>
     );
 }
