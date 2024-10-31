@@ -12,6 +12,7 @@ import { siteid } from '@/helper/helper';
 import { checkSubscription } from "@/helper/helper";
 import Cookies from 'js-cookie'; 
 import { useCookies,CookiesProvider } from "react-cookie";
+import * as CryptoJS from 'crypto-js';
 
 export default function TopPage() {
     const [notifications, setNotifications] = useState([]);
@@ -23,26 +24,9 @@ export default function TopPage() {
 
 
     const router = useRouter();
-    useEffect(() => {
-        if(!globalData.auth){
-            router.push('/');
-        }
-    }, [router]);
+    const {query} = router;
 
-   useEffect(() => {   
-    getSiteInformation();
-   }, []);  
-   const getSiteInformation = async () => {
-        try {
-            const siteId = await siteid();   
-
-            getSubscriptionData(siteId);       
-            getNotifications(siteId);
-            getAnnouncements(siteId);        
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
-        }
-    };
+    const secretKey = process.env.REACT_APP_SECRET_KEY ? process.env.REACT_APP_SECRET_KEY : 'banglalms';
 
     const getSubscriptionData = async (siteId) => {
     try {            
@@ -69,6 +53,58 @@ export default function TopPage() {
     console.error("Error fetching announcements:", error);
     }
     };
+
+    const getSiteInformation = async () => {
+        try {
+             const siteId = await siteid();   
+
+             getSubscriptionData(siteId);       
+             getNotifications(siteId);
+             getAnnouncements(siteId);        
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };
+
+    const subcribeData = async(uidCookie) => {
+        const result = await checkSubscription(uidCookie);
+        const  susbscribeStatus = result ? true : false;
+        setIsSubscribed(susbscribeStatus);
+      };
+
+
+    useEffect(() => {
+        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
+        if(!authCookie){
+            router.push('/');
+        }
+
+        getSiteInformation();
+
+        setAuth(authCookie);
+
+        let uidparam = query.uid;
+
+        if(uidparam){
+            const cipherText = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
+            setCookie('muid',cipherText);
+            subcribeData(uidparam);
+        }
+        else{
+            let uidFromCookie = cookies.muid;
+            if(uidFromCookie){
+                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
+                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
+                subcribeData(decryptedUid);
+            }
+            else{
+                setIsSubscribed(false);
+            }
+        }
+
+    }, [router]);
+
+
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout globalData={{}}>  

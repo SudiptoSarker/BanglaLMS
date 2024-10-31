@@ -14,30 +14,22 @@ import { useRouter } from "next/router";
 import { useCookies,CookiesProvider } from "react-cookie";
 import Cookies from 'js-cookie'; 
 import { checkSubscription } from "@/helper/helper";
+import * as CryptoJS from 'crypto-js';
 
 export default function HomePage() {    
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
-    
-    useEffect(() => {        
-        getSiteInformation();
-    }, []);  
+    const [cookies, setCookie] = useCookies(['muid']);
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [auth, setAuth] = useState(false);
 
-    const getSiteInformation = async () => {
-        try {
-            const siteId = await siteid();     
-                                 
-            getSubscriptionData(siteId);       
-            getLoginData(siteId);     
-            getNotifications(siteId);
-            getAnnouncements(siteId);
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
-        }
-    };
-    
+    const router = useRouter();
+    const {query} = router;
+
+    const secretKey = process.env.REACT_APP_SECRET_KEY ? process.env.REACT_APP_SECRET_KEY : 'banglalms';
+
     const getSubscriptionData = async (siteId) => {                
     try {            
         const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
@@ -64,14 +56,62 @@ export default function HomePage() {
         }
       };
 
-      const getAnnouncements = async (siteId) => {
-        try{
-          const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
-          setAnnouncements(data.data);
-        }catch(error) {
-          console.error("Error fetching announcements:", error);
+    const getAnnouncements = async (siteId) => {
+    try{
+        const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+        setAnnouncements(data.data);
+    }catch(error) {
+        console.error("Error fetching announcements:", error);
+    }
+    };
+
+    const getSiteInformation = async () => {
+        try {
+            const siteId = await siteid();     
+                                    
+            getSubscriptionData(siteId);       
+            getLoginData(siteId);     
+            getNotifications(siteId);
+            getAnnouncements(siteId);
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
         }
+    };
+
+    const subcribeData = async(uidCookie) => {
+        const result = await checkSubscription(uidCookie);
+        const  susbscribeStatus = result ? true : false;
+        setIsSubscribed(susbscribeStatus);
       };
+
+    useEffect(() => {
+        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
+        getSiteInformation();
+
+        setAuth(authCookie);
+        let uidparam = query.uid;
+
+        if(uidparam){
+            const cipherText = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
+            setCookie('muid',cipherText);
+            subcribeData(uidparam);
+            
+        }
+        else{
+            let uidFromCookie = cookies.muid;
+            if(uidFromCookie){
+                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
+                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
+                subcribeData(decryptedUid);
+            }
+            else{
+                setIsSubscribed(false);
+            }
+        }
+
+    }, [router]); 
+
+      
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout globalData={{}}>  
