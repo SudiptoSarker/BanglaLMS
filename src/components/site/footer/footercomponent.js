@@ -9,34 +9,30 @@ const Footer = () => {
     const domain = process.env.NEXT_PUBLIC_DOMAIN;  
 
     useEffect(() => {        
-        if (domain) {
-            const getSiteInformation = async () => {
-                try {
-                    const siteId = await siteid();     
-                    getFooterData(siteId);                        
-                } catch (error) {
-                    console.log("Error fetching subscription data:", error);
-                }
-            };
-            
-            const getFooterData = async (siteId) => {                
-                try {            
-                    const response = await fetchTextLinksForFooterSection(siteId, "FooterLine");
-                    const mappedData = response.data.map(item => ({
-                        id: item.section,
-                        text: item.text,
-                        url: item.link, // Change 'link' to 'url' for consistency
-                    }));
-                    setFooterData(mappedData);
-                } catch (error) {
-                    console.log("Error fetching subscription data:", error);
-                }
-            };
-
-            getSiteInformation();
+        getSiteInformation();
+    }, []);  
+    const getSiteInformation = async () => {
+        try {
+            const siteId = await siteid();     
+            getFooterData(siteId);                        
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
         }
-    }, [domain]);  
-
+    };
+    
+    const getFooterData = async (siteId) => {                
+        try {            
+            const response = await fetchTextLinksForFooterSection(siteId, "FooterLine");
+            const mappedData = response.data.map(item => ({
+                id: item.section,
+                text: item.text,
+                url: item.link, // Change 'link' to 'url' for consistency
+            }));
+            setFooterData(mappedData);
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };
     
 
     // Merge footerLinks with data from footerData

@@ -21,51 +21,46 @@ export default function TopPage({ globalData }) {
         }
     }, [router]);
 
-    const domain = process.env.NEXT_PUBLIC_DOMAIN;
-
    useEffect(() => {   
-    if (domain) {
-        const getSiteInformation = async () => {
-           try {
-                const siteId = await siteid();   
-
-                getSubscriptionData(siteId);       
-                getNotifications(siteId);
-                getAnnouncements(siteId);        
-           } catch (error) {
-               console.log("Error fetching subscription data:", error);
-           }
-       };
-       
-       const getSubscriptionData = async (siteId) => {
-       try {            
-           const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
-           setSubscriptionData(response.data);
-       } catch (error) {
-           console.log("Error fetching subscription data:", error);
-       }
-       };
-       const getNotifications = async (siteId) => {
+    getSiteInformation();
+   }, []);  
+   const getSiteInformation = async () => {
         try {
-          const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
-          setNotifications(data.data);
+            const siteId = await siteid();   
+
+            getSubscriptionData(siteId);       
+            getNotifications(siteId);
+            getAnnouncements(siteId);        
         } catch (error) {
-          console.error("Error fetching notifications:", error);
+            console.log("Error fetching subscription data:", error);
         }
-      };
+    };
 
-      const getAnnouncements = async (siteId) => {
-        try{
-          const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
-          setAnnouncements(data.data);
-        }catch(error) {
-          console.error("Error fetching announcements:", error);
-        }
-      };
-       getSiteInformation();
-   }
-   }, [domain]);  
+    const getSubscriptionData = async (siteId) => {
+    try {            
+        const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
+        setSubscriptionData(response.data);
+    } catch (error) {
+        console.log("Error fetching subscription data:", error);
+    }
+    };
+    const getNotifications = async (siteId) => {
+    try {
+    const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
+    setNotifications(data.data);
+    } catch (error) {
+    console.error("Error fetching notifications:", error);
+    }
+    };
 
+    const getAnnouncements = async (siteId) => {
+    try{
+    const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
+    setAnnouncements(data.data);
+    }catch(error) {
+    console.error("Error fetching announcements:", error);
+    }
+    };
     return (
         <Layout globalData={globalData}>  
             <HeaderComponent  />         
