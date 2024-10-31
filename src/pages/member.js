@@ -23,7 +23,6 @@ export default function MemberPage({ globalData }) {
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     
-    const router = useRouter();
     useEffect(() => {
         if(!globalData.auth){
             router.push('/');
