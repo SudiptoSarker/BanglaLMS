@@ -39,7 +39,7 @@ const Footer = () => {
 
     
 
-    // Merge footerLinks with data from object1
+    // Merge footerLinks with data from footerData
     const updatedFooterLinks = footerLinks.map(group => {
         // Check if there's a matching section in footerData
         const updatedLinks = group.links.map(link => {
@@ -53,27 +53,27 @@ const Footer = () => {
 
         return { ...group, links: updatedLinks };
     });
-    console.log('footerData: ', footerData);
+    console.log('updatedFooterLinks: ', updatedFooterLinks);
     console.log('footerLinks: ', footerLinks);
 
     footerLinks.forEach(group => {
-        // Find matching entries in object1 based on the id
+        // Find matching entries in footerData based on the id
         const matches = footerData.filter(item => item.id === group.id);
     
         // Update the links if matches are found
         if (matches.length > 0) {
             // Keep the original structure and update the text and href for each link
             group.links.forEach((link, index) => {
-                const match = matches[index]; // Get the corresponding match from object1
+                const match = matches[index]; // Get the corresponding match from footerData
                 if (match) {
                     link.text = match.text; // Update text
                     link.href = match.url;  // Update href
                 }
             });
         }
-    });
+    });        
   
-  // Output updated object2
+  // Output updated footerLinks
   console.log('converted data: ',JSON.stringify(footerLinks, null, 2));
 
     return (
