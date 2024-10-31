@@ -87,16 +87,16 @@ export default function TopPage() {
         let uidparam = query.uid;
 
         if(uidparam){
-            const cipherText = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
-            setCookie('muid',cipherText);
-            subcribeData(uidparam);
+            const encryptedUid = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
+            setCookie('muid',encryptedUid);
+            subcribeData(encryptedUid);
         }
         else{
             let uidFromCookie = cookies.muid;
             if(uidFromCookie){
-                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
-                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
-                subcribeData(decryptedUid);
+                //const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
+                //const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
+                subcribeData(uidFromCookie);
             }
             else{
                 setIsSubscribed(false);
