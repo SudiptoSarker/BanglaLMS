@@ -290,3 +290,9 @@ export const fetchNotificationsAndAnnouncements = async (siteId, sectionname) =>
     const values = [];
     return await calltoApi(query,values);
 };
+
+export const fetchTextLinksForFooterSection = async (siteId, sectionname) => {    
+    const query = `SELECT * FROM [dbo].[${siteId}_textlinks]`;//WHERE section LIKE '${sectionname}%'`;    
+    const values = [];
+    return await calltoApi(query,values);
+};
