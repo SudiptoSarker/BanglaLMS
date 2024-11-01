@@ -28,7 +28,7 @@ export default function HomePage() {
     const router = useRouter();
     const {query} = router;
 
-    const secretKey = process.env.REACT_APP_SECRET_KEY ? process.env.REACT_APP_SECRET_KEY : 'banglalms';
+    const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY ? process.env.NEXT_PUBLIC_SECRET_KEY : 'banglalms';
 
     const getSubscriptionData = async (siteId) => {                
         try {            
@@ -94,15 +94,15 @@ export default function HomePage() {
         if(uidparam){
             const encryptedUid = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
             setCookie('muid',encryptedUid);
-            subcribeData(encryptedUid);
+            subcribeData(uidparam);
             
         }
         else{
             let uidFromCookie = cookies.muid;
             if(uidFromCookie){
-                //const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
-                //const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
-                subcribeData(uidFromCookie);
+                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
+                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
+                subcribeData(decryptedUid);
             }
             else{
                 setIsSubscribed(false);

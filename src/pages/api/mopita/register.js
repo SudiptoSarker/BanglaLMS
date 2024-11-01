@@ -1,7 +1,6 @@
 import { queryDatabase } from '@/lib/config';
 import fs from 'fs'
 import path from 'path'
-import * as CryptoJS from 'crypto-js';
 
 export default async function handler(req, res) {
     {
@@ -23,7 +22,6 @@ export default async function handler(req, res) {
 
     
     try{
-        const secretKey = process.env.REACT_APP_SECRET_KEY ? process.env.REACT_APP_SECRET_KEY : 'banglalms';
         //let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002750","act":"reg","cs":"20241001000000000","iai_tms":"20240904192455905","iai_paytype":"00","iai_ordid":"202409046fc1693bf60e81e074","arg":""};
         // let jsonBody = JSON.parse(req.body);
         let jsonBody = req.body;
@@ -31,9 +29,6 @@ export default async function handler(req, res) {
         let ci = jsonBody.ci;
         let uid = jsonBody.uid;
         let act = jsonBody.act;
-
-        //encrypted uid
-        uid = CryptoJS.AES.encrypt(uid, secretKey).toString();
         
         // get site id from ci
         // code here for site id
