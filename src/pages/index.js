@@ -8,7 +8,7 @@ import SubscriptionInfo from "@/components/site/subscriptioninformation/subscrip
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
-import { fetchSubscriptionLoginData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+import { fetchLoginData,fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import { siteid } from '@/helper/helper';
 
 export default function HomePage({ globalData }) {    
@@ -36,7 +36,7 @@ export default function HomePage({ globalData }) {
     
     const getSubscriptionData = async (siteId) => {                
     try {            
-        const response = await fetchSubscriptionLoginData(siteId,"DeviceSubscriptionButton");
+        const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
         setSubscriptionData(response.data);
     } catch (error) {
         console.log("Error fetching subscription data:", error);
@@ -44,7 +44,7 @@ export default function HomePage({ globalData }) {
     };
     const getLoginData = async (siteId) => {
         try {            
-            const response = await fetchSubscriptionLoginData(siteId,"loginbutton");
+            const response = await fetchLoginData(siteId,"LoginSection");
             setLoginData(response.data);
         } catch (error) {
             console.log("Error fetching subscription data:", error);

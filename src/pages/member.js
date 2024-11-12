@@ -7,7 +7,7 @@ import AnnounceComponent from "@/components/site/announcebanner/announcecomponen
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
-import { fetchSubscriptionLoginData, getSiteId,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+import { fetchSubscriptionData, getSiteId,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import Cookies from 'js-cookie'; 
 import { checkSubscription } from "@/helper/helper";
 import { siteid } from '@/helper/helper';
@@ -58,7 +58,7 @@ export default function MemberPage({ globalData }) {
 
     const getSubscriptionData = async (siteId) => {
         try {
-            const response = await fetchSubscriptionLoginData(siteId, "DeviceSubscriptionButton");
+            const response = await fetchSubscriptionData(siteId, "DeviceSubscriptionButton");
             setSubscriptionData(response.data);
         } catch (error) {
             console.log("Error fetching subscription data:", error);

@@ -2,7 +2,7 @@ import Layout from "@/components/site/layout/layout";
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
 import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
-import { fetchSubscriptionLoginData,getSiteId } from "@/components/api/queryApi";
+import { fetchSubscriptionData,getSiteId } from "@/components/api/queryApi";
 import { siteid } from '@/helper/helper';
 
 
@@ -31,7 +31,7 @@ export default function UnsubscribePage({ globalData }) {
     
     const getSubscriptionData = async (siteId) => {
     try {            
-        const response = await fetchSubscriptionLoginData(siteId,"unsubscriptionbutton");
+        const response = await fetchSubscriptionData(siteId,"unsubscriptionbutton");
         setUnubscriptionData(response.data);
     } catch (error) {
         console.log("Error fetching subscription data:", error);
