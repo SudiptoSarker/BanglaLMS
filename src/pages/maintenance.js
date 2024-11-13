@@ -5,16 +5,10 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 
-export default function MaintenancePage({ globalData }) {
-    const router = useRouter();
-    useEffect(() => {
-        if(!globalData.auth){
-            // router.push('/');
-        }
-    }, [router]);
+export default function MaintenancePage() {
 
     return (
-        <Layout globalData={globalData}>                  
+        <Layout globalData={{}}>                  
             <Maintenance  />            
         </Layout>
     );
