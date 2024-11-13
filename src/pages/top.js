@@ -37,12 +37,12 @@ export default function TopPage({ globalData }) {
     };
 
     const getSubscriptionData = async (siteId) => {
-    try {            
-        const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
-        setSubscriptionData(response.data);
-    } catch (error) {
-        console.log("Error fetching subscription data:", error);
-    }
+        try {            
+            const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
+            setSubscriptionData(response.data);
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
     };
     const getNotifications = async (siteId) => {
     try {
