@@ -49,8 +49,6 @@ const Footer = () => {
 
         return { ...group, links: updatedLinks };
     });
-    console.log('updatedFooterLinks: ', updatedFooterLinks);
-    console.log('footerLinks: ', footerLinks);
 
     footerLinks.forEach(group => {
         // Find matching entries in footerData based on the id
@@ -67,10 +65,8 @@ const Footer = () => {
                 }
             });
         }
-    });        
-  
-  // Output updated footerLinks
-  console.log('converted data: ',JSON.stringify(footerLinks, null, 2));
+    });
+
 
     return (
         <footer className={styles.footer}>
