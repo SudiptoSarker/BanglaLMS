@@ -53,8 +53,6 @@ const Footer = () => {
 
         return { ...group, links: updatedLinks };
     });
-    console.log('footerData: ', footerData);
-    console.log('footerLinks: ', footerLinks);
 
     footerLinks.forEach(group => {
         // Find matching entries in object1 based on the id
@@ -72,9 +70,7 @@ const Footer = () => {
             });
         }
     });
-  
-  // Output updated object2
-  console.log('converted data: ',JSON.stringify(footerLinks, null, 2));
+
 
     return (
         <footer className={styles.footer}>
