@@ -15,8 +15,17 @@ import { useCookies,CookiesProvider } from "react-cookie";
 import Cookies from 'js-cookie'; 
 import { checkSubscription } from "@/helper/helper";
 import * as CryptoJS from 'crypto-js';
-
-export default function HomePage() {    
+export async function getServerSideProps(context) {
+    const {req} = context;
+    console.log('Console from service props')
+    console.log(typeof(req));
+    console.log(req);
+    return { props: {
+        userAgent: 'user-agent'
+    } };
+}
+export default function HomePage({ userAgent }) {   
+    console.log(userAgent); 
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);

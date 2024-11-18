@@ -23,8 +23,8 @@ const Footer = () => {
     const getFooterData = async (siteId) => {                
         try {            
             const response = await fetchTextLinksForFooterSection(siteId, "FooterLine");
-            const mappedData = response.data.map(item => ({
-                id: item.section,
+            const mappedData = response.data.map((item,index) => ({
+                id: index,
                 text: item.text,
                 url: item.link, // Change 'link' to 'url' for consistency
             }));
