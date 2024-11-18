@@ -16,16 +16,17 @@ import Cookies from 'js-cookie';
 import { checkSubscription } from "@/helper/helper";
 import * as CryptoJS from 'crypto-js';
 export async function getServerSideProps(context) {
-    const {req} = context;
+    const {req,query} = context;
     console.log('Console from service props')
     console.log(typeof(req));
-    console.log(req);
+    //console.log(query.uid);
     return { props: {
-        userAgent: 'user-agent'
+        //userAgent: 'user-agent',
+        _query: JSON.stringify(query)
     } };
 }
-export default function HomePage({ userAgent }) {   
-    console.log(userAgent); 
+export default function HomePage({ _query }) {   
+    console.log(_query); 
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
