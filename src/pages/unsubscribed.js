@@ -2,17 +2,28 @@
 import Layout from "@/components/site/layout/layout";
 import UnsubscribedComponent from "@/components/site/unsubscription/unsubscribedcomponent";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
-import Cookies from 'js-cookie'; 
+import { validateUserId } from '@/helper/helper';
 
-export default function UnsubscribedPage() {
+export async function getServerSideProps(context) {
+    const {query} = context;
+    let isLogin = false;
+
+    let uid = query.uid;
+
+    isLogin = validateUserId(uid);
+    
+    return { props: {
+        isLogin: isLogin
+    } };
+}
+
+
+
+export default function UnsubscribedPage({isLogin}) {
     const router = useRouter();
-    useEffect(() => {
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
-        if(!authCookie){
-            router.push('/');
-        }
-    }, [router]);
+    if(!isLogin){
+        router.push('/');
+    }
 
     return (
         <Layout globalData={{}}>              

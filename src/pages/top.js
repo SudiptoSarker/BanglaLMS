@@ -8,25 +8,42 @@ import FeatureSection from "@/components/site/feature/featurecomponent";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import { fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
-import { siteid } from '@/helper/helper';
+import { siteid,validateUserId } from '@/helper/helper';
 import { checkSubscription } from "@/helper/helper";
-import Cookies from 'js-cookie'; 
-import { useCookies,CookiesProvider } from "react-cookie";
-import * as CryptoJS from 'crypto-js';
+import { CookiesProvider } from "react-cookie";
 
-export default function TopPage() {
+
+export async function getServerSideProps(context) {
+    const {query} = context;
+    let isLogin = false;
+    let isMember = false;
+
+    let uid = query.uid;
+
+    isLogin = validateUserId(uid);
+    if(isLogin){
+        let subscriptionData =  await checkSubscription(uid);
+        if(subscriptionData != null && subscriptionData != undefined){
+            isMember = true;
+        }
+    }
+    
+    return { props: {
+        isLogin: isLogin,
+        isMember: isMember
+    } };
+}
+
+export default function TopPage({isLogin,isMember}) {
+
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
-    const [cookies, setCookie] = useCookies(['muid']);
-    const [isSubscribed, setIsSubscribed] = useState(false);
-    const [auth, setAuth] = useState(false);
-
 
     const router = useRouter();
-    const {query} = router;
-
-    const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY ? process.env.NEXT_PUBLIC_SECRET_KEY : 'banglalms';
+    if(!isLogin){
+        router.push('/');
+    }
 
     const getSubscriptionData = async (siteId) => {
         try {            
@@ -67,43 +84,10 @@ export default function TopPage() {
         }
     };
 
-    const subcribeData = async(uidCookie) => {
-        const result = await checkSubscription(uidCookie);
-        const  susbscribeStatus = result ? true : false;
-        setIsSubscribed(susbscribeStatus);
-      };
-
 
     useEffect(() => {
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
-        if(!authCookie){
-            router.push('/');
-        }
-
         getSiteInformation();
-
-        setAuth(authCookie);
-
-        let uidparam = query.uid;
-
-        if(uidparam){
-            const encryptedUid = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
-            setCookie('muid',encryptedUid);
-            subcribeData(uidparam);
-        }
-        else{
-            let uidFromCookie = cookies.muid;
-            if(uidFromCookie){
-                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
-                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
-                subcribeData(decryptedUid);
-            }
-            else{
-                setIsSubscribed(false);
-            }
-        }
-
-    }, [router]);
+    }, []);
 
 
     return (
@@ -124,14 +108,14 @@ export default function TopPage() {
                     />
                 ))}   
                 <FeatureSection  />                   
-                {(auth && !isSubscribed) && (
+                {(isLogin && !isMember) && (
                     subscriptionData.map((option, index) => (
                         <SubscriptionButton key={index} data={option} />
                     ))
                 )}
 
                 {/* Show TopPageComponent if user is authenticated and subscribed */}
-                {auth && isSubscribed && (
+                {isLogin && isMember && (
                     <TopPageComponent />
                 )}
 

@@ -9,36 +9,37 @@ import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptio
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 import { fetchLoginData,fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
-import { siteid } from '@/helper/helper';
-import { useRouter } from "next/router";
-import { useCookies,CookiesProvider } from "react-cookie";
-import Cookies from 'js-cookie'; 
+import { siteid,validateUserId } from '@/helper/helper';
+import { CookiesProvider } from "react-cookie";
 import { checkSubscription } from "@/helper/helper";
-import * as CryptoJS from 'crypto-js';
+
 export async function getServerSideProps(context) {
-    const {req,query} = context;
-    console.log('Console from service props')
-    console.log(typeof(req));
-    //console.log(query.uid);
+    const {query} = context;
+    let isLogin = false;
+    let isMember = false;
+
+    let uid = query.uid;
+
+    isLogin = validateUserId(uid);
+    if(isLogin){
+        let subscriptionData =  await checkSubscription(uid);
+        if(subscriptionData != null && subscriptionData != undefined){
+            isMember = true;
+        }
+    }
+    
     return { props: {
-        //userAgent: 'user-agent',
-        _query: JSON.stringify(query)
+        isLogin: isLogin,
+        isMember: isMember
     } };
 }
-export default function HomePage({ _query }) {   
-    console.log(_query); 
+
+export default function HomePage({ isLogin, isMember}) {   
+
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
-    const [cookies, setCookie] = useCookies(['muid']);
-    const [isSubscribed, setIsSubscribed] = useState(false);
-    const [auth, setAuth] = useState(false);
-
-    const router = useRouter();
-    const {query} = router;
-
-    const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY ? process.env.NEXT_PUBLIC_SECRET_KEY : 'banglalms';
 
     const getSubscriptionData = async (siteId) => {                
         try {            
@@ -88,38 +89,10 @@ export default function HomePage({ _query }) {
         }
     };
 
-    const subcribeData = async(uidCookie) => {
-        const result = await checkSubscription(uidCookie);
-        const  susbscribeStatus = result ? true : false;
-        setIsSubscribed(susbscribeStatus);
-      };
 
     useEffect(() => {
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
         getSiteInformation();
-
-        setAuth(authCookie);
-        let uidparam = query.uid;
-
-        if(uidparam){
-            const encryptedUid = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
-            setCookie('muid',encryptedUid);
-            subcribeData(uidparam);
-            
-        }
-        else{
-            let uidFromCookie = cookies.muid;
-            if(uidFromCookie){
-                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
-                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
-                subcribeData(decryptedUid);
-            }
-            else{
-                setIsSubscribed(false);
-            }
-        }
-
-    }, [router]); 
+    }, []); 
 
       
     return (
@@ -143,19 +116,19 @@ export default function HomePage({ _query }) {
                 <SubscriptionInfo  />                       
 
                 {/* Show SubscriptionButton if auth is false or if auth is true but not subscribed */}
-                {(!auth || (auth && !isSubscribed)) && (
+                {(!isLogin || (isLogin && !isMember)) && (
                     subscriptionData.map((option, index) => (
                         <SubscriptionButton key={index} data={option} />
                     ))
                 )}
 
                 {/* Show TopPageComponent if user is authenticated and subscribed */}
-                {auth && isSubscribed && (
+                {isLogin && isMember && (
                     <TopPageComponent />
                 )}
 
                 {/* Show LoginButton if user is not authenticated */}
-                {!auth && (
+                {!isLogin && (
                     loginData.map((option, index) => (
                         <LoginButton key={index} data={option} />
                     ))

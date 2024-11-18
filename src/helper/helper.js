@@ -13,3 +13,13 @@ export const checkSubscription = async(uid) => {
     const subscribeData = subscribeResult.data[0] || null;
     return subscribeData;
 }
+
+export const validateUserId = (uid) => {
+
+    if(!uid || uid == '' || uid == 'NULLGWDOCOMO'){
+        return false;
+    }
+
+    return uid.length == 18;
+    
+}
