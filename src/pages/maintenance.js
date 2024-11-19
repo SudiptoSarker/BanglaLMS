@@ -8,7 +8,7 @@ import { useEffect } from "react";
 export default function MaintenancePage() {
 
     return (
-        <Layout globalData={{}}>                  
+        <Layout>                  
             <Maintenance  />            
         </Layout>
     );

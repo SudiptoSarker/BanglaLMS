@@ -1,9 +1,10 @@
+'use client'
 import Layout from "@/components/site/layout/layout";
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
-import { useRouter } from "next/router";
 import { useEffect,useState } from "react";
 import { fetchSubscriptionData } from "@/components/api/queryApi";
 import { siteid,validateUserId } from '@/helper/helper';
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context) {
     const {query} = context;
@@ -21,16 +22,8 @@ export async function getServerSideProps(context) {
 
 export default function UnsubscribePage({isLogin}) {
     const router = useRouter();
-    if(!isLogin){
-        router.push('/');
-    }
 
-    const [unSubscriptionData, setUnubscriptionData] = useState([]);
-
-    useEffect(() => {
-        // Fetch subscription data once the domain is set
-        getSiteInformation();
-    }, []);  
+    const [unSubscriptionData, setUnubscriptionData] = useState([]); 
 
     const getSiteInformation = async () => {
         try {                    
@@ -49,8 +42,16 @@ export default function UnsubscribePage({isLogin}) {
         console.log("Error fetching subscription data:", error);
     }
     };
+
+    useEffect(() => {
+        if(!isLogin){
+            router.push('/');
+        }
+        getSiteInformation();
+    },[router]);
+    
     return (
-        <Layout globalData={{}}>                      
+        <Layout>                      
             {unSubscriptionData.map((option, index) => (
                 <UnsubscribeComponent key={index} data={option} />
             ))}                  

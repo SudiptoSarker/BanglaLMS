@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Layout from "@/components/site/layout/layout";
 import HeaderComponent from "@/components/site/header/headercomponent";
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
@@ -12,6 +11,7 @@ import { fetchSubscriptionData, fetchNotificationsAndAnnouncements } from "@/com
 import { CookiesProvider } from "react-cookie";
 import { checkSubscription } from "@/helper/helper";
 import { siteid,validateUserId } from '@/helper/helper';
+import { useRouter } from "next/router";
 
 
 export async function getServerSideProps(context) {
@@ -21,16 +21,17 @@ export async function getServerSideProps(context) {
     let licenseKey = '';
 
     let uid = query.uid;
-
+    // Validating User ID
     isLogin = validateUserId(uid);
+
     if(isLogin){
-        let subscriptionData =  await checkSubscription(uid);
+        const subscriptionData =  await checkSubscription(uid);
         if(subscriptionData != null && subscriptionData != undefined){
             isMember = true;
-            licenseKey = subscriptionData.licenseKey;
+            licenseKey = subscriptionData.licensekey;
         }
     }
-    
+
     return { props: {
         isLogin: isLogin,
         isMember: isMember,
@@ -39,14 +40,9 @@ export async function getServerSideProps(context) {
 }
 
 export default function MemberPage({isLogin,isMember,licenseKey}) {    
-
+ 
     const router = useRouter();
-    if(!isLogin){
-        router.push('/');
-    }
-    if(!isMember){
-        router.push('/top');
-    }
+
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
@@ -91,12 +87,18 @@ export default function MemberPage({isLogin,isMember,licenseKey}) {
     };
 
     useEffect(() => {
+        if(!isLogin){
+            router.push('/');
+        }
+        if(!isMember){
+            router.push('/top');
+        }
         getSiteInformation();
-    }, []);
+    }, [router]);
 
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
-            <Layout globalData={{}}>  
+            <Layout>  
                 <HeaderComponent  />         
                 {notifications.map((notification, index) => (
                     <NotificationComponent

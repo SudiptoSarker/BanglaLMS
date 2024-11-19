@@ -1,5 +1,5 @@
+'use client'
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import Layout from "@/components/site/layout/layout";
 import HeaderComponent from "@/components/site/header/headercomponent";
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
@@ -11,6 +11,7 @@ import { fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/comp
 import { siteid,validateUserId } from '@/helper/helper';
 import { checkSubscription } from "@/helper/helper";
 import { CookiesProvider } from "react-cookie";
+import { useRouter } from "next/router";
 
 
 export async function getServerSideProps(context) {
@@ -35,15 +36,11 @@ export async function getServerSideProps(context) {
 }
 
 export default function TopPage({isLogin,isMember}) {
+    const router = useRouter();
 
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
-
-    const router = useRouter();
-    if(!isLogin){
-        router.push('/');
-    }
 
     const getSubscriptionData = async (siteId) => {
         try {            
@@ -84,15 +81,16 @@ export default function TopPage({isLogin,isMember}) {
         }
     };
 
-
     useEffect(() => {
+        if(!isLogin){
+            router.push('/');
+        }
         getSiteInformation();
-    }, []);
-
+    },[router]);
 
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
-            <Layout globalData={{}}>  
+            <Layout>  
                 <HeaderComponent  />         
                 {notifications.map((notification, index) => (
                     <NotificationComponent

@@ -4,7 +4,7 @@ import BannerSection from '../banner/bannercomponent';
 import Footer from '../footer/footercomponent';
 import './layout.module.css';
 
-const Layout = ({ children, globalData }) => {
+const Layout = ({ children }) => {
     return (
         <div className="layout-container">
             <BannerSection />            

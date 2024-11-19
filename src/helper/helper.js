@@ -15,11 +15,11 @@ export const checkSubscription = async(uid) => {
 }
 
 export const validateUserId = (uid) => {
-
+    // Check : NULLGWDOCOMO, _blank, undefined
     if(!uid || uid == '' || uid == 'NULLGWDOCOMO'){
         return false;
     }
-
+    // Check : 18 characters for UID
     return uid.length == 18;
     
 }

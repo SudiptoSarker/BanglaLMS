@@ -8,7 +8,7 @@ import { useEffect } from "react";
 export default function NoticePage() {
 
     return (
-        <Layout globalData={{}}>                  
+        <Layout>                  
             <Instructions  />            
         </Layout>
     );

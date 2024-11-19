@@ -97,7 +97,7 @@ export default function HomePage({ isLogin, isMember}) {
       
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
-            <Layout globalData={{}}>  
+            <Layout>  
                 <HeaderComponent  />                     
                 {notifications.map((notification, index) => (
                     <NotificationComponent
