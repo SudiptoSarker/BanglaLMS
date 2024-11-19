@@ -118,7 +118,12 @@ export default function MemberPage() {
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout globalData={{}}>  
-                <HeaderComponent  />         
+                {auth && isSubscribed && (
+                    <MemberPageComponent licenseKey={licenseKey} />  
+                )}
+                <HeaderComponent  /> 
+
+                {/* Show TopPageComponent if user is authenticated and subscribed */}                         
                 {notifications.map((notification, index) => (
                     <NotificationComponent
                     key={index}
@@ -138,12 +143,7 @@ export default function MemberPage() {
                     subscriptionData.map((option, index) => (
                         <SubscriptionButton key={index} data={option} />
                     ))
-                )}
-
-                {/* Show TopPageComponent if user is authenticated and subscribed */}
-                {auth && isSubscribed && (
-                    <MemberPageComponent licenseKey={licenseKey} />  
-                )}                        
+                )}                       
             </Layout>
         </CookiesProvider>
     );
