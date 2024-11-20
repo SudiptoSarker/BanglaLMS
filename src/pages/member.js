@@ -1,14 +1,32 @@
 'use client'
+// React core imports for managing component state and side effects.
 import { useEffect, useState } from "react";
+
+// Router for handling client-side navigation in Next.js.
 import { useRouter } from "next/router";
+
+// Main layout component wrapping the page structure.
 import Layout from "@/components/site/layout/layout";
+
+// Header component
 import HeaderComponent from "@/components/site/header/headercomponent";
+
+// Components for notifications and announcements.
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
+
+// Feature-related components.
 import FeatureSection from "@/components/site/feature/featurecomponent";
+
+// Member-related components.
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
+
+// Subscription-related components.
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
+
+// API utility functions for fetching site-related data.
 import { fetchSubscriptionData, fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+
 import Cookies from 'js-cookie'; 
 import { useCookies,CookiesProvider } from "react-cookie";
 import { checkSubscription } from "@/helper/helper";
@@ -16,10 +34,11 @@ import { siteid } from '@/helper/helper';
 import * as CryptoJS from 'crypto-js';
 
 export default function MemberPage() {     
-    const router = useRouter();
-    const {query} = router;
-    const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY ? process.env.NEXT_PUBLIC_SECRET_KEY : 'banglalms';
+    const router = useRouter(); // Router instance for navigation control.
+    const {query} = router; // Extract query parameters from the route.
+    const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY ? process.env.NEXT_PUBLIC_SECRET_KEY : 'banglalms';  // Secret key 
 
+    // State variables for managing data and application behavior.
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [licenseKey,setLicenseKey] = useState('');
     const [notifications, setNotifications] = useState([]);
@@ -28,9 +47,7 @@ export default function MemberPage() {
     const [isSubscribed, setIsSubscribed] = useState(false);
     const [auth, setAuth] = useState(false);
     
-
-   
-
+    // Fetch subscription data from the API.
     const getSubscriptionData = async (siteId) => {
         try {
             const response = await fetchSubscriptionData(siteId, "DeviceSubscriptionButton");
@@ -39,6 +56,8 @@ export default function MemberPage() {
             console.log("Error fetching subscription data:", error);
         }
     };
+
+    // Fetch notifications data from the API.
     const getNotifications = async (siteId) => {
         try {
           const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
@@ -48,6 +67,7 @@ export default function MemberPage() {
         }
     };
 
+    // Fetch announcements data from the API.
     const getAnnouncements = async (siteId) => {
         try{
           const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
@@ -57,6 +77,7 @@ export default function MemberPage() {
         }
     };
 
+    // Retrieve all site information (subscription, notifications, announcements).
     const getSiteInformation = async () => {
         try {
             const siteId = await siteid();
@@ -69,6 +90,7 @@ export default function MemberPage() {
         }
     };
     
+    // Retrieve the user's license key if they are subscribed.
     const getLicenseKey = async(uidCookie) => {
         setLicenseKey('');
         const result = await checkSubscription(uidCookie);
@@ -76,7 +98,7 @@ export default function MemberPage() {
         setLicenseKey(responseKey);
     }; 
 
-
+    // Check subscription status and fetch license key if applicable.
     const subcribeData = async(uidCookie) => {
         const result = await checkSubscription(uidCookie);
         const  susbscribeStatus = result ? true : false;
@@ -84,24 +106,28 @@ export default function MemberPage() {
             getLicenseKey(uidCookie);
         }
         setIsSubscribed(susbscribeStatus);
-      };
+    };
 
+    // Main effect hook for component initialization and handling query/cookie data.
     useEffect(() => {
+        // Check authentication cookies.
         const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
         if(!authCookie){
-            router.push('/');
+            router.push('/'); // Redirect to the login page if not authenticated.
         }
         getSiteInformation();
 
-        setAuth(authCookie);
-        let uidparam = query.uid;
-
+        setAuth(authCookie); // Update authentication state.
+        let uidparam = query.uid; // Get UID from query parameters.
+ 
         if(uidparam){
+            // Encrypt UID and store in a cookie.
             const encryptedUid = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
             setCookie('muid',encryptedUid);
             subcribeData(uidparam);
         }
         else{
+            // Decrypt UID from existing cookie.
             let uidFromCookie = cookies.muid;
             if(uidFromCookie){
                 const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
@@ -118,27 +144,35 @@ export default function MemberPage() {
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout globalData={{}}>  
+                {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
                 {auth && isSubscribed && (
                     <MemberPageComponent licenseKey={licenseKey} />  
                 )}
+
+                {/* Header section */}
                 <HeaderComponent  /> 
 
-                {/* Show TopPageComponent if user is authenticated and subscribed */}                         
+                {/* Notification section */}                 
                 {notifications.map((notification, index) => (
                     <NotificationComponent
                     key={index}
                     text={notification.text}
                     href={notification.link}
                     />
-                ))}                                    
+                ))}         
+
+                {/* Announcement section */}                                   
                 {announcements.map((announcement, index) => (
                     <AnnounceComponent 
                         key={index}
                         {...announcement}          
                     />
                 ))}
+
+                {/* Feature section */}        
                 <FeatureSection  />     
 
+                {/* Show subscription buttons if authenticated but not subscribed to the service */}
                 {(auth && !isSubscribed) && (
                     subscriptionData.map((option, index) => (
                         <SubscriptionButton key={index} data={option} />

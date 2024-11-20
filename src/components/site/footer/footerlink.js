@@ -1,3 +1,4 @@
+// Define an array of footer link groups with their respective ids and links
 export const footerLinks = [
     {
       id: 'contact-cancel',
