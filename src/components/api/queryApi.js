@@ -314,3 +314,24 @@ export const fetchTextLinksForFooterSection = async (siteId, sectionname) => {
     const values = [];
     return await calltoApi(query,values);
 };
+
+export const getMemberList = async (siteId,ci,uid) => {    
+    const query = `select * from membertable where ci = '${ci}' and siteid='${siteId}' and muid='${uid}'`;
+    const values = [];
+    return await calltoApi(query,values);
+};
+export const insertMember = async (memberObject) => {    
+    let insertQuery = `insert into membertable (siteid,ci,muid,orderId,ordertime,paytype,ismember,licensekey,validity) values
+                        ('${memberObject.siteId}','${memberObject.ci}','${memberObject.uid}','${memberObject.orderId}','${memberObject.orderTime}','${memberObject.payType}',${memberObject.isMember},'${memberObject.licenseKey}', ${memberObject.validity}); SELECT SCOPE_IDENTITY() AS newId;`;
+
+    const values = [];
+    return await calltoApi(insertQuery,values);
+};
+export const createUserLog = async (userLog) => {    
+    let query = `
+                INSERT INTO userlogs (muid, pagelink, activity, time)
+                VALUES ('${userLog.uid}', '${userLog.pageLink}', '${userLog.activity}', '${userLog.time}'); SELECT SCOPE_IDENTITY() AS newId;
+                `;
+    const values = [];
+    return await calltoApi(query,values);
+};
