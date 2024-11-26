@@ -4,8 +4,7 @@ import BannerSection from '../banner/bannercomponent';
 import Footer from '../footer/footercomponent';
 import './layout.module.css';
 
-// Layout component to wrap content with Banner and Footer sections
-const Layout = ({ children, globalData }) => {
+const Layout = ({ children }) => {
     return (
         <div className="layout-container">
             {/* Display the banner section at the top */}

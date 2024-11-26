@@ -20,15 +20,6 @@ const nextConfig = BuilderDevTools()(
             },
           ]
         },
-        async redirects(){
-          return [
-            {
-              source:'/getuid',
-              destination:'/member',
-              permanent:true
-            }
-          ]
-        }
       })
     )
   )
