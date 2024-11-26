@@ -1,4 +1,5 @@
 import sql from 'mssql';
+// import sql from 'mssql/msnodesqlv8';
 
 const config = {
     user: process.env.NEXT_PUBLIC_DB_USER,
@@ -10,7 +11,15 @@ const config = {
         enableArithAbort: true, 
     },
 };
-
+// const config = {  
+//   server: 'SUDIPTO-JABAIT',
+//   database: 'lmsadmin',
+//   options: {
+//       trustedConnection: true, 
+//       trustServerCertificate: true, 
+//   },
+//   drive: 'msnodesqlv8',
+// };
 let pool;
 
 export async function connectToDatabase() {
