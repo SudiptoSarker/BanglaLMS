@@ -2,7 +2,13 @@ import React from 'react';
 import styles from './feature.module.css';
 import ServiceCard from './servicecard';
 
+/**
+ * FeatureSection Component
+ * 
+ * This component represents a section that showcases the features of a service and product.
+ */
 const FeatureSection = () => {
+  // Define an array of services with their icon, title, and description
   const services = [
     {
       iconSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/67562330c5ca3a8fd013eb01478d308442f7293ccbec58e1b83301c009a2745c?placeholderIfAbsent=true&apiKey=6d2fa06cce744f22a1e3f36901f6ddf3",
@@ -23,13 +29,19 @@ const FeatureSection = () => {
 
   return (
     <section className={styles.featureSections}>
+       {/* Heading of the feature section */}
       <h2 className={styles.heading}>特徴</h2>
+       
+       {/* Overview paragraph introducing the service */}
       <p className={styles.overview}>
         シンプルで安全な自動パスワード管理ですべてのデジタルデバイスでパスワード管理プロセスを簡素化します。
         AndroidやiOSでの使用はもちろんWindowsやMacでも利用が可能です。利用端末数に制限もありません。
       </p>
+
+      {/* Container for the service cards */}
       <div className={styles.servicesContainer}>
         <div className={styles.servicesGrid}>
+          {/* Mapping over the services array to generate a ServiceCard for each service */}
           {services.map((service, index) => (
             <ServiceCard
               key={index}

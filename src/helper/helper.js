@@ -1,5 +1,10 @@
 import { getSiteId, getSubscribedData } from "@/components/api/queryApi"
 
+/**
+ * Fetches the site ID based on the domain.
+ * 
+ * @returns {string|null} - The site ID or null if not found.
+ */
 export const siteid = async() => {
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
     const siteIdResult = await getSiteId(domain);
@@ -7,6 +12,12 @@ export const siteid = async() => {
     return id;
 }
 
+/**
+ * Checks the subscription status of a user based on the site ID and user ID.
+ * 
+ * @param {string} uid - The user ID to check the subscription for.
+ * @returns {object|null} - The subscription data or null if not subscribed.
+ */
 export const checkSubscription = async(uid) => {
     const site = await siteid();
     const subscribeResult = await getSubscribedData(site, uid);

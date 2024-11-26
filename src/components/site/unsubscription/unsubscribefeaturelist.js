@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './unsubscribe.module.css';
 
+// List of features to be displayed
 const features = [
   'ウェブサイトやアプリの迷惑な広告をブロック',
   'ウェブに存在するトラッカーからプライバシーを保護',
@@ -10,6 +11,9 @@ const features = [
   'など'
 ];
 
+/**
+ * Component to display the list of features
+ */
 function FeatureList() {
   return (
     <ul className={styles.featureList}>

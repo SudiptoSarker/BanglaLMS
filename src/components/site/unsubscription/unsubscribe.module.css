@@ -72,7 +72,7 @@
   margin: 15px 0; /* Space above and below */
   font-size: 15px; /* Consistent font size */
 }
-
+ 
 .buttonContainer {
   display: flex;
   flex-direction: column; /* Stack buttons vertically */
@@ -87,7 +87,7 @@
   max-width: 400px; /* Increase max width */
   color: #fff; /* White text */
   text-align: center;
-  padding: 5px; /* Reduced padding for smaller height */
+  padding: 5px; /* Reduced padding for smaller height */ 
   border: 2px solid #55a063; /* Border with a slightly darker shade */
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover */

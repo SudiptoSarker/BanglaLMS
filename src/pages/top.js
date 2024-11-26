@@ -1,12 +1,24 @@
 'use client'
 import { useEffect, useState } from "react";
 import Layout from "@/components/site/layout/layout";
+
+// Header component
 import HeaderComponent from "@/components/site/header/headercomponent";
+
+// Components for notifications and announcements.
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
+
+// Feature-related component.
 import FeatureSection from "@/components/site/feature/featurecomponent";
+
+// Top page component.
 import TopPageComponent from "@/components/site/top/toppagecomponent";
+
+// Subscription-related component.
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
+
+// API utility functions for fetching site-related data.
 import { fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import { siteid,validateUserId } from '@/helper/helper';
 import { checkSubscription } from "@/helper/helper";
@@ -42,6 +54,7 @@ export default function TopPage({isLogin,isMember}) {
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
 
+    // Function to fetch subscription data for a specific site ID.
     const getSubscriptionData = async (siteId) => {
         try {            
             const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
@@ -51,6 +64,7 @@ export default function TopPage({isLogin,isMember}) {
         }
     };
 
+    // Function to fetch notifications for a specific site ID.
     const getNotifications = async (siteId) => {
          try {
            const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
@@ -59,7 +73,8 @@ export default function TopPage({isLogin,isMember}) {
            console.error("Error fetching notifications:", error);
          }
     };
- 
+    
+    // Function to fetch announcements for a specific site ID.
     const getAnnouncements = async (siteId) => {
          try{
            const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
@@ -69,6 +84,7 @@ export default function TopPage({isLogin,isMember}) {
          }
     };
 
+    // Function to fetch all site-related information (subscription, notifications, announcements).
     const getSiteInformation = async () => {
         try {
              const siteId = await siteid();   
@@ -98,7 +114,9 @@ export default function TopPage({isLogin,isMember}) {
                     text={notification.text}
                     href={notification.link}
                     />
-                ))}                                    
+                ))}      
+
+                {/* Render announcement components based on fetched announcements. */}                              
                 {announcements.map((announcement, index) => (
                     <AnnounceComponent 
                         key={index}

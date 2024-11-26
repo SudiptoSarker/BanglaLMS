@@ -34,13 +34,14 @@ export default function UnsubscribePage({isLogin}) {
         }
     };
     
+    // Function to fetch unsubscription-related data based on the site ID.
     const getSubscriptionData = async (siteId) => {
-    try {            
-        const response = await fetchSubscriptionData(siteId,"unsubscriptionbutton");
-        setUnubscriptionData(response.data);
-    } catch (error) {
-        console.log("Error fetching subscription data:", error);
-    }
+        try {            
+            const response = await fetchSubscriptionData(siteId,"unsubscriptionbutton");
+            setUnubscriptionData(response.data);
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
     };
 
     useEffect(() => {
