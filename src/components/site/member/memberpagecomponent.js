@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './memberpage.module.css';
 
-function MemberPageComponent() {
+function MemberPageComponent({ licenseKey }) {
   return (
     <section className={styles.container}>
       <p className={styles.instruction}>
@@ -10,7 +10,7 @@ function MemberPageComponent() {
       <div className={styles.licenseContainer}>
         <h1 className={styles.title}>BDGuard License Key</h1>
         <p className={styles.licenseKey} tabIndex="0" aria-label="Your BDGuard License Key">
-          SudiptoSarker1122334455667788
+          {licenseKey}
         </p>
       </div>
     </section>

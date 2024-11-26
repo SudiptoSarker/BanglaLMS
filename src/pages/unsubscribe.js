@@ -1,26 +1,60 @@
-// Import the Layout component
+'use client'
 import Layout from "@/components/site/layout/layout";
-import InformationSection from "@/components/site/information/informationcomponent";
-import FeatureSection from "@/components/site/feature/featurecomponent";
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
+import { useEffect,useState } from "react";
+import { fetchSubscriptionData } from "@/components/api/queryApi";
+import { siteid,validateUserId } from '@/helper/helper';
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+
+export async function getServerSideProps(context) {
+    const {query} = context;
+    let isLogin = false;
+
+    let uid = query.uid;
+
+    isLogin = validateUserId(uid);
+    
+    return { props: {
+        isLogin: isLogin
+    } };
+}
 
 
-export default function Home({ globalData }) {
-    // Demo URLs to pass as props
-    const noticeLink = 'https://example.com/notice'; // Replace with your desired URL
-    const maintenanceLink = 'https://example.com/maintenance'; // Replace with your desired URL
+export default function UnsubscribePage({isLogin}) {
     const router = useRouter();
+
+    const [unSubscriptionData, setUnubscriptionData] = useState([]); 
+
+    const getSiteInformation = async () => {
+        try {                    
+            const siteId = await siteid();
+            getSubscriptionData(siteId);       
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };
+    
+    const getSubscriptionData = async (siteId) => {
+    try {            
+        const response = await fetchSubscriptionData(siteId,"unsubscriptionbutton");
+        setUnubscriptionData(response.data);
+    } catch (error) {
+        console.log("Error fetching subscription data:", error);
+    }
+    };
+
     useEffect(() => {
-        if(!globalData.auth){
+        if(!isLogin){
             router.push('/');
         }
-    }, [router]);
-
+        getSiteInformation();
+    },[router]);
+    
     return (
-        <Layout globalData={globalData}>         
-            <UnsubscribeComponent  />                        
+        <Layout>                      
+            {unSubscriptionData.map((option, index) => (
+                <UnsubscribeComponent key={index} data={option} />
+            ))}                  
         </Layout>
     );
 }

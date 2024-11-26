@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
-        return res.status(405).json({ error: 'Method not allowed' });
+        return res.status(405).send({ error: 'Method not allowed' });
     }
 
     const { cancel, user, act } = req.query;
@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     // Check if the required parameters have values
     if (!cancel || !user || !act) {
         // If any of the required parameters are missing
-        return res.status(400).json({
+        return res.status(400).send({
             success: false,
             message: 'Missing required parameters',
             user: user || null,
@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         //const currentDate = new Date();
         //const validityDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
         //const formattedValidityDate = validityDate.toISOString().split('T')[0];
-        return res.status(200).json({
+        return res.status(200).send({
             success: true,
             //key: key,
             //purchase: purchase,
@@ -36,7 +36,7 @@ export default async function handler(req, res) {
         });
     } catch (error) {
         console.error('Error:', error);
-        return res.status(500).json({
+        return res.status(500).send({
             success: false,
             message: 'Internal server error'
         });

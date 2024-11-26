@@ -1,6 +1,7 @@
 const calltoApi = async (query, values) => {
     try {
-        const response = await fetch("/api/db", {
+        const api = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(api+"api/db", {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json',
@@ -255,7 +256,7 @@ export const deleteTableData = async (tableName,rowId) => {
 // };
 export const getSiteId = async (domain) => {
     const siteIdQuery = `SELECT id FROM [dbo].[sites] WHERE name LIKE '%${domain}'`;
-    const siteIdResult =  await calltoApi(siteIdQuery);    
+    const siteIdResult =  await calltoApi(siteIdQuery, []);    
     return siteIdResult;    
 }
 
@@ -264,7 +265,7 @@ export const getSubscribedData = async (siteid, muid) => {
     return await calltoApi(query,[]);
 }
 
-export const fetchSubscriptionLoginData = async (siteId, sectionname) => {
+export const fetchSubscriptionData = async (siteId, sectionname) => {
     try {
         if (!siteId) {
             throw new Error(`Site with name '${sitename}' not found.`);
@@ -273,7 +274,7 @@ export const fetchSubscriptionLoginData = async (siteId, sectionname) => {
         // Step 2: Use the site id to fetch the subscription data
         const subscriptionQuery = `SELECT * FROM [dbo].[${siteId}_subscriptiondata] WHERE section = '${sectionname}'`;
         
-        const subscriptionResult = await calltoApi(subscriptionQuery);
+        const subscriptionResult = await calltoApi(subscriptionQuery,[]);
 
         // Return the subscription data
         return subscriptionResult;
@@ -282,4 +283,34 @@ export const fetchSubscriptionLoginData = async (siteId, sectionname) => {
         console.error('Error fetching subscription data:', error);
         throw error;
     }
+};
+export const fetchLoginData = async (siteId, sectionname) => {
+    try {
+        if (!siteId) {
+            throw new Error(`Site with name '${sitename}' not found.`);
+        }
+
+        // Step 2: Use the site id to fetch the subscription data
+        const subscriptionQuery = `SELECT * FROM [dbo].[${siteId}_logindata] WHERE section = '${sectionname}'`;
+        
+        const subscriptionResult = await calltoApi(subscriptionQuery,[]);
+
+        // Return the subscription data
+        return subscriptionResult;
+
+    } catch (error) {
+        console.error('Error fetching subscription data:', error);
+        throw error;
+    }
+};
+export const fetchNotificationsAndAnnouncements = async (siteId, sectionname) => {
+    const query = `SELECT * FROM [dbo].[${siteId}_textlinks] WHERE section = '${sectionname}'`;    
+    const values = [];
+    return await calltoApi(query,values);
+};
+
+export const fetchTextLinksForFooterSection = async (siteId, sectionname) => {    
+    const query = `SELECT * FROM [dbo].[${siteId}_textlinks]`;//WHERE section LIKE '${sectionname}%'`;    
+    const values = [];
+    return await calltoApi(query,values);
 };
