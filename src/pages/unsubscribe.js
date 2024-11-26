@@ -1,5 +1,7 @@
 'use client'
 import Layout from "@/components/site/layout/layout";
+
+// Unsubscribe component
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
 import { useEffect,useState } from "react";
 import { fetchSubscriptionData } from "@/components/api/queryApi";
@@ -25,6 +27,7 @@ export default function UnsubscribePage({isLogin}) {
 
     const [unSubscriptionData, setUnubscriptionData] = useState([]); 
 
+    // Function to fetch all required site-related information.
     const getSiteInformation = async () => {
         try {                    
             const siteId = await siteid();

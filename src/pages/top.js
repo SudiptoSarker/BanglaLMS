@@ -54,7 +54,6 @@ export default function TopPage({isLogin,isMember}) {
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
 
-    // Function to fetch subscription data for a specific site ID.
     const getSubscriptionData = async (siteId) => {
         try {            
             const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");

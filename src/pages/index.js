@@ -55,14 +55,6 @@ export default function HomePage({ isLogin, isMember}) {
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
-    const [cookies, setCookie] = useCookies(['muid']);
-    const [isSubscribed, setIsSubscribed] = useState(false);
-    const [auth, setAuth] = useState(false);
-
-    const router = useRouter();
-    const {query} = router;
-
-    const secretKey = process.env.NEXT_PUBLIC_SECRET_KEY ? process.env.NEXT_PUBLIC_SECRET_KEY : 'banglalms';
 
     // Function to fetch subscription data for the site.
     const getSubscriptionData = async (siteId) => {                
@@ -118,44 +110,16 @@ export default function HomePage({ isLogin, isMember}) {
         }
     };
 
-    const subcribeData = async(uidCookie) => {
-        const result = await checkSubscription(uidCookie);
-        const  susbscribeStatus = result ? true : false;
-        setIsSubscribed(susbscribeStatus);
-      };
 
     // Effect to initialize data fetching and handle user authentication/subscription state.
     useEffect(() => {
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
         getSiteInformation();
-
-        setAuth(authCookie);
-        let uidparam = query.uid;
-
-        if(uidparam){
-            const encryptedUid = CryptoJS.AES.encrypt(uidparam, secretKey).toString();
-            setCookie('muid',encryptedUid);
-            subcribeData(uidparam);
-            
-        }
-        else{
-            let uidFromCookie = cookies.muid;
-            if(uidFromCookie){
-                const bytes = CryptoJS.AES.decrypt(uidFromCookie, secretKey);
-                const decryptedUid = bytes.toString(CryptoJS.enc.Utf8);
-                subcribeData(decryptedUid);
-            }
-            else{
-                setIsSubscribed(false);
-            }
-        }
-
-    }, [router]); 
+    }, []); 
 
     // Main render function for the landing page.
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
-            <Layout globalData={{}}>  
+            <Layout>  
                 <HeaderComponent  />                     
                 {notifications.map((notification, index) => (
                     <NotificationComponent

@@ -56,7 +56,6 @@ export default function MemberPage({isLogin,isMember,licenseKey}) {
  
     const router = useRouter();
 
-    // State variables for managing data and application behavior.
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
