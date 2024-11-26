@@ -7,9 +7,7 @@ import Instructions from "@/components/site/notice/noticecomponent";
 export default function NoticePage() {
 
     return (
-        // Main layout wrapping the page structure.
-        <Layout globalData={{}}>   
-            {/* Render notice component */}    
+        <Layout>                  
             <Instructions  />            
         </Layout>
     );

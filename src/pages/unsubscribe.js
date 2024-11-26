@@ -1,42 +1,31 @@
-// React core imports for managing component state and side effects.
-import { useEffect,useState } from "react";
-
-// Main layout component wrapping the page structure.
+'use client'
 import Layout from "@/components/site/layout/layout";
 
 // Unsubscribe component
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
-
-// Router for handling client-side navigation in Next.js.
+import { useEffect,useState } from "react";
+import { fetchSubscriptionData } from "@/components/api/queryApi";
+import { siteid,validateUserId } from '@/helper/helper';
 import { useRouter } from "next/router";
 
-// API utility functions for fetching data.
-import { fetchSubscriptionData } from "@/components/api/queryApi";
-import { siteid } from '@/helper/helper';
-import Cookies from 'js-cookie'; 
+export async function getServerSideProps(context) {
+    const {query} = context;
+    let isLogin = false;
 
-export default function UnsubscribePage() {
+    let uid = query.uid;
+
+    isLogin = validateUserId(uid);
+    
+    return { props: {
+        isLogin: isLogin
+    } };
+}
+
+
+export default function UnsubscribePage({isLogin}) {
     const router = useRouter();
 
-    // State variables to store data sets.
-    const [unSubscriptionData, setUnubscriptionData] = useState([]);
-
-    // Effect hook to check authentication on page load.
-    useEffect(() => {
-        // Check if authentication cookies are set.
-        const authCookie = Cookies.get('iai_mtisess') && Cookies.get('iai_mtisess_secure') ? true : false;
-        
-        // If authentication cookies are missing, redirect the user to the login page.
-        if(!authCookie){
-            router.push('/');
-        }
-    }, [router]);    
-
-    // Effect hook to fetch the unsubscription data.
-    useEffect(() => {
-        // Call function to fetch site-related information.
-        getSiteInformation();
-    }, []);  
+    const [unSubscriptionData, setUnubscriptionData] = useState([]); 
 
     // Function to fetch all required site-related information.
     const getSiteInformation = async () => {
@@ -58,11 +47,15 @@ export default function UnsubscribePage() {
         }
     };
 
-    // Render the unsubscribe page with fetched data.
+    useEffect(() => {
+        if(!isLogin){
+            router.push('/');
+        }
+        getSiteInformation();
+    },[router]);
+    
     return (
-        // Main layout wrapping the page structure.
-        <Layout globalData={{}}>     
-            {/* Render each unsubscription option using the UnsubscribeComponent. */}                 
+        <Layout>                      
             {unSubscriptionData.map((option, index) => (
                 <UnsubscribeComponent key={index} data={option} />
             ))}                  
