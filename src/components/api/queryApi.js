@@ -261,7 +261,7 @@ export const getSiteId = async (domain) => {
 }
 
 export const getSubscribedData = async (siteid, muid) => {
-    const query = `SELECT * FROM [dbo].[membertable] WHERE siteid='${siteid}' AND muid='${muid}' AND status=1`;
+    const query = `SELECT * FROM [dbo].[membertable] WHERE siteid='${siteid}' AND muid='${muid}' AND ismember=1`;
     return await calltoApi(query,[]);
 }
 
@@ -320,9 +320,9 @@ export const getMemberList = async (siteId,ci,uid) => {
     const values = [];
     return await calltoApi(query,values);
 };
-export const insertMember = async (memberObject) => {    
-    let insertQuery = `insert into membertable (siteid,ci,muid,orderId,ordertime,paytype,ismember,licensekey,validity) values
-                        ('${memberObject.siteId}','${memberObject.ci}','${memberObject.uid}','${memberObject.orderId}','${memberObject.orderTime}','${memberObject.payType}',${memberObject.isMember},'${memberObject.licenseKey}', ${memberObject.validity}); SELECT SCOPE_IDENTITY() AS newId;`;
+export const insertMember = async (memberObject) => {
+    let insertQuery = `insert into membertable (siteid,ci,muid,orderId,ordertime,paytype,ismember,licensekey,validity,cs) values
+                        ('${memberObject.siteId}','${memberObject.ci}','${memberObject.uid}','${memberObject.orderId}','${memberObject.orderTime}','${memberObject.payType}',${memberObject.isMember},null, null,'${memberObject.cs}'); SELECT SCOPE_IDENTITY() AS newId;`;
 
     const values = [];
     return await calltoApi(insertQuery,values);
@@ -332,6 +332,36 @@ export const createUserLog = async (userLog) => {
                 INSERT INTO userlogs (muid, pagelink, activity, time)
                 VALUES ('${userLog.uid}', '${userLog.pageLink}', '${userLog.activity}', '${userLog.time}'); SELECT SCOPE_IDENTITY() AS newId;
                 `;
+    const values = [];
+    return await calltoApi(query,values);
+};
+
+export const getSiteInfo = async (siteId)=>{
+    const query = `
+            SELECT id, name, source, reglink, rellink, sourcetable AS tableName
+            FROM [dbo].[sites]
+            WHERE active = 1 and id=${siteId}`;
+    const values = [];
+    return await calltoApi(query,values);
+};
+
+export const updateLicenseKey = async (id, licenseKey, validity) => {    
+    let updateQuery = `update membertable set licensekey = '${licenseKey}', validity = '${validity}' where id = ${id}; SELECT @@ROWCOUNT  AS affectedRow;`;
+
+    const values = [];
+    return await calltoApi(updateQuery,values);
+};
+
+export const getLicenseList = async (siteId, ci) => {    
+    const query = `SELECT * from [${siteId}_licensetbl] where ci='${ci}' and active=1`;
+    const values = [];
+    return await calltoApi(query,values);
+};
+
+export const deactivateLicenseInSourceTable = async (id,siteId) => {    
+    const query = `
+    update [${siteId}_licensetbl] set active=0 where id=${id}; SELECT @@ROWCOUNT  AS affectedRow;
+`;
     const values = [];
     return await calltoApi(query,values);
 };

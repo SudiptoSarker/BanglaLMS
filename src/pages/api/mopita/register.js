@@ -1,7 +1,7 @@
 import { queryDatabase } from '@/lib/config';
 import fs from 'fs'
 import path from 'path'
-import { siteid } from '@/helper/helper';
+import { siteid,isNullOrEmpty } from '@/helper/helper';
 import { getMemberList,insertMember,createUserLog } from '@/components/api/queryApi';
 
 export default async function handler(req, res) {
@@ -34,27 +34,40 @@ export default async function handler(req, res) {
     let payType='';
 
     try{
+
+        let jsonBody = req.body;
+         cs = jsonBody.cs;
+         ci = jsonBody.ci;
+         uid = jsonBody.uid;
+         act = jsonBody.act;
+         orderId = jsonBody.iai_ordid;
+         orderTime=jsonBody.iai_tms;
+         payType=jsonBody.iai_paytype;
+
+        //dev code
+        // cs = '2292932R750';
+        // ci = '2292932R850';
+        // uid = '01675203399';
+        // act = 'reg';
+        // orderId = 'ord-2';
+        // orderTime='1.42';
+        // payType='card';
+
+       
+        if(isNullOrEmpty(cs) || isNullOrEmpty(ci) || isNullOrEmpty(uid) || isNullOrEmpty(orderId)){
+            throw new Error("Invalid Data!");
+        }
+
+    }
+    catch(error){
+        res.status(200).send('NG¥n');
+    }
+
+    try{
+        // dev
         //let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002750","act":"reg","cs":"20241001000000000","iai_tms":"20240904192455905","iai_paytype":"00","iai_ordid":"202409046fc1693bf60e81e074","arg":""};
         // let jsonBody = JSON.parse(req.body);
-        // let jsonBody = req.body;
-        //  cs = jsonBody.cs;
-        //  ci = jsonBody.ci;
-        //  uid = jsonBody.uid;
-        //  act = jsonBody.act;
-        //  orderId = '';
-        //  orderTime='';
-        //  payType='';
-
-
-        cs = '2292932R750';
-        ci = '2292932R850';
-        uid = '01575203399';
-        act = 'reg';
-        orderId = 'ord-1';
-        orderTime='1.42';
-        payType='card';
-        
-        
+    
         
         let siteId = await siteid();
 
@@ -73,10 +86,9 @@ export default async function handler(req, res) {
                 orderTime:orderTime,
                 payType:payType,
                 isMember:1,
-                licenseKey:'',
-                validity:null
+                cs:cs
             };
-
+            
             let createMember = await insertMember(memberObject);
 
             if(createMember.data[0].newId > 0){

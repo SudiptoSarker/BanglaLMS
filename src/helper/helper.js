@@ -8,10 +8,16 @@ export const siteid = async() => {
 }
 
 export const checkSubscription = async(uid) => {
-    const site = await siteid();
-    const subscribeResult = await getSubscribedData(site, uid);
-    const subscribeData = subscribeResult.data[0] || null;
-    return subscribeData;
+    try{
+        const site = await siteid();
+        const subscribeResult = await getSubscribedData(site, uid);
+        const subscribeData = subscribeResult.data[0] || null;
+        return subscribeData;
+    }
+    catch(error){
+        return null;
+    }
+
 }
 
 export const validateUserId = (uid) => {
@@ -22,4 +28,8 @@ export const validateUserId = (uid) => {
     // Check : 18 characters for UID
     return uid.length == 18;
     
+}
+
+export function isNullOrEmpty(value) {
+    return value === null || value === undefined || value === '';
 }

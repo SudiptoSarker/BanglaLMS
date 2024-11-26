@@ -1,31 +1,14 @@
-//prod
-
-//import sql from 'mssql';
-
-// const config = {
-//     user: process.env.NEXT_PUBLIC_DB_USER,
-//     password: process.env.NEXT_PUBLIC_DB_PASSWORD,
-//     server: process.env.NEXT_PUBLIC_DB_SERVER,
-//     database: process.env.NEXT_PUBLIC_DB_DATABASE,
-//     options: {
-//         encrypt: true, 
-//         enableArithAbort: true, 
-//     },
-// };
-
-
-//local
-
-import sql from 'mssql/msnodesqlv8';
+import sql from 'mssql';
 
 const config = {
-  server: 'DESKTOP-24UP61P\\SQLEXPRESS',
-  database: 'lmsdb',
-  options: {
-    trustedConnection: true, 
-    trustServerCertificate: true, 
-  },
-  driver: "msnodesqlv8",
+    user: process.env.NEXT_PUBLIC_DB_USER,
+    password: process.env.NEXT_PUBLIC_DB_PASSWORD,
+    server: process.env.NEXT_PUBLIC_DB_SERVER,
+    database: process.env.NEXT_PUBLIC_DB_DATABASE,
+    options: {
+        encrypt: true, 
+        enableArithAbort: true, 
+    },
 };
 
 let pool;
