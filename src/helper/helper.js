@@ -19,10 +19,16 @@ export const siteid = async() => {
  * @returns {object|null} - The subscription data or null if not subscribed.
  */
 export const checkSubscription = async(uid) => {
-    const site = await siteid();
-    const subscribeResult = await getSubscribedData(site, uid);
-    const subscribeData = subscribeResult.data[0] || null;
-    return subscribeData;
+    try{
+        const site = await siteid();
+        const subscribeResult = await getSubscribedData(site, uid);
+        const subscribeData = subscribeResult.data[0] || null;
+        return subscribeData;
+    }
+    catch(error){
+        return null;
+    }
+
 }
 
 //mopita user id validation
@@ -34,4 +40,8 @@ export const validateUserId = (uid) => {
     // Check : 18 characters for UID
     return uid.length == 18;
     
+}
+
+export function isNullOrEmpty(value) {
+    return value === null || value === undefined || value === '';
 }
