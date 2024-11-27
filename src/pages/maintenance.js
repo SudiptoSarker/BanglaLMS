@@ -1,14 +1,15 @@
-// Import the Layout component
+// Main layout component wrapping the page structure.
 import Layout from "@/components/site/layout/layout";
-import Maintenance from "@/components/site/maintenance/maintenancecomponent";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
+// annuancement component
+import Maintenance from "@/components/site/maintenance/maintenancecomponent";
 
 export default function MaintenancePage() {
 
     return (
-        <Layout>                  
+        // Main layout wrapping the page structure.
+        <Layout>                 
+            {/* Render annuancement component */}         
             <Maintenance  />            
         </Layout>
     );

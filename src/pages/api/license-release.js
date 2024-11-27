@@ -19,20 +19,9 @@ export default async function handler(req, res) {
         });
     }
 
-    // If all required parameters are present, return success
     try {
-        // Generate a random 20-character license key (optional)
-        //const key = crypto.randomBytes(10).toString('hex'); 
-        //const currentDate = new Date();
-        //const validityDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
-        //const formattedValidityDate = validityDate.toISOString().split('T')[0];
         return res.status(200).send({
-            success: true,
-            //key: key,
-            //purchase: purchase,
-            //subscription: subscription,
-            //user: user,
-            //validity:formattedValidityDate
+            success: true,           
         });
     } catch (error) {
         console.error('Error:', error);

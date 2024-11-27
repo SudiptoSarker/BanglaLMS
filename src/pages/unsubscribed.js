@@ -1,10 +1,14 @@
-// Import the Layout component
+// Main layout component wrapping the page structure.
 import Layout from "@/components/site/layout/layout";
+
+// Unsubscribed component
 import UnsubscribedComponent from "@/components/site/unsubscription/unsubscribedcomponent";
 
 export default function UnsubscribedPage() {
     return (
-        <Layout>              
+        // Main layout wrapping the page structure.
+        <Layout>       
+            {/* Render unsubscribed components */}           
             <UnsubscribedComponent  />                        
         </Layout>
     );

@@ -2,6 +2,7 @@ import React from "react";
 import styles from './unsubscribed.module.css';
 
 function UnsubscribedComponent() {
+  // Handles the "Return to Top" button click event
   const handleReturnClick = () => {
     window.location.href = "/top"; // Redirect to the top page
   };
@@ -13,10 +14,15 @@ function UnsubscribedComponent() {
         className={styles.confirmationImage}
       />
       <section className={styles.contentWrapper}>
+        {/* Title confirming subscription cancellation */}
         <h1 className={styles.title}>BDGuardの解約手続きが完了しました。</h1>
+
+        {/* Thank you message for using the service */}
         <p className={styles.thankYouMessage}>
           ご利用いただき、ありがとうございました。
         </p>
+
+        {/* Button to return to the top page */}
         <button 
           className={styles.returnButton} 
           type="button" 

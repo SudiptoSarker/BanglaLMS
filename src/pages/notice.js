@@ -1,14 +1,15 @@
-// Import the Layout component
+// Main layout component wrapping the page structure.
 import Layout from "@/components/site/layout/layout";
-import Instructions from "@/components/site/notice/noticecomponent";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 
+// Notice component
+import Instructions from "@/components/site/notice/noticecomponent";
 
 export default function NoticePage() {
 
     return (
-        <Layout>                  
+        // Main layout wrapping the page structure.
+        <Layout>          
+            {/* Render notice component */}            
             <Instructions  />            
         </Layout>
     );

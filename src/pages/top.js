@@ -1,27 +1,48 @@
-'use client'
+// React core imports for managing component state and side effects.
 import { useEffect, useState } from "react";
-import Layout from "@/components/site/layout/layout";
-import HeaderComponent from "@/components/site/header/headercomponent";
-import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
-import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
-import FeatureSection from "@/components/site/feature/featurecomponent";
-import TopPageComponent from "@/components/site/top/toppagecomponent";
-import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
-import { fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
-import { siteid,validateUserId } from '@/helper/helper';
-import { checkSubscription } from "@/helper/helper";
-import { CookiesProvider } from "react-cookie";
+
+// Router for handling client-side navigation in Next.js.
 import { useRouter } from "next/router";
 
+// Main layout component wrapping the page structure.
+import Layout from "@/components/site/layout/layout";
 
+// Header component
+import HeaderComponent from "@/components/site/header/headercomponent";
+
+// Components for notifications and announcements.
+import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
+import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
+
+// Feature-related component.
+import FeatureSection from "@/components/site/feature/featurecomponent";
+
+// Top page component.
+import TopPageComponent from "@/components/site/top/toppagecomponent";
+
+// Subscription-related component.
+import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
+
+// API utility functions for fetching site-related data.
+import { fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+
+// Helper utilities.
+import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
+import { CookiesProvider } from "react-cookie";
+
+// Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
     const {query} = context;
     let isLogin = false;
     let isMember = false;
 
+    // Extract user ID (uid) from the query parameters.
     let uid = query.uid;
 
+    // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
+
+    //If logged in,get the subscription data to check isMember or not. 
     if(isLogin){
         let subscriptionData =  await checkSubscription(uid);
         if(subscriptionData != null && subscriptionData != undefined){
@@ -29,6 +50,7 @@ export async function getServerSideProps(context) {
         }
     }
     
+    // Pass the login status as a prop to the component.
     return { props: {
         isLogin: isLogin,
         isMember: isMember
@@ -36,12 +58,14 @@ export async function getServerSideProps(context) {
 }
 
 export default function TopPage({isLogin,isMember}) {
-    const router = useRouter();
+    const router = useRouter(); // Router instance for navigation control.
 
+    // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
 
+    // Function to fetch subscription data for a specific site ID.
     const getSubscriptionData = async (siteId) => {
         try {            
             const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
@@ -51,6 +75,7 @@ export default function TopPage({isLogin,isMember}) {
         }
     };
 
+    // Function to fetch notifications for a specific site ID.
     const getNotifications = async (siteId) => {
          try {
            const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
@@ -59,7 +84,8 @@ export default function TopPage({isLogin,isMember}) {
            console.error("Error fetching notifications:", error);
          }
     };
- 
+    
+    // Function to fetch announcements for a specific site ID.
     const getAnnouncements = async (siteId) => {
          try{
            const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
@@ -69,6 +95,7 @@ export default function TopPage({isLogin,isMember}) {
          }
     };
 
+    // Function to fetch all site-related information (subscription, notifications, announcements).
     const getSiteInformation = async () => {
         try {
              const siteId = await siteid();   
@@ -81,38 +108,50 @@ export default function TopPage({isLogin,isMember}) {
         }
     };
 
+    // Effect hook to handle initial page setup.
     useEffect(() => {
+        // If user is not logged in, redirect the user to the login page.
         if(!isLogin){
             router.push('/');
         }
+        // Call function to fetch site-related information.
         getSiteInformation();
     },[router]);
 
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout>  
-                <HeaderComponent  />         
+                {/* Header component for the top of the page. */}
+                <HeaderComponent  />  
+
+                {/* Render notification components based on fetched notifications. */}               
                 {notifications.map((notification, index) => (
                     <NotificationComponent
                     key={index}
                     text={notification.text}
                     href={notification.link}
                     />
-                ))}                                    
+                ))}     
+
+                {/* Render announcement components based on fetched announcements. */}                                            
                 {announcements.map((announcement, index) => (
                     <AnnounceComponent 
                         key={index}
                         {...announcement}          
                     />
-                ))}   
-                <FeatureSection  />                   
+                ))} 
+
+                {/* Render feature section. */}   
+                <FeatureSection  />     
+
+                {/* Display subscription options if user is authenticated but not subscribed. */}                        
                 {(isLogin && !isMember) && (
                     subscriptionData.map((option, index) => (
                         <SubscriptionButton key={index} data={option} />
                     ))
                 )}
 
-                {/* Show TopPageComponent if user is authenticated and subscribed */}
+                {/* Display TopPageComponent if user is authenticated and subscribed. */}
                 {isLogin && isMember && (
                     <TopPageComponent />
                 )}

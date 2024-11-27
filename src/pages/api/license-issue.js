@@ -1,4 +1,3 @@
-//import { queryDatabase } from "@/lib/config";
 import crypto from 'crypto';
 
 export default async function handler(req, res) {

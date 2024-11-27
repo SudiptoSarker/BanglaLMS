@@ -5,21 +5,24 @@ import { fetchTextLinksForFooterSection } from "@/components/api/queryApi";
 import { siteid } from '@/helper/helper';
 
 const Footer = () => {
-    const [footerData, setFooterData] = useState([]);
-    const domain = process.env.NEXT_PUBLIC_DOMAIN;  
+    // State to store footer data from API
+    const [footerData, setFooterData] = useState([]);    
 
     useEffect(() => {        
-        getSiteInformation();
-    }, []);  
+        getSiteInformation(); // Fetch site info on component mount
+    }, []); 
+    
+    // Function to get site information and fetch footer data
     const getSiteInformation = async () => {
         try {
-            const siteId = await siteid();     
-            getFooterData(siteId);                        
+            const siteId = await siteid();    // Get site ID       
+            getFooterData(siteId);      // Fetch footer data based on site ID                               
         } catch (error) {
             console.log("Error fetching subscription data:", error);
         }
     };
     
+    // Function to fetch footer data from API
     const getFooterData = async (siteId) => {                
         try {            
             const response = await fetchTextLinksForFooterSection(siteId, "FooterLine");
