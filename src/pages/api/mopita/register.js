@@ -2,7 +2,7 @@ import { queryDatabase } from '@/lib/config';
 import fs from 'fs'
 import path from 'path'
 import { siteid,isNullOrEmpty } from '@/helper/helper';
-import { getMemberList,insertMember,createUserLog } from '@/components/api/queryApi';
+import { getMemberList,insertMember,createUserLog,getCI } from '@/components/api/queryApi';
 
 export default async function handler(req, res) {
     {
@@ -78,22 +78,28 @@ export default async function handler(req, res) {
             isMember = true;
         }
         else{
-            let memberObject = {
-                siteId:siteId,
-                ci:ci,
-                uid:uid,
-                orderId:orderId,
-                orderTime:orderTime,
-                payType:payType,
-                isMember:1,
-                cs:cs
-            };
-            
-            let createMember = await insertMember(memberObject);
 
-            if(createMember.data[0].newId > 0){
-                isMember = true;
-                activity = 'subscriptions';
+            let _ci = await getCI(siteId,ci);
+            if(_ci.data.length > 0){
+
+                let memberObject = {
+                    siteId:siteId,
+                    ci:ci,
+                    uid:uid,
+                    orderId:orderId,
+                    orderTime:orderTime,
+                    payType:payType,
+                    isMember:1,
+                    cs:cs,
+                    category:_ci.data[0].category
+                };
+
+                let createMember = await insertMember(memberObject);
+
+                if(createMember.data[0].newId > 0){
+                    isMember = true;
+                    activity = 'subscriptions';
+                }
             }
 
         }

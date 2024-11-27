@@ -24,7 +24,7 @@ import TopPageComponent from "@/components/site/top/toppagecomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 
 // API utility functions for fetching site-related data.
-import { fetchSubscriptionData,fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
+import { fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberListByUid } from "@/components/api/queryApi";
 
 // Helper utilities.
 import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
@@ -35,6 +35,7 @@ export async function getServerSideProps(context) {
     const {query} = context;
     let isLogin = false;
     let isMember = false;
+    let _skippableCategories = [];
 
     // Extract user ID (uid) from the query parameters.
     let uid = query.uid;
@@ -47,17 +48,20 @@ export async function getServerSideProps(context) {
         let subscriptionData =  await checkSubscription(uid);
         if(subscriptionData != null && subscriptionData != undefined){
             isMember = true;
+            let _memberList = await getMemberListByUid(uid);
+            _skippableCategories = _memberList.data;
         }
     }
     
     // Pass the login status as a prop to the component.
     return { props: {
         isLogin: isLogin,
-        isMember: isMember
+        isMember: isMember,
+        skippableCategories:_skippableCategories
     } };
 }
 
-export default function TopPage({isLogin,isMember}) {
+export default function TopPage({isLogin,isMember,skippableCategories}) {
     const router = useRouter(); // Router instance for navigation control.
 
     // State variables to store various data sets.
@@ -146,9 +150,11 @@ export default function TopPage({isLogin,isMember}) {
 
                 {/* Display subscription options if user is authenticated but not subscribed. */}                        
                 {(isLogin && !isMember) && (
-                    subscriptionData.map((option, index) => (
-                        <SubscriptionButton key={index} data={option} />
-                    ))
+                    subscriptionData.map((option, index) => {
+                        if(!skippableCategories.includes(option.category)){
+                            return <SubscriptionButton key={index} data={option} />
+                        }
+                    })
                 )}
 
                 {/* Display TopPageComponent if user is authenticated and subscribed. */}

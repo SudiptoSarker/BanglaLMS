@@ -120,8 +120,8 @@ export const getMemberList = async (siteId,ci,uid) => {
     return await calltoApi(query,values);
 };
 export const insertMember = async (memberObject) => {
-    let insertQuery = `insert into membertable (siteid,ci,muid,orderId,ordertime,paytype,ismember,licensekey,validity,cs) values
-                        ('${memberObject.siteId}','${memberObject.ci}','${memberObject.uid}','${memberObject.orderId}','${memberObject.orderTime}','${memberObject.payType}',${memberObject.isMember},null, null,'${memberObject.cs}'); SELECT SCOPE_IDENTITY() AS newId;`;
+    let insertQuery = `insert into membertable (siteid,ci,muid,orderId,ordertime,paytype,ismember,licensekey,validity,cs,category) values
+                        ('${memberObject.siteId}','${memberObject.ci}','${memberObject.uid}','${memberObject.orderId}','${memberObject.orderTime}','${memberObject.payType}',${memberObject.isMember},null, null,'${memberObject.cs}',${memberObject.category}); SELECT SCOPE_IDENTITY() AS newId;`;
 
     const values = [];
     return await calltoApi(insertQuery,values);
@@ -161,6 +161,19 @@ export const deactivateLicenseInSourceTable = async (id,siteId) => {
     const query = `
     update [${siteId}_licensetbl] set active=0 where id=${id}; SELECT @@ROWCOUNT  AS affectedRow;
 `;
+    const values = [];
+    return await calltoApi(query,values);
+};
+
+export const getCI = async (siteId,ci) => {    
+    const query = `
+    select * from [${siteId}_subscriptiondata] where ci='${ci}'`;
+    const values = [];
+    return await calltoApi(query,values);
+};
+
+export const getMemberListByUid = async (uid) => {    
+    const query = `SELECT * from [membertable] where muid='${uid}' and ismember=1`;
     const values = [];
     return await calltoApi(query,values);
 };
