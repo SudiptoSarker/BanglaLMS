@@ -164,3 +164,10 @@ export const deactivateLicenseInSourceTable = async (id,siteId) => {
     const values = [];
     return await calltoApi(query,values);
 };
+
+//Fetch the service list from member table by siteid,mopita user id and ismember true.
+export const getServiceList = async (siteId,uid) => {    
+    const query = `select ci from membertable where siteid='${siteId}' and muid='${uid}' and ismember=1`;
+    const values = [];
+    return await calltoApi(query,values);
+};

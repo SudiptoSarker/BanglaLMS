@@ -8,7 +8,7 @@ import Layout from "@/components/site/layout/layout";
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
 
 // API utility functions for fetching data.
-import { fetchSubscriptionData } from "@/components/api/queryApi";
+import { fetchSubscriptionData,getServiceList } from "@/components/api/queryApi";
 import { siteid,validateUserId } from '@/helper/helper';
 
 // Router for handling client-side navigation in Next.js.
@@ -21,18 +21,19 @@ export async function getServerSideProps(context) {
 
     // Extract user ID (uid) from the query parameters.
     let uid = query.uid;
-
+    uid = '015752033990000000'
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
     
     // Pass the login status as a prop to the component.
     return { props: {
-        isLogin: isLogin
+        isLogin: isLogin,
+        userId:uid
     } };
 }
 
 // Main functional component for the Unsubscribe page.
-export default function UnsubscribePage({isLogin}) {
+export default function UnsubscribePage({isLogin,userId}) {
     const router = useRouter();
 
     // State variables to store data sets.
@@ -50,12 +51,17 @@ export default function UnsubscribePage({isLogin}) {
     
     // Function to fetch unsubscription-related data based on the site ID.
     const getSubscriptionData = async (siteId) => {
-    try {            
-        const response = await fetchSubscriptionData(siteId,"unsubscriptionbutton");
-        setUnubscriptionData(response.data);
-    } catch (error) {
-        console.log("Error fetching subscription data:", error);
-    }
+        try {            
+            const response = await fetchSubscriptionData(siteId,"unsubscriptionbutton");
+            
+            let subscribedData = response.data;
+            const ciResponse = await getServiceList(siteId,userId);            
+            const ciValues = ciResponse.data.map(item => item.ci);
+            subscribedData = subscribedData.filter(item => ciValues.includes(item.ci));
+            setUnubscriptionData(subscribedData);
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
     };
 
     useEffect(() => {
@@ -63,18 +69,17 @@ export default function UnsubscribePage({isLogin}) {
         if(!isLogin){
             router.push('/');
         }
-        // Call function to fetch site-related information.
+        // Call function to fetch site-related information.        
         getSiteInformation();
+
     },[router]);
     
     // Render the unsubscribe page with fetched data.
     return (
         // Main layout wrapping the page structure.
         <Layout>          
-            {/* Render each unsubscription option using the UnsubscribeComponent. */}                   
-            {unSubscriptionData.map((option, index) => (
-                <UnsubscribeComponent key={index} data={option} />
-            ))}                  
+            {/* Render each unsubscription option using the UnsubscribeComponent. */}                               
+            <UnsubscribeComponent data={unSubscriptionData} />              
         </Layout>
     );
 }
