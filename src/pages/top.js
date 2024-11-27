@@ -49,7 +49,11 @@ export async function getServerSideProps(context) {
         if(subscriptionData != null && subscriptionData != undefined){
             isMember = true;
             let _memberList = await getMemberListByUid(uid);
-            _skippableCategories = _memberList.data;
+            if(_memberList.data.length > 0){
+                for(let x=0; x<_memberList.data.length;x++){
+                    _skippableCategories.push(_memberList.data[x].category);
+                }
+            }
         }
     }
     
