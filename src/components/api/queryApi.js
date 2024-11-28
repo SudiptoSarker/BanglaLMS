@@ -183,3 +183,8 @@ export const getMemberListByUid = async (uid,siteId) => {
     const values = [];
     return await calltoApi(query,values);
 };
+export const getServiceList = async (siteId,uid) => {    
+    const query = `select ci from membertable where siteid='${siteId}' and muid='${uid}' and ismember=1`;
+    const values = [];
+    return await calltoApi(query,values);
+};
