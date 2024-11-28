@@ -1,4 +1,4 @@
-import { getSiteId, getSubscribedData } from "@/components/api/queryApi"
+import { getSiteId, getSubscribedData,getSubscribedDataByService } from "@/components/api/queryApi"
 
 /**
  * Fetches the site ID based on the domain.
@@ -22,6 +22,19 @@ export const checkSubscription = async(uid) => {
     try{
         const site = await siteid();
         const subscribeResult = await getSubscribedData(site, uid);
+        const subscribeData = subscribeResult.data[0] || null;
+        return subscribeData;
+    }
+    catch(error){
+        return null;
+    }
+
+}
+
+export const checkSubscriptionByService = async(uid,ci) => {
+    try{
+        const site = await siteid();
+        const subscribeResult = await getSubscribedDataByService(site, uid,ci);
         const subscribeData = subscribeResult.data[0] || null;
         return subscribeData;
     }

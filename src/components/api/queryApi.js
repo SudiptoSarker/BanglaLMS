@@ -46,6 +46,11 @@ export const getSubscribedData = async (siteid, muid) => {
     return await calltoApi(query,[]);
 }
 
+export const getSubscribedDataByService = async (siteid, muid,ci) => {
+    const query = `SELECT * FROM [dbo].[membertable] WHERE siteid='${siteid}' AND muid='${muid}' AND ci='${ci}' AND ismember=1`;
+    return await calltoApi(query,[]);
+}
+
 /**
  * Retrieves planner's subscription data for page data show
  * Planner's subscription data filter by site primary key and planner's design section name
@@ -173,7 +178,7 @@ export const getCI = async (siteId,ci) => {
 };
 
 export const getMemberListByUid = async (uid) => {    
-    const query = `SELECT * from [membertable] where muid='${uid}' and ismember=1`;
+    const query = `SELECT ci, category from [membertable] where muid='${uid}' and ismember=1`;
     const values = [];
     return await calltoApi(query,values);
 };

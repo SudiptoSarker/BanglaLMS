@@ -36,9 +36,12 @@ export async function getServerSideProps(context) {
     let isLogin = false;
     let isMember = false;
     let _skippableCategories = [];
+    let _skippableResources = [];
 
     // Extract user ID (uid) from the query parameters.
-    let uid = query.uid;
+     let uid = query.uid;
+    // dev
+    //let uid = '015752033990000000';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -50,9 +53,8 @@ export async function getServerSideProps(context) {
             isMember = true;
             let _memberList = await getMemberListByUid(uid);
             if(_memberList.data.length > 0){
-                for(let x=0; x<_memberList.data.length;x++){
-                    _skippableCategories.push(_memberList.data[x].category);
-                }
+                _skippableCategories = _memberList.data.map(x=>x.category);
+                _skippableResources = _memberList.data.map(x=>x.ci);
             }
         }
     }
@@ -61,11 +63,12 @@ export async function getServerSideProps(context) {
     return { props: {
         isLogin: isLogin,
         isMember: isMember,
-        skippableCategories:_skippableCategories
+        skippableCategories:_skippableCategories,
+        skippableResources:_skippableResources
     } };
 }
 
-export default function HomePage({ isLogin, isMember,skippableCategories}) {   
+export default function HomePage({ isLogin, isMember,skippableCategories,skippableResources}) {   
     // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
@@ -161,17 +164,25 @@ export default function HomePage({ isLogin, isMember,skippableCategories}) {
                 <SubscriptionInfo  />                       
 
                 {/* Show SubscriptionButton if auth is false or if auth is true but not subscribed */}
-                {(!isLogin || (isLogin && !isMember)) && (
+                {
                     subscriptionData.map((option, index) => {
                         if(!skippableCategories.includes(option.category)){
                             return <SubscriptionButton key={index} data={option} />
                         }
                     })
-                )}
+                }
 
                 {/* Show TopPageComponent if user is authenticated and subscribed */}
                 {isLogin && isMember && (
-                    <TopPageComponent />
+                    <>
+                        <div style={{textAlign:'center'}}>
+                            <h2>BDGuardメンバーシップページへ</h2>
+                            <p style={{fontSize:'16px',marginTop:'30px'}}>
+                            ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
+                            </p>
+                        </div>
+                        {skippableResources.map((item,index)=><TopPageComponent ci={item}/>)}
+                    </>  
                 )}
 
                 {/* Show LoginButton if user is not authenticated */}
