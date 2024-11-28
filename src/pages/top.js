@@ -74,7 +74,7 @@ export async function getServerSideProps(context) {
 
 export default function TopPage({isLogin,isMember,skippableCategories,skippableResources}) {
     const router = useRouter(); // Router instance for navigation control.
-
+    
     // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
@@ -177,7 +177,7 @@ export default function TopPage({isLogin,isMember,skippableCategories,skippableR
                             ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
                             </p>
                         </div>
-                        {skippableResources.map((item,index)=><TopPageComponent ci={item}/>)}
+                        {skippableResources.map((item,index)=><TopPageComponent ci={item.ci} servicename={item.servicename}/>)}
                     </>  
                 )}
 

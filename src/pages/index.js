@@ -183,7 +183,7 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
                             ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
                             </p>
                         </div>
-                        {skippableResources.map((item,index)=><TopPageComponent ci={item}/>)}
+                        {skippableResources.map((item,index)=><TopPageComponent ci={item.ci} servicename={item.servicename}/>)}
                     </>  
                 )}
 

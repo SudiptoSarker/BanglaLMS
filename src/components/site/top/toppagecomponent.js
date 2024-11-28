@@ -1,7 +1,7 @@
 import React from "react";
 import styles from './toppage.module.css';
 
-function TopPageComponent({ci}) {
+function TopPageComponent({ci,servicename}) {
   return (
     <section className={styles.membershipContainer}>
        {/* Title for the membership page */}
@@ -12,7 +12,7 @@ function TopPageComponent({ci}) {
         type="button" 
         onClick={() => location.href='/member?ci='+ci}
       >
-        BDGuardメンバーシップページへ
+        {servicename} - BDGuard
       </button>
     </section>
   );
