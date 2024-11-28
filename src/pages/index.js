@@ -38,6 +38,8 @@ export async function getServerSideProps(context) {
     let _skippableCategories = [];
     let _skippableResources = [];
 
+    let siteId = await siteid();
+
     // Extract user ID (uid) from the query parameters.
      let uid = query.uid;
     // dev
@@ -51,7 +53,7 @@ export async function getServerSideProps(context) {
         let subscriptionData =  await checkSubscription(uid);
         if(subscriptionData != null && subscriptionData != undefined){
             isMember = true;
-            let _memberList = await getMemberListByUid(uid);
+            let _memberList = await getMemberListByUid(uid,siteId);
             if(_memberList.data.length > 0){
                 _skippableCategories = _memberList.data.map(x=>x.category);
                 _skippableResources = _memberList.data.map(x=>x.ci);
