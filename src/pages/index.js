@@ -56,7 +56,7 @@ export async function getServerSideProps(context) {
             let _memberList = await getMemberListByUid(uid,siteId);
             if(_memberList.data.length > 0){
                 _skippableCategories = _memberList.data.map(x=>x.category);
-                _skippableResources = _memberList.data.map(x=>x.ci);
+                _skippableResources = _memberList.data.map(x=>{return {ci:x.ci, servicename:x.servicename}});
             }
         }
     }
