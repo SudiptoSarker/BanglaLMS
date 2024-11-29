@@ -177,7 +177,7 @@ export const getCI = async (siteId,ci) => {
     return await calltoApi(query,values);
 };
 
-export const getMemberListByUid = async (uid,siteId) => {    
+export const getMemberResourceCatByUid = async (uid,siteId) => {    
     const query = `SELECT distinct m.ci, m.category, r.servicename from [membertable] m join resources r on m.ci = r.resourceid and m.siteid = r.siteid 
                     where m.siteid='${siteId}' and m.muid='${uid}' and m.ismember=1`;
     const values = [];

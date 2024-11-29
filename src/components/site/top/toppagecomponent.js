@@ -12,7 +12,7 @@ function TopPageComponent({ci,servicename}) {
         type="button" 
         onClick={() => location.href='/member?ci='+ci}
       >
-        {servicename} - BDGuard
+        Go To {servicename} - Member Page
       </button>
     </section>
   );

@@ -23,7 +23,7 @@ import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 
 // API utility functions for fetching site-related data.
-import { fetchLoginData,fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberListByUid } from "@/components/api/queryApi";
+import { fetchLoginData,fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResourceCatByUid } from "@/components/api/queryApi";
 
 // Helper utilities.
 import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
@@ -43,7 +43,7 @@ export async function getServerSideProps(context) {
     // Extract user ID (uid) from the query parameters.
      let uid = query.uid;
     // dev
-    //let uid = '015752033990000000';
+    // uid = '279d0664343d1bba04';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -53,7 +53,7 @@ export async function getServerSideProps(context) {
         let subscriptionData =  await checkSubscription(uid);
         if(subscriptionData != null && subscriptionData != undefined){
             isMember = true;
-            let _memberList = await getMemberListByUid(uid,siteId);
+            let _memberList = await getMemberResourceCatByUid(uid,siteId);
             if(_memberList.data.length > 0){
                 _skippableCategories = _memberList.data.map(x=>x.category);
                 _skippableResources = _memberList.data.map(x=>{return {ci:x.ci, servicename:x.servicename}});

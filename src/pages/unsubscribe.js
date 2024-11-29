@@ -21,7 +21,10 @@ export async function getServerSideProps(context) {
 
     // Extract user ID (uid) from the query parameters.
     let uid = query.uid;
-    uid = '015752033990000000'
+
+    // dev
+    // uid = '279d0664343d1bba04';
+
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
     

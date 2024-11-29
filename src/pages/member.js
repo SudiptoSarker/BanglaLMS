@@ -40,7 +40,7 @@ export async function getServerSideProps(context) {
 
 
     // dev
-    //let uid = '015752033990000000';
+    // uid = '279d0664343d1bba04';
 
     let isLogin = false;
     let isMember = false;
