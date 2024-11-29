@@ -38,7 +38,7 @@
 .licenseKey {
     font-size: 24px; /* Larger font size for the key */
     color: #008000; /* Green color for the license key */
-    white-space: nowrap; /* Prevents text wrapping */
+    /*white-space: nowrap; Prevents text wrapping*/
     line-height: 1.5; /* Better line height for readability */
     padding: 15px 0; /* Padding for spacing around the key */
 }

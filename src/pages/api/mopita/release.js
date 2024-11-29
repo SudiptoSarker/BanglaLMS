@@ -1,6 +1,8 @@
 import { queryDatabase } from '@/lib/config';
 import fs from 'fs'
 import path from 'path'
+import { siteid,isNullOrEmpty } from '@/helper/helper';
+import { getSubscribedDataByService,getSiteInfo,createUserLog,deleteDataFromMemberTable } from '@/components/api/queryApi';
 
 export default async function handler(req, res) {
     // custom log
@@ -18,39 +20,46 @@ export default async function handler(req, res) {
             console.log('Release File written!');
         });
     }
+    
+    let ci='';
+    let uid = '';
+    let act = '';
+
 
     try{
-        //let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002750","act":"rel","cs":"20241001000000000","iai_tms":"20240904192455905","iai_paytype":"00","iai_ordid":"202409046fc1693bf60e81e074","arg":""};
-        // let jsonBody = JSON.parse(req.body);
+
         let jsonBody = req.body;
-        //let cs = jsonBody['cs'];
-        let ci = jsonBody.ci;
-        let uid = jsonBody.uid;
-        let act = jsonBody.act;
-        
-        // get site id from ci
-        // code here for site id
-        const queryGetSite = `select * from resources  where resource='${ci}'`;
-        let resourceList = await queryDatabase(queryGetSite);
-        if(resourceList.length > 0){
+        ci = jsonBody.ci;
+        uid = jsonBody.uid;
+        act = jsonBody.act;
 
-            let siteId=resourceList[0].siteId;
+        //dev code
+        // ci = 'R000002750';
+        // uid = '015752033990000000';
+        // act = 'rel';
 
-            const query = `
-            SELECT id, name, source, reglink, rellink, sourcetable AS tableName
-            FROM [dbo].[sites]
-            WHERE active = 1 and id=${siteId}
-                `;
-            let siteDataList = await queryDatabase(query);
-            //let _url = `http://localhost:3000/api/license-release?cancel={ci}&user={uid}&act={act}`;
-            
-            if(siteDataList.length > 0){
-                let siteData = siteDataList[0];
+        if(isNullOrEmpty(ci) || isNullOrEmpty(uid)){
+            throw new Error("Invalid Data!");
+        }
+        if(act!='rel'){
+            throw new Error("Invalid Request!");
+        }
+    }
+    catch(error){
+        res.status(200).send('NG¥n');
+    }
 
+    try{
+
+        let siteId = await siteid();
+        let memberInfo = await getSubscribedDataByService(siteId,uid,ci);
+        if(memberInfo.data.length > 0){
+            let siteInfo = await getSiteInfo(siteId);
+            if(siteInfo.data.length > 0){
+                let siteData = siteInfo.data[0];
                 if(siteData.source.toLowerCase() == 'webapi'){
-                    let _url = siteData.rellink;
 
-                    //_url = _url.replace('{cs}',cs);
+                    let _url = siteData.rellink;
                     _url = _url.replace('{ci}',ci);
                     _url = _url.replace('{uid}',uid);
                     _url = _url.replace('{act}',act);
@@ -65,76 +74,41 @@ export default async function handler(req, res) {
                         query: queryString
                     });
                     let result = await response.json();
-
                     if(result.success){
-
-                        let insertQuery = `update membertable set status=0 where ci='${ci}' and muid='${uid}'; SELECT @@ROWCOUNT  AS affectedRow;`;
-                        let insertResults = await queryDatabase(insertQuery);
-
-                        if(insertResults[0].affectedRow > 0){
-                            {
-                                let siteName = siteDataList[0].name;
-                                let query = `
-                                    INSERT INTO userlogs (muid, pagelink, activity, time)
-                                    VALUES (@uid, @pagelink, @activity, @time)
-                                `;
-                                
-                                let params = {
-                                    uid: uid,
-                                    pagelink: siteName,
-                                    activity: 'unsubscriptions',
-                                    time: new Date().toISOString().replace('T', ' ').substring(0, 19) 
-                                };    
-                                await queryDatabase(query, params);  
-                            }
-                            res.status(200).send('OK¥n');
-                        }
-                        else{
-                            res.status(200).send('NG¥n');
-                        }
-
-                    }
-                    else{
+                        let deleteResult = await deleteDataFromMemberTable(siteId,uid,ci);
+                        deleteResult.data[0].affectedRow > 0 ? res.status(200).send('OK¥n') : res.status(200).send('NG¥n');
+                        
+                    }else{
                         res.status(200).send('NG¥n');
                     }
-                }
-                else{
-                    let insertQuery = `update membertable set status=0 where ci='${ci}' and muid='${uid}'; SELECT @@ROWCOUNT  AS affectedRow;`;
-                    let insertResults = await queryDatabase(insertQuery);
 
-                    if(insertResults[0].affectedRow > 0){
-                        {
-                            let siteName = siteDataList[0].name;
-                            let query = `
-                                INSERT INTO userlogs (muid, pagelink, activity, time)
-                                VALUES (@uid, @pagelink, @activity, @time)
-                            `;
-                            
-                            let params = {
-                                uid: uid,
-                                pagelink: siteName,
-                                activity: 'unsubscriptions',
-                                time: new Date().toISOString().replace('T', ' ').substring(0, 19) 
-                            };    
-                            await queryDatabase(query, params);  
-                        }
-                        res.status(200).send('OK¥n');
-                    }
-                    else{
-                        res.status(200).send('NG¥n');
-                    }
+                }else{
+                    let deleteResult = await deleteDataFromMemberTable(siteId,uid,ci);
+                    deleteResult.data[0].affectedRow > 0 ? res.status(200).send('OK¥n') : res.status(200).send('NG¥n');
                 }
-            }
-            else{
+            }else{
                 res.status(200).send('NG¥n');
             }
-        }
-        else{
-            res.status(200).send('NG¥n');
+        }else{
+            res.status(200).send('OK¥n');
         }
     }
     catch(error){
         res.status(200).send('NG¥n');
+    }finally{
+        try{
+            // creating user log.
+            let userLog  = {
+                uid:uid,
+                pageLink:'',
+                activity:'unsubscriptions',
+                time:new Date().toISOString().replace('T', ' ').substring(0, 19) 
+            };
+
+            let response = await createUserLog(userLog);
+        }
+        catch(error){
+        }
     }
 
     

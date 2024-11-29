@@ -1,19 +1,18 @@
 import React from "react";
 import styles from './toppage.module.css';
 
-function TopPageComponent() {
+function TopPageComponent({ci,servicename}) {
   return (
     <section className={styles.membershipContainer}>
-      <h1>BDGuardメンバーシップページへ</h1>
-      <p className={styles.membershipInfo}>
-        ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
-      </p>
+       {/* Title for the membership page */}
+      
+      {/* Button that redirects to the membership page */}
       <button 
         className={`${styles.membershipLink} btn`} 
         type="button" 
-        onClick={() => location.href='/member'}
+        onClick={() => location.href='/member?ci='+ci}
       >
-        BDGuardメンバーシップページへ
+        Go To {servicename} - Member Page
       </button>
     </section>
   );

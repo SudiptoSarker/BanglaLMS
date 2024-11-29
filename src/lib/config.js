@@ -25,23 +25,6 @@ export async function connectToDatabase() {
   }
 }
 
-// export async function queryDatabase(query, params = []) {
-//   try {
-//     const pool = await connectToDatabase();
-//     const request = pool.request();
-
-//     params.forEach((param, index) => {
-//       request.input(`param${index + 1}`, param);
-//     });
-
-//     const result = await request.query(query);
-//     return result.recordset;
-//   } catch (err) {
-//     console.error('Query failed: ', err);
-//     throw err;
-//   }
-// }
-
 export async function queryDatabase(query, params = {}) {
   try {
     const pool = await connectToDatabase();

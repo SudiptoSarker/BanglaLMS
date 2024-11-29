@@ -1,11 +1,12 @@
 import React from 'react';
 import styles from './notification.module.css';
 
+ {/* notification component*/}
 const NotificationComponent = ({ text, href }) => {
   return (
     <section className={styles.section}>      
-      <a href={href} className={styles.notice} role="alert">
-        {/* 「ahamo」「LINEMO」「ドコモ払い」をご利用予定またはご利用中の皆様へのお知らせ */}
+      {/* Link for the notification */}
+      <a href={href} className={styles.notice} role="alert">        
         {text}
       </a> 
     </section>

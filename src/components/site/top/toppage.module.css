@@ -11,13 +11,13 @@
   padding: 40px 20px; /* Adds padding for better spacing */
 }
 
-.membershipInfo {
+/* .membershipInfo {
   font-size: 16px;
   line-height: 1.5;
   align-self: stretch;
-  margin-top: 30px; /* Reduces the space to keep it tighter */
+  margin-top: 30px; 
   max-width: 100%;
-}
+} */
 
 /* Button styles */
 .membershipLink {
