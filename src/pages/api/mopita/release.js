@@ -20,8 +20,6 @@ export default async function handler(req, res) {
             console.log('Release File written!');
         });
     }
-
-    let shouldProceed = false;
     
     let ci='';
     let uid = '';
@@ -77,30 +75,22 @@ export default async function handler(req, res) {
                     });
                     let result = await response.json();
                     if(result.success){
-                        shouldProceed = true;
+                        let deleteResult = await deleteDataFromMemberTable(siteId,uid,ci);
+                        deleteResult.data[0].affectedRow > 0 ? res.status(200).send('OK¥n') : res.status(200).send('NG¥n');
+                        
+                    }else{
+                        res.status(200).send('NG¥n');
                     }
 
                 }else{
-                    shouldProceed = true;
+                    let deleteResult = await deleteDataFromMemberTable(siteId,uid,ci);
+                    deleteResult.data[0].affectedRow > 0 ? res.status(200).send('OK¥n') : res.status(200).send('NG¥n');
                 }
-            }
-        }
-        else{
-            shouldProceed = true;
-        }
-
-        if(shouldProceed){
-            let deleteResult = await deleteDataFromMemberTable(siteId,uid,ci);
-            if(deleteResult.data[0].affectedRow > 0){
-                res.status(200).send('OK¥n');
-            }
-            else{
+            }else{
                 res.status(200).send('NG¥n');
             }
-            
-        }
-        else{
-            res.status(200).send('NG¥n');
+        }else{
+            res.status(200).send('OK¥n');
         }
     }
     catch(error){
