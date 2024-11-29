@@ -188,3 +188,9 @@ export const getServiceList = async (siteId,uid) => {
     const values = [];
     return await calltoApi(query,values);
 };
+
+export const deleteDataFromMemberTable = async (siteid, muid,ci) => {    
+    const query = `DELETE FROM [dbo].[membertable] WHERE siteid='${siteid}' AND muid='${muid}' AND ci='${ci}' AND ismember=1; SELECT @@ROWCOUNT  AS affectedRow;`;
+    const values = [];
+    return await calltoApi(query,values);
+};
