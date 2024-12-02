@@ -109,7 +109,7 @@ export const fetchNotificationsAndAnnouncements = async (siteId, sectionname) =>
  * Planner's Footer data filter by site primary key and planner's design section name.
 */
 export const fetchTextLinksForFooterSection = async (siteId, sectionname) => {    
-    const query = `SELECT * FROM [dbo].[${siteId}_textlinks]`;//WHERE section LIKE '${sectionname}%'`;    
+    const query = `SELECT * FROM [dbo].[${siteId}_textlinks] WHERE section IN (${sectionname})`;    
     const values = [];
     return await calltoApi(query,values);
 };
