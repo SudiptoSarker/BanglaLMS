@@ -75,6 +75,25 @@ export const fetchSubscriptionData = async (siteId, sectionname) => {
     }
 };
 
+export const fetchSubscriptions = async (siteId, sectionname) => {
+    try {
+        if (!siteId) {
+            throw new Error(`Site with name '${sitename}' not found.`);
+        }
+
+        // Step 2: Use the site id to fetch the subscription data
+        const subscriptionQuery = `SELECT * FROM [dbo].[${siteId}_subscriptiondata] WHERE section like '${sectionname}_%'`;
+        
+        const subscriptionResult = await calltoApi(subscriptionQuery,[]);
+
+        // Return the subscription data
+        return subscriptionResult;
+
+    } catch (error) {
+        console.error('Error fetching subscription data:', error);
+        throw error;
+    }
+};
 /**
  * Retrieves planner's login data for authentication on every page
  * Planner's login data filter by site primary key and planner's design section name.
@@ -108,7 +127,11 @@ export const fetchNotificationsAndAnnouncements = async (siteId, sectionname) =>
     const values = [];
     return await calltoApi(query,values);
 };
-
+export const fetchNotifications = async (siteId, sectionname) => {
+    const query = `SELECT * FROM [dbo].[${siteId}_textlinks] WHERE section LIKE '${sectionname}_%'`;    
+    const values = [];
+    return await calltoApi(query,values);
+};
 /**
  * Retrieves planner's Footer data to show on the page.
  * Planner's Footer data filter by site primary key and planner's design section name.
@@ -194,3 +217,15 @@ export const deleteDataFromMemberTable = async (siteid, muid,ci) => {
     const values = [];
     return await calltoApi(query,values);
 };
+
+export const fetchFooterSectionForTestLMS = async (sectionname) => {    
+    const query = `SELECT * FROM [dbo].[59_textlinks] WHERE section LIKE '${sectionname}%'`;    
+    const values = [];
+    return await calltoApi(query,values);
+};
+export const fetchTextInformationForTestLMS = async (siteId,sectionname) => {    
+    const query = `SELECT * FROM [dbo].[${siteId}_text] WHERE section = '${sectionname}'`;    
+    const values = [];
+    return await calltoApi(query,values);
+};
+
