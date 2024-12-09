@@ -6,7 +6,7 @@
  * @throws {Error} - If there is a network or server error.
  */
 
-const calltoApi = async (query, values) => {
+const calltoApi = async (query, values) => {    
     try {
         const api = process.env.NEXT_PUBLIC_API_URL;
         const response = await fetch(api+"api/db", {
@@ -18,11 +18,17 @@ const calltoApi = async (query, values) => {
         });
 
         if (!response.ok) {
-            throw new Error("Network response was not ok");
+            // throw new Error("Network response was not ok");
+            if (typeof window !== "undefined" && !window.location.href.includes("/404")) {
+                window.location.href = "/404";
+            }
         }
         return await response.json();
     } catch (error) {
         console.error("Error fetching notifications:", error);
+        if (typeof window !== "undefined" && !window.location.href.includes("/404")) {
+            window.location.href = "/404";
+        }
         throw error;
     }
 };
@@ -75,25 +81,6 @@ export const fetchSubscriptionData = async (siteId, sectionname) => {
     }
 };
 
-export const fetchSubscriptions = async (siteId, sectionname) => {
-    try {
-        if (!siteId) {
-            throw new Error(`Site with name '${sitename}' not found.`);
-        }
-
-        // Step 2: Use the site id to fetch the subscription data
-        const subscriptionQuery = `SELECT * FROM [dbo].[${siteId}_subscriptiondata] WHERE section like '${sectionname}_%'`;
-        
-        const subscriptionResult = await calltoApi(subscriptionQuery,[]);
-
-        // Return the subscription data
-        return subscriptionResult;
-
-    } catch (error) {
-        console.error('Error fetching subscription data:', error);
-        throw error;
-    }
-};
 /**
  * Retrieves planner's login data for authentication on every page
  * Planner's login data filter by site primary key and planner's design section name.
@@ -217,15 +204,3 @@ export const deleteDataFromMemberTable = async (siteid, muid,ci) => {
     const values = [];
     return await calltoApi(query,values);
 };
-
-export const fetchFooterSectionForTestLMS = async (sectionname) => {    
-    const query = `SELECT * FROM [dbo].[59_textlinks] WHERE section LIKE '${sectionname}%'`;    
-    const values = [];
-    return await calltoApi(query,values);
-};
-export const fetchTextInformationForTestLMS = async (siteId,sectionname) => {    
-    const query = `SELECT * FROM [dbo].[${siteId}_text] WHERE section = '${sectionname}'`;    
-    const values = [];
-    return await calltoApi(query,values);
-};
-

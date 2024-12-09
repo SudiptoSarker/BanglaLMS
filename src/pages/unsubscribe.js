@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
     // Pass the login status as a prop to the component.
     return { props: {
         isLogin: isLogin,
-        userId:uid
+        userId: uid || null
     } };
 }
 
