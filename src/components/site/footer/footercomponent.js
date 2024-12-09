@@ -57,8 +57,8 @@ const Footer = () => {
                     <div key={group.id} className={styles.linkGroup}>
                         {group.links.map((link, index) => (
                             <React.Fragment key={`${group.id}-${index}`}>
-                                <a href={link.href} className={styles.footerLink}>
-                                    {link.text}
+                                <a href={link.href} className={styles.footerLink} dangerouslySetInnerHTML={{ __html: link.text }}>
+                                    {/* {link.text} */}
                                 </a>
                                 {index < group.links.length - 1 && (
                                     <span className={styles.separator}>｜</span>
