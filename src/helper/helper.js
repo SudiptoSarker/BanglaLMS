@@ -7,9 +7,14 @@ import { getSiteId, getSubscribedData,getSubscribedDataByService } from "@/compo
  */
 export const siteid = async() => {
     const domain = process.env.NEXT_PUBLIC_DOMAIN;
-    const siteIdResult = await getSiteId(domain);
-    const id = siteIdResult.data[0]?.id;
-    return id;
+    try{
+        const siteIdResult = await getSiteId(domain);
+        const id = siteIdResult.data[0]?.id;
+        return id;
+    }
+    catch(error){
+        return null;
+    }
 }
 
 /**
