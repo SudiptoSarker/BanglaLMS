@@ -138,62 +138,60 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
 
     // Main render function for the landing page.
     return (
-        <CookiesProvider defaultSetOptions={{ path: '/' }}>
-            <Layout>  
-                <HeaderComponent  />                     
+        <Layout>  
+            <HeaderComponent  />                     
 
-                {/* Render notification components */}              
-                {notifications.map((notification, index) => (
-                    <NotificationComponent
+            {/* Render notification components */}              
+            {notifications.map((notification, index) => (
+                <NotificationComponent
+                key={index}
+                text={notification.text}
+                href={notification.link}
+                />
+            ))}     
+
+            {/* Render announcement components */}                                            
+            {announcements.map((announcement, index) => (
+                <AnnounceComponent 
                     key={index}
-                    text={notification.text}
-                    href={notification.link}
-                    />
-                ))}     
+                    {...announcement}          
+                />
+            ))}
 
-                {/* Render announcement components */}                                            
-                {announcements.map((announcement, index) => (
-                    <AnnounceComponent 
-                        key={index}
-                        {...announcement}          
-                    />
-                ))}
+            {/* Render feature section */}
+            <FeatureSection  />
 
-                {/* Render feature section */}
-                <FeatureSection  />
+            {/* Render subscription information */}
+            <SubscriptionInfo  />                       
 
-                {/* Render subscription information */}
-                <SubscriptionInfo  />                       
+            {/* Show SubscriptionButton if auth is false or if auth is true but not subscribed */}
+            {
+                subscriptionData.map((option, index) => {
+                    if(!skippableCategories.includes(option.category)){
+                        return <SubscriptionButton key={index} data={option} />
+                    }
+                })
+            }
 
-                {/* Show SubscriptionButton if auth is false or if auth is true but not subscribed */}
-                {
-                    subscriptionData.map((option, index) => {
-                        if(!skippableCategories.includes(option.category)){
-                            return <SubscriptionButton key={index} data={option} />
-                        }
-                    })
-                }
+            {/* Show TopPageComponent if user is authenticated and subscribed */}
+            {isLogin && isMember && (
+                <>
+                    <div style={{textAlign:'center'}}>
+                        <h2>BDGuardメンバーシップページへ</h2>
+                        <p style={{fontSize:'16px',marginTop:'30px'}}>
+                        ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
+                        </p>
+                    </div>
+                    {skippableResources.map((item,index)=><TopPageComponent ci={item.ci} servicename={item.servicename}/>)}
+                </>  
+            )}
 
-                {/* Show TopPageComponent if user is authenticated and subscribed */}
-                {isLogin && isMember && (
-                    <>
-                        <div style={{textAlign:'center'}}>
-                            <h2>BDGuardメンバーシップページへ</h2>
-                            <p style={{fontSize:'16px',marginTop:'30px'}}>
-                            ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
-                            </p>
-                        </div>
-                        {skippableResources.map((item,index)=><TopPageComponent ci={item.ci} servicename={item.servicename}/>)}
-                    </>  
-                )}
-
-                {/* Show LoginButton if user is not authenticated */}
-                {!isLogin && (
-                    loginData.map((option, index) => (
-                        <LoginButton key={index} data={option} />
-                    ))
-                )}
-            </Layout>
-        </CookiesProvider>
+            {/* Show LoginButton if user is not authenticated */}
+            {!isLogin && (
+                loginData.map((option, index) => (
+                    <LoginButton key={index} data={option} />
+                ))
+            )}
+        </Layout>
     );
 }

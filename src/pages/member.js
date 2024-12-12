@@ -32,6 +32,8 @@ import { siteid,validateUserId,isNullOrEmpty,checkSubscriptionByService } from '
 import { useRouter } from "next/router";
 import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTable } from "@/components/api/queryApi";
 
+import styles from '../components/site/member/memberpage.module.css';
+
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
     const {query} = context;
@@ -191,43 +193,52 @@ export default function MemberPage({isLogin,isMember,licenseKey}) {
     }, [router]);
 
     return (
-        <CookiesProvider defaultSetOptions={{ path: '/' }}>
-            <Layout>  
-                {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
-                {isLogin && isMember && (
-                    <MemberPageComponent licenseKey={licenseKey} />  
-                )} 
+        <Layout>  
+            {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
+            {isLogin && isMember && (
+                <MemberPageComponent licenseKey={licenseKey} />  
+            )} 
 
-                {/* Header section */}
-                <HeaderComponent  />   
+            {/* Header section */}
+            <HeaderComponent  />   
 
-                {/* Notification section */}          
-                {notifications.map((notification, index) => (
-                    <NotificationComponent
+            {/* Notification section */}          
+            {notifications.map((notification, index) => (
+                <NotificationComponent
+                key={index}
+                text={notification.text}
+                href={notification.link}
+                />
+            ))}    
+
+            {/* Announcement section */}                                                
+            {announcements.map((announcement, index) => (
+                <AnnounceComponent 
                     key={index}
-                    text={notification.text}
-                    href={notification.link}
-                    />
-                ))}    
+                    {...announcement}          
+                />
+            ))}
 
-                {/* Announcement section */}                                                
-                {announcements.map((announcement, index) => (
-                    <AnnounceComponent 
-                        key={index}
-                        {...announcement}          
-                    />
-                ))}
+            {/* Feature section */}        
+            <FeatureSection  />     
 
-                {/* Feature section */}        
-                <FeatureSection  />     
+            {/* Show subscription buttons if authenticated but not subscribed to the service */}
+            {(isLogin && !isMember) && (
+                subscriptionData.map((option, index) => (
+                    <SubscriptionButton key={index} data={option} />
+                ))
+            )}     
 
-                {/* Show subscription buttons if authenticated but not subscribed to the service */}
-                {(isLogin && !isMember) && (
-                    subscriptionData.map((option, index) => (
-                        <SubscriptionButton key={index} data={option} />
-                    ))
-                )}                                       
-            </Layout>
-        </CookiesProvider>
+            <div className={styles.buttonContainer}>
+                {/* Back button to return to the previous page */}
+                <button
+                    className={styles.backButton}
+                    type="button"
+                    onClick={() => router.push('/top')}
+                >
+                    Top
+                </button>                       
+            </div>                                  
+        </Layout>
     );
 }
