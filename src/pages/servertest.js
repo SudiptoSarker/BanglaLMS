@@ -14,6 +14,7 @@ import { siteid,validateUserId,isNullOrEmpty,checkSubscriptionByService } from '
 import { useRouter } from "next/router";
 import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTable } from "@/components/api/queryApi";
 
+
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
     const {query} = context;
@@ -105,8 +106,8 @@ export async function getServerSideProps(context) {
 
     // Pass the login status as a prop to the component.
     return { props: {
-        isLogin: true,
-        isMember: true,
+        isLogin: isLogin,
+        isMember: isMember,
         licenseKey: licenseKey
     } };
 }
@@ -116,20 +117,29 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
 
 
     const handleGet = async()=>{
-        const res = await fetch('http://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list?iai_rid=R000002750&iai_muid=279d0664343d1bba04');
+        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list?iai_rid=R000002750&iai_muid=279d0664343d1bba04&iai_src_mrkt=MKT00001',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf8',
+                'X-Mti-Source-Id': 'S00313',
+            }
+        }
+        );
         let result = await res.json();
         console.log(result);
     }
 
     const handlePost = async()=>{
-        const res = await fetch('http://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list', {
+        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list', {
             headers: {
               'Content-Type': 'application/json; charset=utf8',
+              'X-Mti-Source-Id': 'S00313',
             },
             method:'POST',
             body:{
                 'iai_rid':'R000002750',
-                'iai_muid':'279d0664343d1bba04'
+                'iai_muid':'279d0664343d1bba04',
+                'iai_src_mrkt': 'MKT00001'
             }
           });
 
