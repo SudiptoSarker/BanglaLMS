@@ -59,3 +59,32 @@
         padding: 10px 0; /* Adjusts padding for mobile view */
     }
 }
+.buttonContainer {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    align-items: center; /* Center buttons */
+    margin-top: 30px; /* Space above button container */
+}
+.backButton {
+    /* Directly include styles from .button */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #66b574; /* Green background */
+    min-height: 40px; /* Decrease the minimum height */
+    width: 200px; /* Full width on small screens */
+    max-width: 400px; /* Increase max width */
+    color: #fff; /* White text */
+    text-align: center;
+    padding: 5px; /* Reduced padding for smaller height */
+    border: 2px solid #55a063; /* Border with a slightly darker shade */
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover */
+    margin-bottom: 15px; /* Space between buttons */
+    font-size: 15px; /* Consistent font size for buttons */
+}
+.backButton:hover,
+.cancelButton:hover {
+  transform: translateY(-2px); /* Slight lift effect on hover */
+}
+.backButton:hover {
+    background-color: #57a057; /* Darker shade on hover for back button */
+}
