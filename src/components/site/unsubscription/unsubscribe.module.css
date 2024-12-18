@@ -95,16 +95,46 @@
   font-size: 15px; /* Consistent font size for buttons */
 }
 
+/* .backButton {
+  composes: button;
+} */
 .backButton {
-  composes: button; /* Inherit button styles */
+  /* Directly include styles from .button */
+  border-radius: 10px; /* Rounded corners */
+  background-color: #66b574; /* Green background */
+  min-height: 40px; /* Decrease the minimum height */
+  width: 200px; /* Full width on small screens */
+  max-width: 400px; /* Increase max width */
+  color: #fff; /* White text */
+  text-align: center;
+  padding: 5px; /* Reduced padding for smaller height */
+  border: 2px solid #55a063; /* Border with a slightly darker shade */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover */
+  margin-bottom: 15px; /* Space between buttons */
+  font-size: 15px; /* Consistent font size for buttons */
 }
-
+/* .cancelButton {
+  composes: button; 
+  background-color: #b1252a;
+  border: 2px solid #9f1d2b;
+} */
 .cancelButton {
-  composes: button; /* Inherit button styles */
+  /* Copy and modify styles from .button */
+  border-radius: 10px; /* Rounded corners */
   background-color: #b1252a; /* Red background for cancel button */
-  border: 2px solid #9f1d2b; /* Darker red border */
+  min-height: 40px;
+  width: 200px;
+  max-width: 400px;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border: 2px solid #9f1d2b;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 15px;
+  font-size: 15px;
 }
-
 .backButton:hover,
 .cancelButton:hover {
   transform: translateY(-2px); /* Slight lift effect on hover */

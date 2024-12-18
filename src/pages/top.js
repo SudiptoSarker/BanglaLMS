@@ -134,55 +134,53 @@ export default function TopPage({isLogin,isMember,skippableCategories,skippableR
     },[router]);
 
     return (
-        <CookiesProvider defaultSetOptions={{ path: '/' }}>
-            <Layout>  
-                {/* Header component for the top of the page. */}
-                <HeaderComponent  />  
+        <Layout>  
+            {/* Header component for the top of the page. */}
+            <HeaderComponent  />  
 
-                {/* Render notification components based on fetched notifications. */}               
-                {notifications.map((notification, index) => (
-                    <NotificationComponent
+            {/* Render notification components based on fetched notifications. */}               
+            {notifications.map((notification, index) => (
+                <NotificationComponent
+                key={index}
+                text={notification.text}
+                href={notification.link}
+                />
+            ))}     
+
+            {/* Render announcement components based on fetched announcements. */}                                            
+            {announcements.map((announcement, index) => (
+                <AnnounceComponent 
                     key={index}
-                    text={notification.text}
-                    href={notification.link}
-                    />
-                ))}     
+                    {...announcement}          
+                />
+            ))} 
 
-                {/* Render announcement components based on fetched announcements. */}                                            
-                {announcements.map((announcement, index) => (
-                    <AnnounceComponent 
-                        key={index}
-                        {...announcement}          
-                    />
-                ))} 
+            {/* Render feature section. */}   
+            <FeatureSection  />     
 
-                {/* Render feature section. */}   
-                <FeatureSection  />     
+            {/* Display subscription options if user is authenticated but not subscribed. */}                        
+            {(isLogin) && (
+                subscriptionData.map((option, index) => {
+                    if(!skippableCategories.includes(option.category)){
+                        return <SubscriptionButton key={index} data={option} />
+                    }
+                })
+            )}
 
-                {/* Display subscription options if user is authenticated but not subscribed. */}                        
-                {(isLogin) && (
-                    subscriptionData.map((option, index) => {
-                        if(!skippableCategories.includes(option.category)){
-                            return <SubscriptionButton key={index} data={option} />
-                        }
-                    })
-                )}
+            {/* Display TopPageComponent if user is authenticated and subscribed. */}
+            {isLogin && isMember && (
+                <>
+                    <div style={{textAlign:'center'}}>
+                        <h2>BDGuardメンバーシップページへ</h2>
+                        <p style={{fontSize:'16px',marginTop:'30px'}}>
+                        ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
+                        </p>
+                    </div>
+                    {skippableResources.map((item,index)=><TopPageComponent ci={item.ci} servicename={item.servicename}/>)}
+                </>  
+            )}
 
-                {/* Display TopPageComponent if user is authenticated and subscribed. */}
-                {isLogin && isMember && (
-                    <>
-                        <div style={{textAlign:'center'}}>
-                            <h2>BDGuardメンバーシップページへ</h2>
-                            <p style={{fontSize:'16px',marginTop:'30px'}}>
-                            ライセンスキーの確認とアプリのダウンロードは、下記の「会員ページ」から行ってください。
-                            </p>
-                        </div>
-                        {skippableResources.map((item,index)=><TopPageComponent ci={item.ci} servicename={item.servicename}/>)}
-                    </>  
-                )}
-
-                <br />
-            </Layout>
-        </CookiesProvider>
+            <br />
+        </Layout>
     );
 }

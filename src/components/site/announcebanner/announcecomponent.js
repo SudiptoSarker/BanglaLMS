@@ -6,8 +6,8 @@ const AnnounceComponent = (announcement) => {
   return (
     <section className={styles.section}> 
       {/* Link for the announcement */}
-      <a href={announcement.link} className={styles.link}>        
-        {announcement.text}
+      <a href={announcement.link} className={styles.link} dangerouslySetInnerHTML={{ __html: announcement.text }}>        
+        {/* {announcement.text} */}
       </a>
     </section>
   );

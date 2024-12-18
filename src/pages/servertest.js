@@ -1,28 +1,10 @@
 'use client'
 // React core imports for managing component state and side effects.
 import { useEffect, useState } from "react";
-
 // Main layout component wrapping the page structure.
 import Layout from "@/components/site/layout/layout";
-
 // Header component
 import HeaderComponent from "@/components/site/header/headercomponent";
-
-// Components for notifications and announcements.
-import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
-import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
-
-// Feature-related components.
-import FeatureSection from "@/components/site/feature/featurecomponent";
-
-// Member-related components.
-import MemberPageComponent from "@/components/site/member/memberpagecomponent";
-
-// Subscription-related components.
-import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
-
-// API utility functions for fetching site-related data.
-import { fetchSubscriptionData, fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import { CookiesProvider } from "react-cookie";
 
 // Helper utilities.
@@ -32,7 +14,6 @@ import { siteid,validateUserId,isNullOrEmpty,checkSubscriptionByService } from '
 import { useRouter } from "next/router";
 import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTable } from "@/components/api/queryApi";
 
-import styles from '../components/site/member/memberpage.module.css';
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
@@ -131,114 +112,62 @@ export async function getServerSideProps(context) {
     } };
 }
 
-export default function MemberPage({isLogin,isMember,licenseKey}) {     
+export default function ServerTest({isLogin,isMember,licenseKey}) {     
     const router = useRouter(); // Router instance for navigation control.
 
-    // State variables for managing data and application behavior.
-    const [subscriptionData, setSubscriptionData] = useState([]);
-    const [notifications, setNotifications] = useState([]);
-    const [announcements, setAnnouncements] = useState([]);
 
-    // Fetch subscription data from the API.
-    const getSubscriptionData = async (siteId) => {
-        try {
-            const response = await fetchSubscriptionData(siteId, "DeviceSubscriptionButton");
-            setSubscriptionData(response.data);
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
+    const handleGet = async()=>{
+        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list?iai_rid=R000002750&iai_muid=279d0664343d1bba04&iai_src_mrkt=MKT00001',{
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json; charset=utf8',
+                'X-Mti-Source-Id': 'S00313',
+            }
         }
-    };
-    
-    // Fetch notifications data from the API.
-    const getNotifications = async (siteId) => {
-        try {
-          const data = await fetchNotificationsAndAnnouncements(siteId,"notificationbanner");                  
-          setNotifications(data.data);
-        } catch (error) {
-          console.error("Error fetching notifications:", error);
-        }
-    };
+        );
+        let result = await res.json();
+        console.log(result);
+    }
 
-    // Fetch announcements data from the API.
-    const getAnnouncements = async (siteId) => {
-        try{
-          const data = await fetchNotificationsAndAnnouncements(siteId,"announcebanner");                  
-          setAnnouncements(data.data);
-        }catch(error) {
-          console.error("Error fetching announcements:", error);
-        }
-    };
+    const handlePost = async()=>{
+        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list', {
+            headers: {
+              'Content-Type': 'application/json; charset=utf8',
+              'X-Mti-Source-Id': 'S00313',
+            },
+            method:'POST',
+            body:{
+                'iai_rid':'R000002750',
+                'iai_muid':'279d0664343d1bba04',
+                'iai_src_mrkt': 'MKT00001'
+            }
+          });
 
-    // Retrieve all site information (subscription, notifications, announcements).
-    const getSiteInformation = async () => {
-        try {
-            const siteId = await siteid();
+          let result = await res.json();
+          console.log(result);
+    }
 
-            getSubscriptionData(siteId);
-            getNotifications(siteId);
-            getAnnouncements(siteId);
-        } catch (error) {
-            console.log("Error fetching site information:", error);
-        }
-    };
 
     useEffect(() => {
         if(!isLogin){
             router.push('/');
         }
-        if(!isMember){
-            router.push('/top');
-        }
-        getSiteInformation();
+        
     }, [router]);
 
     return (
-        <Layout>  
-            {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
-            {isLogin && isMember && (
-                <MemberPageComponent licenseKey={licenseKey} />  
-            )} 
-
-            {/* Header section */}
-            <HeaderComponent  />   
-
-            {/* Notification section */}          
-            {notifications.map((notification, index) => (
-                <NotificationComponent
-                key={index}
-                text={notification.text}
-                href={notification.link}
-                />
-            ))}    
-
-            {/* Announcement section */}                                                
-            {announcements.map((announcement, index) => (
-                <AnnounceComponent 
-                    key={index}
-                    {...announcement}          
-                />
-            ))}
-
-            {/* Feature section */}        
-            <FeatureSection  />     
-
-            {/* Show subscription buttons if authenticated but not subscribed to the service */}
-            {(isLogin && !isMember) && (
-                subscriptionData.map((option, index) => (
-                    <SubscriptionButton key={index} data={option} />
-                ))
-            )}     
-
-            <div className={styles.buttonContainer}>
-                {/* Back button to return to the previous page */}
-                <button
-                    className={styles.backButton}
-                    type="button"
-                    onClick={() => router.push('/top')}
-                >
-                    Top
-                </button>                       
-            </div>                                  
-        </Layout>
+        <CookiesProvider defaultSetOptions={{ path: '/' }}>
+            <Layout>  
+                {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
+                {isLogin && (
+                    <>
+                        <button onClick={handleGet} style={{padding:'10px',marginRight:'10px'}}>get request</button>
+                        <button onClick={handlePost} style={{padding:'10px',marginRight:'10px'}}>post request</button>
+                    </>
+                )} 
+                {/* Header section */}
+                <HeaderComponent  />                                       
+            </Layout>
+        </CookiesProvider>
     );
 }

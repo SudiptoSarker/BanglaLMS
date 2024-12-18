@@ -6,7 +6,7 @@
  * @throws {Error} - If there is a network or server error.
  */
 
-const calltoApi = async (query, values) => {
+const calltoApi = async (query, values) => {    
     try {
         const api = process.env.NEXT_PUBLIC_API_URL;
         const response = await fetch(api+"api/db", {
@@ -18,11 +18,17 @@ const calltoApi = async (query, values) => {
         });
 
         if (!response.ok) {
-            throw new Error("Network response was not ok");
+            // throw new Error("Network response was not ok");
+            if (typeof window !== "undefined" && !window.location.href.includes("/404")) {
+                window.location.href = "/404";
+            }
         }
         return await response.json();
     } catch (error) {
         console.error("Error fetching notifications:", error);
+        if (typeof window !== "undefined" && !window.location.href.includes("/404")) {
+            window.location.href = "/404";
+        }
         throw error;
     }
 };
@@ -108,7 +114,11 @@ export const fetchNotificationsAndAnnouncements = async (siteId, sectionname) =>
     const values = [];
     return await calltoApi(query,values);
 };
-
+export const fetchNotifications = async (siteId, sectionname) => {
+    const query = `SELECT * FROM [dbo].[${siteId}_textlinks] WHERE section LIKE '${sectionname}_%'`;    
+    const values = [];
+    return await calltoApi(query,values);
+};
 /**
  * Retrieves planner's Footer data to show on the page.
  * Planner's Footer data filter by site primary key and planner's design section name.
