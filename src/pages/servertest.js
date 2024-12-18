@@ -152,9 +152,6 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
         if(!isLogin){
             router.push('/');
         }
-        if(!isMember){
-            router.push('/top');
-        }
         
     }, [router]);
 
