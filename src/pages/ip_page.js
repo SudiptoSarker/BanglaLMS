@@ -23,9 +23,20 @@ export default function UnsubscribedPage({context}) {
         console.log(context)
     };
 
+    const plannerCall = async ()=>{
+      const res = await fetch('http://localhost:3001/api/ip_test');
+      let result = await res.json();
+      console.log(result);
+        // let data = await fetch('https://stgplanner.imasale.com/api/ip_test')
+        // let ip = await data.json()
+        // console.log(ip);
+    };
 
-    return (
-       
-        <button onClick={handleClick}>click me to call api</button> 
+
+    return (       
+        <>
+        <button onClick={handleClick}>Internal Call</button> 
+        <button onClick={plannerCall}>Planner Call</button> 
+        </>
     );
 }
