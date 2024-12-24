@@ -6,7 +6,7 @@ export async function getServerSideProps(context) {
     //const ip = forwarded ? forwarded.split(/, /)[0] : req.connection.remoteAddress
 
     //internal call
-    let data = await fetch('/api/it_test')
+    let data = await fetch('https://stgbanglalms.mopita.com/api/it_test')
     let ip = await data.json()
     console.log(ip);
 
