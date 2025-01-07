@@ -117,7 +117,8 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
 
 
     const handleGet = async()=>{
-        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list?iai_rid=R000002750&iai_muid=279d0664343d1bba04&iai_src_mrkt=MKT00001&iai_uagt=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',{
+        const user_agent = encodeURIComponent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36`);
+        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list?iai_rid=R000002750&iai_muid=279d0664343d1bba04&iai_src_mrkt=MKT00001&iai_uagt='+user_agent,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json; charset=utf8',
