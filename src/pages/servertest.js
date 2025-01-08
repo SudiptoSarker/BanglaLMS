@@ -123,6 +123,7 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
             headers: {
                 'Content-Type': 'application/json; charset=utf8',
                 'X-Mti-Source-Id': 'S00313',
+                'X-Iai-Remote-Addr': '52.173.141.239'
             }
         }
         );
@@ -133,8 +134,9 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
     const handlePost = async()=>{
         const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list', {
             headers: {
-              'Content-Type': 'application/json; charset=utf8',
+              'Content-Type': 'application/x-www-form-urlencoded',
               'X-Mti-Source-Id': 'S00313',
+              'X-Iai-Remote-Addr': '52.173.141.239'
             },
             method:'POST',
             body:{
