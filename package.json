@@ -2,11 +2,13 @@
   "name": "licence_management",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "json-server": "node server.js"
   },
   "dependencies": {
     "@builder.io/dev-tools": "^1.1.20",
@@ -28,5 +30,8 @@
     "react-responsive-modal": "^6.4.2",
     "react-toastify": "^10.0.5",
     "universal-cookie": "^7.2.0"
+  },
+  "devDependencies": {
+    "json-server": "^0.17.3"
   }
 }
