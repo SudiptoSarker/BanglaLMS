@@ -117,8 +117,8 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
 
 
     const handleGet = async()=>{
-        const user_agent = encodeURIComponent(`Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36`);
-        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list?iai_rid=R000002750&iai_muid=279d0664343d1bba04&iai_src_mrkt=MKT00001&iai_uagt='+user_agent,{
+        const user_agent = `Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36`;
+        const res = await fetch(encodeURIComponent('https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list?iai_rid=R000002750&iai_muid=279d0664343d1bba04&iai_src_mrkt=MKT00001&iai_uagt='+user_agent),{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json; charset=utf8',
@@ -132,7 +132,7 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
     }
 
     const handlePost = async()=>{
-        const res = await fetch('https://devservice.mopita.ns-mti.com/iai-api/pub/payment.get_paytype_list', {
+        const res = await fetch('https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list', {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'X-Mti-Source-Id': 'S00313',
@@ -149,6 +149,12 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
 
           let result = await res.json();
           console.log(result);
+    }
+    const handleAPI = async()=>{
+        const res = await fetch('/api/mopita-api');
+
+        let result = await res.json();
+        console.log(result);
     }
 
 
@@ -167,6 +173,7 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
                     <>
                         <button onClick={handleGet} style={{padding:'10px',marginRight:'10px'}}>get request</button>
                         <button onClick={handlePost} style={{padding:'10px',marginRight:'10px'}}>post request</button>
+                        <button onClick={handleAPI} style={{padding:'10px',marginRight:'10px'}}>API request</button>
                     </>
                 )} 
                 {/* Header section */}
