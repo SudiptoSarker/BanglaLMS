@@ -106,18 +106,21 @@ export async function getServerSideProps(context) {
 
     // Pass the login status as a prop to the component.
     return { props: {
+        uid: uid,
         isLogin: isLogin,
         isMember: isMember,
         licenseKey: licenseKey
     } };
 }
 
-export default function ServerTest({isLogin,isMember,licenseKey}) {     
+export default function ServerTest({uid, isLogin,isMember,licenseKey}) {     
+    console.log("User ID", uid);
+    
     const router = useRouter(); // Router instance for navigation control.
 
 
     const handlePaymentListApi = async()=>{
-        const res = await fetch('/api/mopita-paylist-api');
+        const res = await fetch('/api/mopita-paylist-api?userID='+uid);
 
         let result = await res.json();
         console.log(result);

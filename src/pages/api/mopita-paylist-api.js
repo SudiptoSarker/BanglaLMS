@@ -1,9 +1,9 @@
 import crypto from "crypto";
 
 export default async function handler(req, res) {
-    try { 
+    try {
+        const { uid, serviceID } = req.query; 
         const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
-
 
         const access_key = process.env.NEXT_PUBLIC_MOPITA_ACCESS_KEY;
         const secret_key = process.env.NEXT_PUBLIC_MOPITA_SECURITY_KEY;
@@ -35,8 +35,8 @@ export default async function handler(req, res) {
             'iai_akey': access_key,
             'iai_atms': formattedDate,
 
-            'iai_rid': 'R000002750',
-            'iai_muid':'279d0664343d1bba04',
+            'iai_rid': serviceID,
+            'iai_muid': uid,
             'iai_uagt':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
             
         };

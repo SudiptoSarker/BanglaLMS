@@ -2,6 +2,7 @@ import crypto from "crypto";
 
 export default async function handler(req, res) {
     try { 
+        const {serviceID, serviceType, payType} = req.query;
         // const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
         const BEFOREPAYMENTMOPITAAPI = "https://devservice.mopita.com/iai-api/pub/payment.get_before_info"
 
@@ -36,9 +37,9 @@ export default async function handler(req, res) {
             'iai_akey': access_key,
             'iai_atms': formattedDate,
 
-            'iai_rid': 'R000002750',
-            'iai_paytype': '00',
-            'iai_act': 'reg',
+            'iai_rid': serviceID,
+            'iai_paytype': payType,
+            'iai_act': serviceType,
         };
 
         const jsonString = JSON.stringify(postData);
