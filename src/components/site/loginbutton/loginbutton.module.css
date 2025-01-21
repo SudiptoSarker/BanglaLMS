@@ -15,7 +15,54 @@
 }
 
 @media (max-width: 991px) {
-  .loginForm {
+  .loginForm,.googleLogin {
       padding: 20px;
   }
+}
+/* 
+.googleLogin {
+  width: 100%;       
+  height: auto;      
+  max-height: 50px;  
+  display: block;    
+  margin: 0 auto;    
+}
+.googleButtonWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;     
+  border: none;       
+  background: none;   
+  cursor: pointer;   
+} */
+
+.centerContainer {
+  display: flex;           
+  justify-content: center;
+  align-items: center;     
+  width: 100%;            
+  background-color: #f8f9fa;
+}
+
+.googleButtonWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;     
+  border: none;      
+  background: none;   
+  cursor: pointer;    
+}
+
+.googleLogin {
+  width: 100%;      
+  height: auto;      
+  max-height: 50px; 
+  display: block;   
+}
+
+
+.hiddenInput {
+  display: none;
 }
