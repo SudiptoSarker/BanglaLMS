@@ -36,7 +36,7 @@ export default async function handler(req, res) {
             'iai_akey': access_key,
             'iai_atms': formattedDate,
 
-            'iai_rid': 'R000002750',
+            'iai_rid': 'R000002769',
             'iai_paytype': '00',
             'iai_act': 'reg',
         };

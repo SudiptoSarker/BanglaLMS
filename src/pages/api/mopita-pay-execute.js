@@ -2,7 +2,8 @@ import crypto from "crypto";
 
 export default async function handler(req, res) {
     try { 
-        const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
+        // const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
+        const BEFOREPAYMENTMOPITAAPI = "https://devservice.mopita.com/iai-api/pub/member_resource.add_service"
 
 
         const access_key = process.env.NEXT_PUBLIC_MOPITA_ACCESS_KEY;
@@ -35,10 +36,13 @@ export default async function handler(req, res) {
             'iai_akey': access_key,
             'iai_atms': formattedDate,
 
+            'iai_acctcat': '0009',
+            'iai_ruid': 'a0565c5d4697e8b1b9',
             'iai_rid': 'R000002769',
-            'iai_muid':'a0565c5d4697e8b1b9',
-            'iai_uagt':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-            
+            'iai_paytype': '00',
+            'iai_nl': 'https://stgbanglalms.mopita.com/top',
+            'iai_cl': 'https://stgbanglalms.mopita.com/top',
+            'iai_fl': 'https://stgbanglalms.mopita.com/',
         };
 
         const jsonString = JSON.stringify(postData);
@@ -52,7 +56,7 @@ export default async function handler(req, res) {
         const bodyData = `iai_req=${iai_req}&iai_sig=${iai_sig}`;
 
        
-        const response = await fetch(MOPITADEVAPI,{
+        const response = await fetch(BEFOREPAYMENTMOPITAAPI,{
             method: 'POST',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded',
@@ -67,39 +71,4 @@ export default async function handler(req, res) {
     }catch(error){
         res.status(200).json({error: error});
     }
-
-    // try {
-    //     // const response = await fetch(MOPITADEVAPI, {
-    //     //     method: 'POST',
-    //     //     headers: {
-    //     //         'Content-Type': 'application/x-www-form-urlencoded',
-    //     //         'X-Mti-Source-Id': 'S00313',
-    //     //         'X-Iai-Remote-Addr': '52.173.141.239'
-    //     //     },
-    //     //     body:{
-    //     //         'iai_rid':'R000002750',
-    //     //         'iai_muid':'279d0664343d1bba04',
-    //     //         'iai_req': 'POST',
-    //     //         'iai_uagt':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-    //     //     }
-    //     // });
-    //     const response = await fetch(BEFOREPAYMENTMOPITAAPI, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-type': 'application/x-www-form-urlencoded',
-    //             'X-Mti-Source-Id': 'S00313',
-    //             'X-Iai-Remote-Addr': '52.173.141.239'
-    //         },
-    //         body: {
-    //             'iai_rid': 'R000002750',
-    //             'iai_paytype': '00',
-    //             'iai_act': 'reg',
-    //         }
-    //     })
-    //     let result = await response.json();
-    //     res.status(200).json({result: result});
-
-    // }catch(error){
-    //     res.status(200).json({error: error});
-    // }
 }
