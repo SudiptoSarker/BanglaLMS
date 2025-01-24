@@ -123,30 +123,25 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
         console.log(result);
     }
 
-    const handlePost = async()=>{
-        const res = await fetch('https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list', {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'X-Mti-Source-Id': 'S00313',
-              'X-Iai-Remote-Addr': '52.173.141.239'
-            },
-            method:'POST',
-            body:{
-                'iai_rid':'R000002750',
-                'iai_muid':'279d0664343d1bba04',
-                'iai_src_mrkt': 'MKT00001',
-                'iai_uagt':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-            }
-          });
-
-          let result = await res.json();
-          console.log(result);
-    }
     const handleBeforePayAPI = async()=>{
         const res = await fetch('/api/mopita-before-pay-api');
 
         let result = await res.json();
         console.log(result);
+    }
+
+    const handlePaymentProcess = async()=>{
+        const res = await fetch('/api/mopita-pay-execute');
+
+        let result = await res.json();
+        console.log(result);
+    }
+
+    const handleCreditCardPayment = async()=> {
+        const response = await fetch(`/api/mopita-credit-card-payment`);
+        const result = await response.json();
+        console.log(result);
+        
     }
 
 
@@ -164,8 +159,10 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
                 {isLogin && (
                     <>
                         <button onClick={handlePaymentListApi} style={{padding:'10px',marginRight:'10px'}}>Paylist API request</button>
-                        <button onClick={handlePost} style={{padding:'10px',marginRight:'10px'}}>post request</button>
+                        <button onClick={handlePaymentProcess} style={{padding:'10px',marginRight:'10px'}}>Payment execution</button>
                         <button onClick={handleBeforePayAPI} style={{padding:'10px',marginRight:'10px'}}>Before Pay API request</button>
+                        <button onClick={handleCreditCardPayment} style={{padding:'10px',marginRight:'10px'}}>Credit Card Payment API request</button>
+                        
                     </>
                 )} 
                 {/* Header section */}

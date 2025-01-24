@@ -194,26 +194,28 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
                 ))
             )}
 
-            <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
-                <div className={styles.centerContainer}>
-                    <button type="submit" className={styles.googleButtonWrapper}>
-                        <img
-                            src="/images/GoogleLogin2.png"
-                            alt="Login with Google"
-                            className={styles.googleLogin}
-                        />
-                    </button>
-                </div>
+            {!isLogin && (
+               <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
+                    <div className={styles.centerContainer}>
+                        <button type="submit" className={styles.googleButtonWrapper}>
+                            <img
+                                src="/images/GoogleLogin2.png"
+                                alt="Login with Google"
+                                className={styles.googleLogin}
+                            />
+                        </button>
+                    </div>
 
 
-                {/* Hidden input field to include additional form data */}
-                <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
-                <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
-                <input type="hidden" name="in" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/404" />      
-                <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="." />      
-                <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
-                <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
-            </form>
+                    {/* Hidden input field to include additional form data */}
+                    <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
+                    <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
+                    <input type="hidden" name="fl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/404" />      
+                    <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />      
+                    <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
+                    <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
+                </form>
+            )}
         </Layout>
     );
 }
