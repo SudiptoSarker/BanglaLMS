@@ -32,6 +32,8 @@ function SubscriptionButton({ data }) {
       {/* Hidden inputs for form submission */}
       <input type="hidden" name="ci" className={styles.hiddenInput} value={data.ci} />
       <input type="hidden" name="act" className={styles.hiddenInput} value={data.act} />
+      <input type="hidden" name="iai_acc_create" className={styles.hiddenInput} value='0' />
+      <input type="hidden" name="iai_logincat" className={styles.hiddenInput} value='0009' />
       <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />
       <input type="hidden" name="cl" className={styles.hiddenInput} value={data.cl} />
       <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />       

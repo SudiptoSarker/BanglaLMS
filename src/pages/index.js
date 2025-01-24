@@ -188,11 +188,11 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
             )}
 
             {/* Show LoginButton if user is not authenticated */}
-            {!isLogin && (
+            {/* {!isLogin && (
                 loginData.map((option, index) => (
                     <LoginButton key={index} data={option} />
                 ))
-            )}
+            )} */}
 
             {!isLogin && (
                <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               

@@ -36,9 +36,21 @@ import styles from '../components/site/member/memberpage.module.css';
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
+    
     const {query} = context;
+    console.log("Member Page:",query);
     let uid = query.uid;
     let ci = query.ci;
+    let ordid = query.ordid || null;
+
+    try{
+        if(ordid){
+            const response = await fetch(`/api/mopita-after-pay-api?orderID=${ordid}&resource=${ci}`);
+            console.log("After Pay API Result:",response);
+        }
+    }catch(error){
+        console.log("API Error:",  error);
+    }
 
 
     // dev
