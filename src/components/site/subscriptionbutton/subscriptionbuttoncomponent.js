@@ -3,7 +3,23 @@ import { useState } from 'react';
 import styles from './subscriptionbutton.module.css';
 import Cookies from 'js-cookie';
 
-function SubscriptionButton({ data }) {  
+function SubscriptionButton({ data, user=null }) {
+  
+  let agent = navigator.userAgent.toLowerCase();
+
+  const handleSubscriptionPurchase = async (resource, user) => {
+    try{
+      if(resource && user){
+        const paylist = await fetch(`/api/mopita-paylist-api?serviceID=${resource}&user=${user}&agent=${agent}`);
+        const result = await paylist.json();
+        return result;
+      }
+    } catch (error) {
+      console.error('Error fetching paylist:', error);
+      return {error: error};
+    }
+  }  
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
 

@@ -64,6 +64,7 @@ export async function getServerSideProps(context) {
     
     // Pass the login status as a prop to the component.
     return { props: {
+        userId: uid || null,
         isLogin: isLogin,
         isMember: isMember,
         skippableCategories:_skippableCategories,
@@ -79,6 +80,8 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     const [loginData, setLoginData] = useState([]);
 
     // Function to fetch subscription data for the site.
+
+    let agent = navigator.userAgent.toLowerCase();
     const getSubscriptionData = async (siteId) => {                
         try {            
             const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
@@ -169,7 +172,7 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
             {
                 subscriptionData.map((option, index) => {
                     if(!skippableCategories.includes(option.category)){
-                        return <SubscriptionButton key={index} data={option} />
+                        return <SubscriptionButton key={index} data={option} user={userId} />
                     }
                 })
             }

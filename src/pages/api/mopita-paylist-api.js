@@ -1,9 +1,9 @@
 import crypto from "crypto";
 
 export default async function handler(req, res) {
-    try { 
+    try {
+        const {serviceID, user, agent} = req.query;
         const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
-
 
         const access_key = process.env.NEXT_PUBLIC_MOPITA_ACCESS_KEY;
         const secret_key = process.env.NEXT_PUBLIC_MOPITA_SECURITY_KEY;
@@ -35,10 +35,9 @@ export default async function handler(req, res) {
             'iai_akey': access_key,
             'iai_atms': formattedDate,
 
-            'iai_rid': 'R000002769',
-            'iai_muid':'a0565c5d4697e8b1b9',
-            'iai_uagt':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-            
+            'iai_rid': serviceID,
+            'iai_muid':user,
+            'iai_uagt': agent
         };
 
         const jsonString = JSON.stringify(postData);
@@ -67,39 +66,4 @@ export default async function handler(req, res) {
     }catch(error){
         res.status(200).json({error: error});
     }
-
-    // try {
-    //     // const response = await fetch(MOPITADEVAPI, {
-    //     //     method: 'POST',
-    //     //     headers: {
-    //     //         'Content-Type': 'application/x-www-form-urlencoded',
-    //     //         'X-Mti-Source-Id': 'S00313',
-    //     //         'X-Iai-Remote-Addr': '52.173.141.239'
-    //     //     },
-    //     //     body:{
-    //     //         'iai_rid':'R000002750',
-    //     //         'iai_muid':'279d0664343d1bba04',
-    //     //         'iai_req': 'POST',
-    //     //         'iai_uagt':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-    //     //     }
-    //     // });
-    //     const response = await fetch(BEFOREPAYMENTMOPITAAPI, {
-    //         method: 'POST',
-    //         headers: {
-    //             'Content-type': 'application/x-www-form-urlencoded',
-    //             'X-Mti-Source-Id': 'S00313',
-    //             'X-Iai-Remote-Addr': '52.173.141.239'
-    //         },
-    //         body: {
-    //             'iai_rid': 'R000002750',
-    //             'iai_paytype': '00',
-    //             'iai_act': 'reg',
-    //         }
-    //     })
-    //     let result = await response.json();
-    //     res.status(200).json({result: result});
-
-    // }catch(error){
-    //     res.status(200).json({error: error});
-    // }
 }
