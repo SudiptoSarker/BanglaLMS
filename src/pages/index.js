@@ -138,6 +138,7 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     }, []); 
 
     // Main render function for the landing page.
+    isLogin = true;
     return (
         <Layout>  
             <HeaderComponent  />                     
@@ -193,9 +194,29 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
                     <LoginButton key={index} data={option} />
                 ))
             )}
+            
+            <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
+                <div className={styles.centerContainer}>
+                    <button type="submit" className={styles.googleButtonWrapper}>
+                        <img
+                            src="/images/GoogleLogin2.png"
+                            alt="Login with Google"
+                            className={styles.googleLogin}
+                        />
+                    </button>
+                </div>
 
-            {!isLogin && (
-               <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
+                {/* Hidden input field to include additional form data */}
+                <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
+                <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
+                <input type="hidden" name="fl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/404" />      
+                <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />      
+                <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
+                <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
+            </form>
+            
+            {!isLogin ? (
+                <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
                     <div className={styles.centerContainer}>
                         <button type="submit" className={styles.googleButtonWrapper}>
                             <img
@@ -206,7 +227,6 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
                         </button>
                     </div>
 
-
                     {/* Hidden input field to include additional form data */}
                     <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
                     <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
@@ -215,7 +235,34 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
                     <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
                     <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
                 </form>
+            ) : (
+                <form
+                    id="formLogout"
+                    method="post"
+                    action="https://devwww.mopita.com/cp/logout"
+                    className={styles.logoutForm}
+                >
+                    <button type="submit" className={styles.logoutButton}>
+                        Logout
+                    </button>
+
+                    <input
+                        type="hidden"
+                        name="nl"
+                        className={styles.hiddenInput}
+                        value="https://stgbanglalms.mopita.com/top"
+                    />
+                    <input
+                        type="hidden"
+                        name="cl"
+                        className={styles.hiddenInput}
+                        value="https://stgbanglalms.mopita.com/unsubscribe"
+                    />
+                </form>
             )}
+
+
+
         </Layout>
     );
 }

@@ -66,3 +66,45 @@
 .hiddenInput {
   display: none;
 }
+
+.logoutForm {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px; /* Space from other elements */
+  margin-bottom: 11px;
+}
+.logoutButton {
+  background-color: #ff4d4f; /* Bright red for prominence */
+  color: #ffffff; /* White text for contrast */
+  font-size: 16px; /* Larger font for emphasis */
+  font-weight: bold;
+  padding: 12px 24px; /* Increased padding for better clickability */
+  border: 2px solid #ffffff; /* White border for visibility */
+  border-radius: 10px; /* Rounded corners for a modern look */
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow for elevation */
+  transition: all 0.3s ease-in-out;
+}
+
+.logoutButton:hover {
+  background-color: #e04142; /* Darker red on hover */
+  color: #ffffff;
+  transform: scale(1.1); /* Slight enlargement on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* Stronger shadow */
+}
+
+/* Responsive Styles */
+@media (max-width: 1024px) {  
+  .logoutButton,.googleLogin {
+    font-size: 14px; /* Adjust size for smaller screens */
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 768px) {  
+  .logoutButton,.googleLogin {
+    font-size: 14px; /* Adjust font size for smaller screens */
+    padding: 10px 20px; /* Reduced padding for mobile */
+  }
+}
