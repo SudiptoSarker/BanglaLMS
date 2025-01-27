@@ -1,14 +1,26 @@
 import React from 'react';
+import { useState } from 'react';
 import styles from './subscriptionbutton.module.css';
 import Cookies from 'js-cookie';
 
 function SubscriptionButton({ data }) {  
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
+
+  const toggleModal = (e) => {
+    e.preventDefault(); // Prevent form submission
+    setModalOpen(!isModalOpen);
+  };
+  const handleOptionClick = (option) => {
+    setSelectedPaymentOption(option); // Set the selected option
+    document.getElementById(data.formId).submit(); // Submit the form
+  };
   return (  
-    // Form to handle subscription button submission
+    <>    
     <form id={data.formId} method="post" action={data.submitlink}>    
       <p>        
         {/* Button to submit the subscription */}     
-        <button className={styles.button} type="submit">
+        <button className={styles.button} type="button" onClick={toggleModal}>
            {/* If buttonhtml is provided, render it directly */}
           {data.buttonhtml ? (
             <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
@@ -38,6 +50,31 @@ function SubscriptionButton({ data }) {
       <input type="hidden" name="cl" className={styles.hiddenInput} value={data.cl} />
       <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />       
     </form>
+
+    {/* Modal */}
+    {isModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2>Choose Your Payment Method</h2>
+            <button
+              className={styles.modalButton}
+              onClick={() => handleOptionClick('クレジットカード決済')}
+            >
+              クレジットカード決済
+            </button>
+            <button
+              className={styles.modalButton}
+              onClick={() => handleOptionClick('Option-2 Payment')}
+            >
+              Option-2 Payment
+            </button>
+            <button className={styles.closeButton} onClick={toggleModal}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

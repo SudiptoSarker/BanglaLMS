@@ -31,8 +31,8 @@ export async function getServerSideProps(context) {
     let siteId = await siteid();
     
     // Validating User ID
-    isLogin = validateUserId(uid);
-
+    // isLogin = validateUserId(uid);
+    isLogin =true
     //dev
     //isLogin = true;
 

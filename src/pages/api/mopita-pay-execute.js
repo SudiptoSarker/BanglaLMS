@@ -5,7 +5,6 @@ export default async function handler(req, res) {
         // const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
         const BEFOREPAYMENTMOPITAAPI = "https://devservice.mopita.com/iai-api/pub/member_resource.add_service"
 
-
         const access_key = process.env.NEXT_PUBLIC_MOPITA_ACCESS_KEY;
         const secret_key = process.env.NEXT_PUBLIC_MOPITA_SECURITY_KEY;
 
