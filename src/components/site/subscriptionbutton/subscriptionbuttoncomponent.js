@@ -22,11 +22,110 @@ function SubscriptionButton({ data, user=null }) {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
+  const [paymentMethods, setPaymentMethods] = useState([]);
 
-  const toggleModal = (e) => {
+  const toggleModal = async (e) => {
     e.preventDefault(); // Prevent form submission
+  
+    // Get the value of the hidden input field with name="ci"
+    const ciValue = document.querySelector(`input[name="ci"]`)?.value;
+  
+    if (ciValue && user) {
+      // Call the handleSubscriptionPurchase function with ciValue and user
+      const result = await handleSubscriptionPurchase(ciValue, user);
+      let tempData = {
+        "result": {
+            "paytypelist": [
+                {
+                    "paytype_info": {
+                        "paytype": "00",
+                        "paytype_name": "クレジットカード決済",
+                        "runningflg": "1",
+                        "stoptext": null,
+                        "displaycode": "1",
+                        "selectflg": "0",
+                        "linktype": "0"
+                    }
+                }
+                // ,
+                // {
+                //     "paytype_info": {
+                //         "paytype": "01",
+                //         "paytype_name": "MasterCard",
+                //         "runningflg": "1",
+                //         "stoptext": null,
+                //         "displaycode": "1",
+                //         "selectflg": "0",
+                //         "linktype": "0"
+                //     }
+                // },
+                // {
+                //     "paytype_info": {
+                //         "paytype": "02",
+                //         "paytype_name": "American Express",
+                //         "runningflg": "1",
+                //         "stoptext": null,
+                //         "displaycode": "1",
+                //         "selectflg": "0",
+                //         "linktype": "0"
+                //     }
+                // }
+            ],
+            "message_list": [
+                {
+                    "line_list": [
+                        {
+                            "message_info": {
+                                "message": "各支払い方法については"
+                            }
+                        },
+                        {
+                            "message_info": {
+                                "message": "Q&A",
+                                "link_url": "http://mti7.okbiz.okwave.jp/faq/show/3591?site_domain=mopitafaq001"
+                            }
+                        },
+                        {
+                            "message_info": {
+                                "message": "をご確認ください。"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "result": {
+                "code": "I000",
+                "args": [
+                    ""
+                ]
+            }
+        },
+        "data": {
+            "iai_aver": "1.0",
+            "iai_akey": "597e2b0fdb6cef96cb",
+            "iai_atms": "20250127195740000",
+            "iai_rid": "R000002769",
+            "iai_muid": "a0565c5d4697e8b1b9",
+            "iai_uagt": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+        }
+      }
+
+      if (tempData?.result?.paytypelist) {
+        console.log('result.result.paytypelist: ',tempData.result.paytypelist);
+        setPaymentMethods(tempData.result.paytypelist); // Store the paytypelist
+      }
+
+      // Log or handle the result as needed
+      console.log("Subscription Purchase Result:", result);
+    } else {
+      console.warn("CI value or user is missing");
+    }
+  
+    // Toggle the modal
     setModalOpen(!isModalOpen);
   };
+  
+
   const handleOptionClick = (option) => {
     setSelectedPaymentOption(option); // Set the selected option
     document.getElementById(data.formId).submit(); // Submit the form
@@ -68,7 +167,7 @@ function SubscriptionButton({ data, user=null }) {
     </form>
 
     {/* Modal */}
-    {isModalOpen && (
+    {/* {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <h2>Choose Your Payment Method</h2>
@@ -84,6 +183,36 @@ function SubscriptionButton({ data, user=null }) {
             >
               Option-2 Payment
             </button>
+            <button className={styles.closeButton} onClick={toggleModal}>
+              Close
+            </button>
+          </div>
+        </div>
+      )} */}
+      {/* Modal */}
+      {isModalOpen && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <h2>Choose Your Payment Method</h2>
+            {paymentMethods.length > 0 ? (
+              paymentMethods.map((method) => {
+                const payTypeName = method.paytype_info?.paytype_name;
+                if (payTypeName) {
+                  return (
+                    <button
+                      key={payTypeName}
+                      className={styles.modalButton}
+                      onClick={() => handleOptionClick(payTypeName)}
+                    >
+                      {payTypeName}
+                    </button>
+                  );
+                }
+                return null;
+              })
+            ) : (
+              <p>Loading payment methods...</p>
+            )}
             <button className={styles.closeButton} onClick={toggleModal}>
               Close
             </button>

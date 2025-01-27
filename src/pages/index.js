@@ -20,6 +20,8 @@ import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptio
 
 // Login and top-page components.
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
+import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 
 // API utility functions for fetching site-related data.
@@ -45,6 +47,7 @@ export async function getServerSideProps(context) {
      let uid = query.uid;
     // dev
     // uid = '279d0664343d1bba04';
+    uid = 'a0565c5d4697e8b1b9';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -72,7 +75,7 @@ export async function getServerSideProps(context) {
     } };
 }
 
-export default function HomePage({ isLogin, isMember,skippableCategories,skippableResources}) {   
+export default function HomePage({ userId,isLogin, isMember,skippableCategories,skippableResources}) {   
     // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
@@ -95,7 +98,42 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     const getLoginData = async (siteId) => {
         try {            
             const response = await fetchLoginData(siteId,"LoginSection");
-            setLoginData(response.data);
+            let tempData = [
+                {
+                    "id": 1,
+                    "siteid": 63,
+                    "formid": "formLogin",
+                    "submitlink": "https://devwww.mopita.com/cp/login",
+                    "nl": "https://stgbanglalms.mopita.com/member",
+                    "fl": "https://stgbanglalms.mopita.com/member",
+                    "cl": "https://stgbanglalms.mopita.com/top",
+                    "logincat": "0001",
+                    "logo": "https://www.mopita.com/img/cmn/logo.png",
+                    "buttonhtml": "mopita login",
+                    "buttoncolor": "linear-gradient(90deg,rgb(122, 140, 156) 0%, #00f2fe 100%)",
+                    "section": "LoginSection",
+                    "iai_shortening": "",
+                    "iai_src_mrkt": ""
+                },
+                {
+                    "id": 2,
+                    "siteid": 63,
+                    "formid": "formLogin",
+                    "submitlink": "https://devwww.mopita.com/cp/google/google_login",
+                    "nl": "https://stgbanglalms.mopita.com/member",
+                    "fl": "https://stgbanglalms.mopita.com/member",
+                    "cl": "https://stgbanglalms.mopita.com/top",
+                    "logincat": "0009",
+                    "logo": "https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA",
+                    "buttonhtml": "Login with Google",
+                    "buttoncolor": "linear-gradient(90deg,rgb(226, 156, 70) 0%, #ff5858 100%)",
+                    "iai_shortening": "1",
+                    "iai_src_mrkt": "MKT00001",
+                    "section": "LoginSection"
+                }
+            ]
+            // setLoginData(response.data);
+            setLoginData(tempData);
         } catch (error) {
             console.log("Error fetching subscription data:", error);
         }
@@ -141,7 +179,8 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     }, []); 
 
     // Main render function for the landing page.
-    isLogin = true;
+    // isLogin = true;
+    console.log('userid: ',userId)
     return (
         <Layout>  
             <HeaderComponent  />                     
@@ -192,60 +231,13 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
             )}
 
             {/* Show LoginButton if user is not authenticated */}
-            {/* {!isLogin && (
+            {!isLogin ? (
                 loginData.map((option, index) => (
                     <LoginButton key={index} data={option} />
                 ))
-            )} */}
-
-            {!isLogin && (
-               <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
-                    <div className={styles.centerContainer}>
-                        <button type="submit" className={styles.googleButtonWrapper}>
-                            <img
-                                src="/images/GoogleLogin2.png"
-                                alt="Login with Google"
-                                className={styles.googleLogin}
-                            />
-                        </button>
-                    </div>
-
-                    {/* Hidden input field to include additional form data */}
-                    <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
-                    <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
-                    <input type="hidden" name="fl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/404" />      
-                    <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />      
-                    <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
-                    <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
-                </form>
             ) : (
-                <form
-                    id="formLogout"
-                    method="post"
-                    action="https://devwww.mopita.com/cp/logout"
-                    className={styles.logoutForm}
-                >
-                    <button type="submit" className={styles.logoutButton}>
-                        Logout
-                    </button>
-
-                    <input
-                        type="hidden"
-                        name="nl"
-                        className={styles.hiddenInput}
-                        value="https://stgbanglalms.mopita.com/top"
-                    />
-                    <input
-                        type="hidden"
-                        name="cl"
-                        className={styles.hiddenInput}
-                        value="https://stgbanglalms.mopita.com/unsubscribe"
-                    />
-                </form>
+                <LogoutButton />
             )}
-
-
-
         </Layout>
     );
 }

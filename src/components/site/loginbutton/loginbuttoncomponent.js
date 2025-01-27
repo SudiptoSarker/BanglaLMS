@@ -2,6 +2,7 @@ import React from "react";
 import styles from './loginbutton.module.css';
 import Cookies from 'js-cookie';
 import { useState,useEffect } from 'react';
+import { Content } from "@builder.io/react";
 
 
 /**
@@ -26,13 +27,42 @@ function LoginButton({ data }) {
   };
   
   return (    
-    <section>
+    <section>      
       {/* If the cookie is not found, render the login form */}
       {cookieData==null &&
         <>
           <form id={data.formId} method="post" action={data.submitlink}>
             <p>        
-              <button className={styles.loginForm} type="submit" onClick={handleLogin}>
+              {/* <button className={styles.loginForm} type="submit" onClick={handleLogin} style={{ backgroundColor: data.buttonBgColor }}> */}
+              <button
+                className={styles.loginForm}
+                type="submit"
+                onClick={handleLogin}
+                style={{
+                  background: data.buttoncolor,
+                  color: "white",
+                  border: "none",
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  fontSize: "16px",
+                  cursor: "pointer",
+                  display: "flex", // Enable flexbox for alignment
+                  alignItems: "center", // Align items vertically in the center
+                  justifyContent: "center", // Center items horizontally
+                  gap: "10px", // Add space between logo and text
+                }}
+              >
+                {/* Render the logo */}
+                <img
+                  src={data.logo} // Use the 'logo' node from the passed data
+                  alt="login logo"
+                  style={{                                     
+                    width:"60px",
+                    height: "25px",                     
+                    objectFit: "contain",
+                    float:"right"
+                  }}
+                />
                 {data.buttonhtml ? (
                   // If custom button HTML is provided, render it using dangerouslySetInnerHTML
                   <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
@@ -45,7 +75,11 @@ function LoginButton({ data }) {
               </button>
             </p>
             {/* Hidden input field to include additional form data */}
-            <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />      
+            <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />                  
+            <input type="hidden" name="cl" className={styles.hiddenInput} value={data.cl} />                  
+            <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />                  
+            <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value={data.iai_shortening} />                  
+            <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value={data.iai_src_mrkt} />                  
           </form>
         </>
       }
