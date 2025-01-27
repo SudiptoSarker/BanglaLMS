@@ -2,8 +2,11 @@ import crypto from "crypto";
 
 export default async function handler(req, res) {
     try {
-        const {serviceID, user, agent} = req.query;
-        const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
+        const { orderID } = req.query;
+        const { resource } = req.query;
+        // const MOPITADEVAPI = `https://devservice.mopita.com/iai-api/pub/payment.get_paytype_list`;
+        const BEFOREPAYMENTMOPITAAPI = "https://devservice.mopita.com/iai-api/pub/payment.get_before_info"
+
 
         const access_key = process.env.NEXT_PUBLIC_MOPITA_ACCESS_KEY;
         const secret_key = process.env.NEXT_PUBLIC_MOPITA_SECURITY_KEY;
@@ -35,9 +38,10 @@ export default async function handler(req, res) {
             'iai_akey': access_key,
             'iai_atms': formattedDate,
 
-            'iai_rid': serviceID,
-            'iai_muid':user,
-            'iai_uagt': agent
+            'iai_ordid': orderID,
+            'iai_rid': resource,
+            'iai_paytype': '00',
+            'iai_act': 'reg',
         };
 
         const jsonString = JSON.stringify(postData);
@@ -51,7 +55,7 @@ export default async function handler(req, res) {
         const bodyData = `iai_req=${iai_req}&iai_sig=${iai_sig}`;
 
        
-        const response = await fetch(MOPITADEVAPI,{
+        const response = await fetch(BEFOREPAYMENTMOPITAAPI,{
             method: 'POST',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded',

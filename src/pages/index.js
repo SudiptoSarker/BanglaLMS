@@ -64,6 +64,7 @@ export async function getServerSideProps(context) {
     
     // Pass the login status as a prop to the component.
     return { props: {
+        userId: uid || null,
         isLogin: isLogin,
         isMember: isMember,
         skippableCategories:_skippableCategories,
@@ -79,6 +80,8 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     const [loginData, setLoginData] = useState([]);
 
     // Function to fetch subscription data for the site.
+
+    let agent = navigator.userAgent.toLowerCase();
     const getSubscriptionData = async (siteId) => {                
         try {            
             const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
@@ -170,7 +173,7 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
             {
                 subscriptionData.map((option, index) => {
                     if(!skippableCategories.includes(option.category)){
-                        return <SubscriptionButton key={index} data={option} />
+                        return <SubscriptionButton key={index} data={option} user={userId} />
                     }
                 })
             }
@@ -189,34 +192,14 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
             )}
 
             {/* Show LoginButton if user is not authenticated */}
-            {!isLogin && (
+            {/* {!isLogin && (
                 loginData.map((option, index) => (
                     <LoginButton key={index} data={option} />
                 ))
-            )}
-            
-            <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
-                <div className={styles.centerContainer}>
-                    <button type="submit" className={styles.googleButtonWrapper}>
-                        <img
-                            src="/images/GoogleLogin2.png"
-                            alt="Login with Google"
-                            className={styles.googleLogin}
-                        />
-                    </button>
-                </div>
+            )} */}
 
-                {/* Hidden input field to include additional form data */}
-                <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
-                <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
-                <input type="hidden" name="fl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/404" />      
-                <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />      
-                <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
-                <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
-            </form>
-            
-            {!isLogin ? (
-                <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
+            {!isLogin && (
+               <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
                     <div className={styles.centerContainer}>
                         <button type="submit" className={styles.googleButtonWrapper}>
                             <img

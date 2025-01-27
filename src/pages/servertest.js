@@ -130,6 +130,13 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
         console.log(result);
     }
 
+    const handleAfterPayAPI = async()=>{
+        const res = await fetch('/api/mopita-after-pay-api');
+
+        let result = await res.json();
+        console.log(result);
+    }
+
     const handlePaymentProcess = async()=>{
         const res = await fetch('/api/mopita-pay-execute');
 
@@ -145,22 +152,23 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
     }
 
 
-    useEffect(() => {
-        if(!isLogin){
-            router.push('/');
-        }
+    // useEffect(() => {
+    //     if(!isLogin){
+    //         router.push('/');
+    //     }
         
-    }, [router]);
+    // }, [router]);
 
     return (
         <CookiesProvider defaultSetOptions={{ path: '/' }}>
             <Layout>  
                 {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
-                {isLogin && (
+                {1 && (
                     <>
                         <button onClick={handlePaymentListApi} style={{padding:'10px',marginRight:'10px'}}>Paylist API request</button>
-                        <button onClick={handlePaymentProcess} style={{padding:'10px',marginRight:'10px'}}>Payment execution</button>
                         <button onClick={handleBeforePayAPI} style={{padding:'10px',marginRight:'10px'}}>Before Pay API request</button>
+                        <button onClick={handleAfterPayAPI} style={{padding:'10px',marginRight:'10px'}}>After Pay API request</button>
+                        <button onClick={handlePaymentProcess} style={{padding:'10px',marginRight:'10px'}}>Payment execution</button>                        
                         <button onClick={handleCreditCardPayment} style={{padding:'10px',marginRight:'10px'}}>Credit Card Payment API request</button>
                         
                     </>
