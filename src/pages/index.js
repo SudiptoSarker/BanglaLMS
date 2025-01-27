@@ -64,6 +64,7 @@ export async function getServerSideProps(context) {
     
     // Pass the login status as a prop to the component.
     return { props: {
+        userID: uid || null,
         isLogin: isLogin,
         isMember: isMember,
         skippableCategories:_skippableCategories,
@@ -188,32 +189,34 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
             )}
 
             {/* Show LoginButton if user is not authenticated */}
-            {!isLogin && (
+            {/* {!isLogin && (
                 loginData.map((option, index) => (
                     <LoginButton key={index} data={option} />
                 ))
+            )} */}
+
+            {!isLogin && (
+               <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
+                    <div className={styles.centerContainer}>
+                        <button type="submit" className={styles.googleButtonWrapper}>
+                            <img
+                                src="/images/GoogleLogin2.png"
+                                alt="Login with Google"
+                                className={styles.googleLogin}
+                            />
+                        </button>
+                    </div>
+
+
+                    {/* Hidden input field to include additional form data */}
+                    <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
+                    <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
+                    <input type="hidden" name="fl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/404" />      
+                    <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />      
+                    <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
+                    <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
+                </form>
             )}
-
-            <form id="formLogin" method="post" action="https://devwww.mopita.com/cp/google/google_login">               
-                <div className={styles.centerContainer}>
-                    <button type="submit" className={styles.googleButtonWrapper}>
-                        <img
-                            src="/images/GoogleLogin2.png"
-                            alt="Login with Google"
-                            className={styles.googleLogin}
-                        />
-                    </button>
-                </div>
-
-
-                {/* Hidden input field to include additional form data */}
-                <input type="hidden" name="nl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/top" />      
-                <input type="hidden" name="cl" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/unsubscribe" />      
-                <input type="hidden" name="in" className={styles.hiddenInput} value="https://stgbanglalms.mopita.com/404" />      
-                <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />      
-                <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value="MKT00001" />      
-                <input type="hidden" name="have_logintoken" className={styles.hiddenInput} value="" />      
-            </form>
         </Layout>
     );
 }

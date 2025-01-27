@@ -32,7 +32,10 @@ import { CookiesProvider } from "react-cookie";
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
+    
+    
     const {query} = context;
+    console.log("Top page:",query);
     let isLogin = false;
     let isMember = false;
     let _skippableCategories = [];
