@@ -33,6 +33,7 @@ import { useRouter } from "next/router";
 import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTable } from "@/components/api/queryApi";
 
 import styles from '../components/site/member/memberpage.module.css';
+import LogoutButton from "@/components/site/logoutbutton/logoutbuttoncomponent";
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
@@ -137,13 +138,14 @@ export async function getServerSideProps(context) {
 
     // Pass the login status as a prop to the component.
     return { props: {
+        userId: uid || null,
         isLogin: isLogin,
         isMember: isMember,
         licenseKey: licenseKey
     } };
 }
 
-export default function MemberPage({isLogin,isMember,licenseKey}) {     
+export default function MemberPage({userId, isLogin,isMember,licenseKey}) {     
     const router = useRouter(); // Router instance for navigation control.
 
     // State variables for managing data and application behavior.
@@ -237,7 +239,7 @@ export default function MemberPage({isLogin,isMember,licenseKey}) {
             {/* Show subscription buttons if authenticated but not subscribed to the service */}
             {(isLogin && !isMember) && (
                 subscriptionData.map((option, index) => (
-                    <SubscriptionButton key={index} data={option} />
+                    <SubscriptionButton key={index} data={option} user={userId}/>
                 ))
             )}     
 
@@ -250,7 +252,11 @@ export default function MemberPage({isLogin,isMember,licenseKey}) {
                 >
                     Top
                 </button>                       
-            </div>                                  
+            </div>
+
+            {isLogin && (
+                <LogoutButton/>
+            )}                                  
         </Layout>
     );
 }

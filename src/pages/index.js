@@ -98,22 +98,22 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
         try {            
             const response = await fetchLoginData(siteId,"LoginSection");
             let tempData = [
-                {
-                    "id": 1,
-                    "siteid": 63,
-                    "formid": "formLogin",
-                    "submitlink": "https://devwww.mopita.com/cp/login",
-                    "nl": "https://stgbanglalms.mopita.com/member",
-                    "fl": "https://stgbanglalms.mopita.com/member",
-                    "cl": "https://stgbanglalms.mopita.com/top",
-                    "logincat": "0001",
-                    "logo": "https://www.mopita.com/img/cmn/logo.png",
-                    "buttonhtml": "mopita login",
-                    "buttoncolor": "linear-gradient(90deg,rgb(122, 140, 156) 0%, #00f2fe 100%)",
-                    "section": "LoginSection",
-                    "iai_shortening": "",
-                    "iai_src_mrkt": ""
-                },
+                // {
+                //     "id": 1,
+                //     "siteid": 63,
+                //     "formid": "formLogin",
+                //     "submitlink": "https://devwww.mopita.com/cp/login",
+                //     "nl": "https://stgbanglalms.mopita.com/member",
+                //     "fl": "https://stgbanglalms.mopita.com/member",
+                //     "cl": "https://stgbanglalms.mopita.com/top",
+                //     "logincat": "0001",
+                //     "logo": "https://www.mopita.com/img/cmn/logo.png",
+                //     "buttonhtml": "mopita login",
+                //     "buttoncolor": "linear-gradient(90deg,rgb(122, 140, 156) 0%, #00f2fe 100%)",
+                //     "section": "LoginSection",
+                //     "iai_shortening": "",
+                //     "iai_src_mrkt": ""
+                // },
                 {
                     "id": 2,
                     "siteid": 63,

@@ -69,7 +69,7 @@ function LoginButton({ data }) {
                 ) : (            
                   // Default button text                     
                   <>              
-                    <p>mopitaにログイン</p> 
+                    <p>Login</p> 
                   </>       
                 )}
               </button>

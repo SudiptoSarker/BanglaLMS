@@ -69,6 +69,7 @@ export async function getServerSideProps(context) {
     
     // Pass the login status as a prop to the component.
     return { props: {
+        userId: uid || null,
         isLogin: isLogin,
         isMember: isMember,
         skippableCategories:_skippableCategories,
@@ -76,7 +77,7 @@ export async function getServerSideProps(context) {
     } };
 }
 
-export default function TopPage({isLogin,isMember,skippableCategories,skippableResources}) {
+export default function TopPage({userId, isLogin,isMember,skippableCategories,skippableResources}) {
     const router = useRouter(); // Router instance for navigation control.
     
     // State variables to store various data sets.
@@ -166,7 +167,7 @@ export default function TopPage({isLogin,isMember,skippableCategories,skippableR
             {(isLogin) && (
                 subscriptionData.map((option, index) => {
                     if(!skippableCategories.includes(option.category)){
-                        return <SubscriptionButton key={index} data={option} />
+                        return <SubscriptionButton key={index} data={option} user={userId}/>
                     }
                 })
             )}
@@ -186,7 +187,7 @@ export default function TopPage({isLogin,isMember,skippableCategories,skippableR
 
             <br />
 
-            {!isLogin && (
+            {isLogin && (
                 <LogoutButton/>
             )}
         </Layout>

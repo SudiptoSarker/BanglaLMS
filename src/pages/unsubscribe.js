@@ -71,7 +71,7 @@ export default function UnsubscribePage({isLogin,userId}) {
     useEffect(() => {
         // If user is not logged in, redirect the user to the login page.
         if(!isLogin){
-            // router.push('/');
+            router.push('/');
         }
         // Call function to fetch site-related information.        
         getSiteInformation();
