@@ -13,6 +13,7 @@ import { siteid,validateUserId } from '@/helper/helper';
 
 // Router for handling client-side navigation in Next.js.
 import { useRouter } from "next/router";
+import LogoutButton from "@/components/site/logoutbutton/logoutbuttoncomponent";
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
@@ -82,7 +83,8 @@ export default function UnsubscribePage({isLogin,userId}) {
         // Main layout wrapping the page structure.
         <Layout>          
             {/* Render each unsubscription option using the UnsubscribeComponent. */}                               
-            <UnsubscribeComponent data={unSubscriptionData} />              
+            <UnsubscribeComponent data={unSubscriptionData} />
+            <LogoutButton />              
         </Layout>
     );
 }

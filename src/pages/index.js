@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
      let uid = query.uid;
     // dev
     // uid = '279d0664343d1bba04';
-    uid = 'a0565c5d4697e8b1b9';
+    // uid = 'a0565c5d4697e8b1b9';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -84,7 +84,6 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
 
     // Function to fetch subscription data for the site.
 
-    let agent = navigator.userAgent.toLowerCase();
     const getSubscriptionData = async (siteId) => {                
         try {            
             const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");

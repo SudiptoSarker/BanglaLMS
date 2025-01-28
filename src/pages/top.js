@@ -29,6 +29,7 @@ import { fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResou
 // Helper utilities.
 import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
 import { CookiesProvider } from "react-cookie";
+import LogoutButton from "@/components/site/logoutbutton/logoutbuttoncomponent";
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
@@ -184,6 +185,10 @@ export default function TopPage({isLogin,isMember,skippableCategories,skippableR
             )}
 
             <br />
+
+            {!isLogin && (
+                <LogoutButton/>
+            )}
         </Layout>
     );
 }

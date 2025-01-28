@@ -4,13 +4,11 @@ import styles from './subscriptionbutton.module.css';
 import Cookies from 'js-cookie';
 
 function SubscriptionButton({ data, user=null }) {
-  
-  let agent = navigator.userAgent.toLowerCase();
 
   const handleSubscriptionPurchase = async (resource, user) => {
     try{
       if(resource && user){
-        const paylist = await fetch(`/api/mopita-paylist-api?serviceID=${resource}&user=${user}&agent=${agent}`);
+        const paylist = await fetch(`/api/mopita-paylist-api?serviceID=${resource}&user=${user}`);
         const result = await paylist.json();
         return result;
       }
