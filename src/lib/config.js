@@ -42,3 +42,13 @@ export async function queryDatabase(query, params = {}) {
     throw err;
   }
 }
+
+export const MopitaAPIBaseURL = {
+  staging: 'https://devservice.mopita.com/',
+  production: 'https://service.mopita.com/',
+}
+
+export const MopitaBaseURL = {
+  staging: 'https://devwww.mopita.com/',
+  production: 'https://www.mopita.com/',
+}
