@@ -1,9 +1,18 @@
-import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import Layout from "@/components/site/layout/layout";
 
-export default function TestPage() {
+export async function getServerSideProps(context) {
+
+        const siteMode = '0';
+        return {
+            props: {
+                siteMode: siteMode
+            }
+        }
+    }
+
+export default function TestPage({siteMode}) {
     const handlePaylist = async (serviceID) => {
-        const response = await fetch("/api/mopita/paylist?siteMode=0&serviceID="+serviceID)
+        const response = await fetch(`/api/mopita/paylist?siteMode=${siteMode}&service=${serviceID}`)
         const result = await response.json();
         console.log(result);       
     }

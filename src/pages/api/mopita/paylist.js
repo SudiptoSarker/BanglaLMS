@@ -1,7 +1,5 @@
 import crypto from 'crypto';
 import { MopitaAPIBaseURL } from '@/lib/config';
-import { headers } from 'next/headers';
-import { query } from 'mssql';
 
 export default async function handler(req, res) {
     // Request validation
@@ -14,7 +12,12 @@ export default async function handler(req, res) {
         const secret_key = process.env.NEXT_PUBLIC_MOPITA_SECURITY_KEY; // get secret key from environment variable
 
         const userAgent = req.headers['user-agent']; // extract user agent from request headers
-        const { serviceID, siteMode, uid } = req.query; // extract information from query parameters
+        const { service, siteMode, uid } = req.query; // extract information from query parameters
+
+        // Validate required parameters
+        if(!access_key || !secret_key || !userAgent || !service || !siteMode || !uid) {
+            throw new Error('Missing required parameters');
+        }
 
         const apiBaseURL = siteMode === '1' ? MopitaAPIBaseURL.production : MopitaAPIBaseURL.staging; // determine API base URL based on site mode
         const apiURL = apiBaseURL + 'iai-api/pub/payment.get_paytype_list'; // construct API URL
@@ -46,7 +49,7 @@ export default async function handler(req, res) {
             'iai_akey': access_key,
             'iai_atms': formattedDate,
 
-            'iai_rid': serviceID,
+            'iai_rid': service,
             'iai_muid': uid,
             'iai_uagt': userAgent,
         }
