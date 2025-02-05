@@ -18,17 +18,23 @@ import FeatureSection from "@/components/site/feature/featurecomponent";
 import SubscriptionInfo from "@/components/site/subscriptioninformation/subscriptioninformationcomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 
-// Login and top-page components.
+// Login components.
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
+import ShortcutLogin from '@/components/site/shortcut/login/shortcutlogincomponent';
+
+// Logout components.
+import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+
+// Top-page components.
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 
 // API utility functions for fetching site-related data.
-import { fetchLoginData,fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResourceCatByUid } from "@/components/api/queryApi";
+import { fetchLoginData,fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResourceCatByUid,getSiteInfo } from "@/components/api/queryApi";
 
 // Helper utilities.
 import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
 import { CookiesProvider } from "react-cookie";
-
+// import styles from './loginbutton.module.css';
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
@@ -44,6 +50,7 @@ export async function getServerSideProps(context) {
      let uid = query.uid;
     // dev
     // uid = '279d0664343d1bba04';
+    // uid = 'a0565c5d4697e8b1b9';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -63,6 +70,7 @@ export async function getServerSideProps(context) {
     
     // Pass the login status as a prop to the component.
     return { props: {
+        userId: uid || null,
         isLogin: isLogin,
         isMember: isMember,
         skippableCategories:_skippableCategories,
@@ -70,14 +78,32 @@ export async function getServerSideProps(context) {
     } };
 }
 
-export default function HomePage({ isLogin, isMember,skippableCategories,skippableResources}) {   
+export default function HomePage({ userId,isLogin, isMember,skippableCategories,skippableResources}) {   
     // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
+    const [isProduction,setIsProduction] =useState(true);
+    const [isMopita,setIsMopita] =useState(true);
 
     // Function to fetch subscription data for the site.
+    const getSiteInfoData = async (siteId) => {                
+        try {            
+            const response = await getSiteInfo(siteId);
+            console.log('response: ', response);
+            
+            if (response?.data?.length > 0) {
+                const siteInfo = response.data[0]; 
+                setIsProduction(siteInfo.isProduction);
+                setIsMopita(siteInfo.isMopita);
+            }
+            
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };  
+    
     const getSubscriptionData = async (siteId) => {                
         try {            
             const response = await fetchSubscriptionData(siteId,"DeviceSubscriptionButton");
@@ -90,8 +116,9 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     // Function to fetch login section data for the site.
     const getLoginData = async (siteId) => {
         try {            
-            const response = await fetchLoginData(siteId,"LoginSection");
+            const response = await fetchLoginData(siteId,"LoginSection");           
             setLoginData(response.data);
+            // setLoginData(tempData);
         } catch (error) {
             console.log("Error fetching subscription data:", error);
         }
@@ -120,10 +147,10 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     // Main function to fetch all site-related data.
     const getSiteInformation = async () => {
         try {
-            const siteId = await siteid();     
-                                    
-            getSubscriptionData(siteId);       
-            getLoginData(siteId);     
+            const siteId = await siteid();   
+            getSiteInfoData(siteId);
+            getSubscriptionData(siteId);             
+            getLoginData(siteId);                                         
             getNotifications(siteId);
             getAnnouncements(siteId);
         } catch (error) {
@@ -137,6 +164,10 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
     }, []); 
 
     // Main render function for the landing page.
+    // isLogin = true;
+    console.log('isProduction: ',isProduction);
+    console.log('isMopita: ',isMopita);
+
     return (
         <Layout>  
             <HeaderComponent  />                     
@@ -168,7 +199,7 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
             {
                 subscriptionData.map((option, index) => {
                     if(!skippableCategories.includes(option.category)){
-                        return <SubscriptionButton key={index} data={option} />
+                        return <SubscriptionButton key={index} data={option} user={userId} />
                     }
                 })
             }
@@ -185,13 +216,22 @@ export default function HomePage({ isLogin, isMember,skippableCategories,skippab
                     {skippableResources.map((item,index)=><TopPageComponent ci={item.ci} servicename={item.servicename}/>)}
                 </>  
             )}
-
-            {/* Show LoginButton if user is not authenticated */}
-            {!isLogin && (
-                loginData.map((option, index) => (
-                    <LoginButton key={index} data={option} />
-                ))
+           
+            {!isLogin ? (
+                isMopita ? (
+                    loginData.map((option, index) => (
+                        <LoginButton key={index} data={option} />
+                    ))
+                ) : (
+                    loginData.map((option, index) => (
+                        <ShortcutLogin key={index} data={option} />
+                    ))
+                )
+            ) : (
+                <LogoutButton />
             )}
+         
+
         </Layout>
     );
 }

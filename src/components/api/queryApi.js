@@ -106,6 +106,30 @@ export const fetchLoginData = async (siteId, sectionname) => {
 };
 
 /**
+ * Retrieves planner's login data for authentication on every page
+ * Planner's login data filter by site primary key and planner's design section name.
+*/
+export const fetchShortcutLoginURL = async (loginCode) => {
+    try {
+        if (!loginCode) {
+            throw new Error(`Login option not found for the request`);
+        }
+
+        // Step 2: Use the site id to fetch the subscription data        
+        const subscriptionQuery = `SELECT * FROM [dbo].[loginOptions] WHERE logincat= '${loginCode}'`;
+        
+        const subscriptionResult = await calltoApi(subscriptionQuery,[]);
+
+        // Return the subscription data
+        return subscriptionResult;
+
+    } catch (error) {
+        console.error('Error fetching subscription data:', error);
+        throw error;
+    }
+};
+
+/**
  * Retrieves planner's Notifications data to show on the page.
  * Planner's Notifications data filter by site primary key and planner's design section name.
 */
@@ -152,7 +176,7 @@ export const createUserLog = async (userLog) => {
 
 export const getSiteInfo = async (siteId)=>{
     const query = `
-            SELECT id, name, source, reglink, rellink, sourcetable AS tableName
+            SELECT id, name, source, reglink, rellink, sourcetable AS tableName,isProduction,isMopita
             FROM [dbo].[sites]
             WHERE active = 1 and id=${siteId}`;
     const values = [];

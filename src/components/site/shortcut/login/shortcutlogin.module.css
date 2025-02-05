@@ -1,9 +1,9 @@
-.loginForm {
-  border-radius: 8px;
-  background: linear-gradient(90deg, rgb(122, 140, 156) 0%, #00f2fe 100%);
+.googleLoginBtn {
+  background: linear-gradient(90deg, rgb(226, 156, 70) 0%, #ff5858 100%);
   color: white;
   border: none;
   padding: 10px 20px;
+  border-radius: 8px;
   font-size: 16px;
   cursor: pointer;
   display: flex;
@@ -19,7 +19,7 @@
 }
 
 @media (max-width: 991px) {
-  .loginForm {
-      padding: 20px;
+  .googleLoginBtn {
+    padding: 20px;
   }
 }
