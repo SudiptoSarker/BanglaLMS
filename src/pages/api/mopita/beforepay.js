@@ -11,10 +11,10 @@ export default async function handler(req, res) {
         const access_key = process.env.NEXT_PUBLIC_MOPITA_ACCESS_KEY; // get access key from environment variable
         const secret_key = process.env.NEXT_PUBLIC_MOPITA_SECURITY_KEY; // get secret key from environment variable
 
-        const { service, siteMode, uid, action, type } = req.query; // extract information from query parameters
+        const { service, siteMode, action, type } = req.query; // extract information from query parameters
 
         // Validate required parameters
-        if(!access_key || !secret_key || !service || !siteMode || !uid || !action || !type) {
+        if(!access_key || !secret_key || !service || !siteMode || !action || !type) {
             throw new Error('Missing required parameters');
         }
 
