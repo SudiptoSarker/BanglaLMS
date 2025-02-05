@@ -125,8 +125,7 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
             }
         }
         );
-        let result = await res.json();
-        console.log(result);
+        let result = await res.json();        
     }
 
     const handlePost = async()=>{
@@ -143,8 +142,7 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
             }
           });
 
-          let result = await res.json();
-          console.log(result);
+          let result = await res.json();          
     }
 
 

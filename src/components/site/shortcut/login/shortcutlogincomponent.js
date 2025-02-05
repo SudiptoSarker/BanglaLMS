@@ -13,9 +13,7 @@ function ShortcutLogin({ data }) {
 
   const getShortcutLoginURL = async (loginOption) => {                
     try {            
-        const response = await fetchShortcutLoginURL(loginOption);
-        console.log('response22: ', response);
-        
+        const response = await fetchShortcutLoginURL(loginOption);        
         if (response?.data?.length > 0) {
             const loginInfo = response.data[0];  // Extract the first object from response.data array
             setShortUrl(loginInfo.link);   

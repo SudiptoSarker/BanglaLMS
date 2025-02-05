@@ -90,9 +90,7 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
     // Function to fetch subscription data for the site.
     const getSiteInfoData = async (siteId) => {                
         try {            
-            const response = await getSiteInfo(siteId);
-            console.log('response: ', response);
-            
+            const response = await getSiteInfo(siteId);            
             if (response?.data?.length > 0) {
                 const siteInfo = response.data[0]; 
                 setIsProduction(siteInfo.isProduction);
@@ -162,11 +160,6 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
     useEffect(() => {
         getSiteInformation();
     }, []); 
-
-    // Main render function for the landing page.
-    // isLogin = true;
-    console.log('isProduction: ',isProduction);
-    console.log('isMopita: ',isMopita);
 
     return (
         <Layout>  

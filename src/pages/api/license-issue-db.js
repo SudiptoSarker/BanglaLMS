@@ -21,8 +21,7 @@ export default async function handler(req, res) {
 
     try {
         // Query to get the sourcetable from the SiteTable using siteid
-        const siteQuery = `SELECT sourcetable FROM SiteTable WHERE id = @siteid AND active = 1`;
-        console.log(`Executing site query: ${siteQuery} with params: ${siteid}`);
+        const siteQuery = `SELECT sourcetable FROM SiteTable WHERE id = @siteid AND active = 1`;        
         
         const siteData = await queryDatabase(siteQuery, { siteid });
 
@@ -51,8 +50,7 @@ export default async function handler(req, res) {
                 WHERE active = 1 
                 AND validity >= GETDATE() 
                 AND ci = @ci
-            `;
-            console.log(`Executing license query: ${licenseQuery} with params: ${ci}`);
+            `;            
             
             const licenseData = await queryDatabase(licenseQuery, { ci });
 

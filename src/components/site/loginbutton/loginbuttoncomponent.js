@@ -20,16 +20,12 @@ function LoginButton({ data }) {
       }
   },[]);
 
-  const handleLogin = () => {
-    console.log('Login button clicked');
-  };
-  
   return (    
     <section>      
       {data?.formid && data?.submitlink && data?.nl ? (
         <form id={data.formid} method="post" action={data.submitlink}>
               <p>                      
-                <button className={styles.loginForm} type="submit" onClick={handleLogin}>              
+                <button className={styles.loginForm} type="submit">              
                   {data.buttonhtml ? (
                     // If custom button HTML is provided, render it using dangerouslySetInnerHTML
                     <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
