@@ -33,7 +33,7 @@ import { fetchLoginData,fetchSubscriptionData,fetchNotificationsAndAnnouncements
 
 // Helper utilities.
 import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
-import { CookiesProvider } from "react-cookie";
+import Cookies from 'js-cookie';
 // import styles from './loginbutton.module.css';
 
 // Server-side function to fetch initial props during SSR.
@@ -48,6 +48,7 @@ export async function getServerSideProps(context) {
 
     // Extract user ID (uid) from the query parameters.
      let uid = query.uid;
+     let logincat = query.logincat || null;
     // dev
     // uid = '279d0664343d1bba04';
     // uid = 'a0565c5d4697e8b1b9';
@@ -72,13 +73,14 @@ export async function getServerSideProps(context) {
     return { props: {
         userId: uid || null,
         isLogin: isLogin,
+        logincat: logincat,
         isMember: isMember,
         skippableCategories:_skippableCategories,
         skippableResources:_skippableResources
     } };
 }
 
-export default function HomePage({ userId,isLogin, isMember,skippableCategories,skippableResources}) {   
+export default function HomePage({ userId,isLogin, logincat, isMember,skippableCategories,skippableResources}) {   
     // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
@@ -86,6 +88,15 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
     const [loginData, setLoginData] = useState([]);
     const [isProduction,setIsProduction] =useState(true);
     const [isMopita,setIsMopita] =useState(true);
+
+    let loginCatCookieData = Cookies.get('logincat') || null;
+    if(logincat){
+        Cookies.set('logincat', logincat, { expires: 7, sameSite: 'strict' });
+    }else{
+
+        logincat = loginCatCookieData;
+    }
+    // console.log(logincat);
 
     // Function to fetch subscription data for the site.
     const getSiteInfoData = async (siteId) => {                
@@ -165,8 +176,8 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
 
     // Main render function for the landing page.
     // isLogin = true;
-    console.log('isProduction: ',isProduction);
-    console.log('isMopita: ',isMopita);
+    // console.log('isProduction: ',isProduction);
+    // console.log('isMopita: ',isMopita);
 
     return (
         <Layout>  

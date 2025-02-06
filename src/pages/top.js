@@ -28,7 +28,7 @@ import { fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResou
 
 // Helper utilities.
 import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
-import { CookiesProvider } from "react-cookie";
+import Cookies from 'js-cookie';
 
 // Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
@@ -42,7 +42,7 @@ export async function getServerSideProps(context) {
 
     // Extract user ID (uid) from the query parameters.
     let uid = query.uid;
-
+    let logincat = query.logincat || null;
     // dev
     // uid = '279d0664343d1bba04';
 
@@ -66,19 +66,28 @@ export async function getServerSideProps(context) {
     // Pass the login status as a prop to the component.
     return { props: {
         isLogin: isLogin,
+        logincat: logincat,
         isMember: isMember,
         skippableCategories:_skippableCategories,
         skippableResources:_skippableResources
     } };
 }
 
-export default function TopPage({isLogin,isMember,skippableCategories,skippableResources}) {
+export default function TopPage({isLogin,logincat,isMember,skippableCategories,skippableResources}) {
     const router = useRouter(); // Router instance for navigation control.
     
     // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
+
+    let loginCatCookieData = Cookies.get('logincat') || null;
+    if(logincat){
+        Cookies.set('logincat', logincat, { expires: 7, sameSite: 'strict' });
+    }else{
+
+        logincat = loginCatCookieData;
+    }
 
     // Function to fetch subscription data for a specific site ID.
     const getSubscriptionData = async (siteId) => {
