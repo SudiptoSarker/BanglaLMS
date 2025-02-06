@@ -17,6 +17,7 @@ import FeatureSection from "@/components/site/feature/featurecomponent";
 // Subscription-related components.
 import SubscriptionInfo from "@/components/site/subscriptioninformation/subscriptioninformationcomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
+import ShortcutSubscription from "@/components/site/shortcut/subscription/shortcutsubscription";
 
 // Login components.
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
@@ -94,7 +95,8 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
             if (response?.data?.length > 0) {
                 const siteInfo = response.data[0]; 
                 setIsProduction(siteInfo.isProduction);
-                setIsMopita(siteInfo.isMopita);
+                setIsMopita(false);
+                // setIsMopita(siteInfo.isMopita);
             }
             
         } catch (error) {
@@ -158,9 +160,9 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
 
 
     useEffect(() => {
-        getSiteInformation();
+        getSiteInformation();        
     }, []); 
-
+    
     return (
         <Layout>  
             <HeaderComponent  />                     
@@ -189,12 +191,15 @@ export default function HomePage({ userId,isLogin, isMember,skippableCategories,
             <SubscriptionInfo  />                       
 
             {/* Show SubscriptionButton if auth is false or if auth is true but not subscribed */}
-            {
-                subscriptionData.map((option, index) => {
-                    if(!skippableCategories.includes(option.category)){
-                        return <SubscriptionButton key={index} data={option} user={userId} />
-                    }
-                })
+            {subscriptionData
+                .filter(option => !skippableCategories.includes(option.category))
+                .map((option, index) =>
+                    isMopita ? (
+                        <SubscriptionButton key={index} data={option} user={userId} />
+                    ) : (
+                        <ShortcutSubscription key={index} data={option} user={userId} />
+                    )
+                )
             }
 
             {/* Show TopPageComponent if user is authenticated and subscribed */}
