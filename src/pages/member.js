@@ -41,14 +41,62 @@ export async function getServerSideProps(context) {
     let ci = query.ci;
     let logincat = query.logincat || null;
 
-    // dev
-    // uid = '279d0664343d1bba04';
+    let ordid = query.ordid || null;
+    ordid = "0iUNJX+dz+fpf3GbYXoDdG8Acexp+QlL1uAQ+XVx2oY=";
+    ci = "R000002750";
+    let payType = "00";
+    try{
+        if(ordid){            
+            const response = await fetch(`/api/mopita/afterpay?siteMode=0&service=${ci}&type=${payType}&order=${ordid}&action=reg`)
+            // const response = {
+            //     "success": true,
+            //     "result": {
+            //         "buyid": "20250205a54bd78326ca565703",
+            //         "service_name": "[STG]バングラライセンス管理システム　550円（税込）",
+            //         "amount": "550",
+            //         "buy_date": "20250205",
+            //         "reentryflg": "1",
+            //         "campaigntype": "0",
+            //         "result": {
+            //             "code": "I000",
+            //             "args": [
+            //                 "Some error message here"
+            //             ]
+            //         }
+            //     }
+            // }
+            // const result = await response.json();
+            // alert("result: "+JSON.stringify(result));
+             // Check if response code is not "I000"
+             if (response.result?.result?.code !== "I000") {
+                return {
+                    redirect: {
+                        destination: "/404",
+                        permanent: false,
+                    },
+                };
+            }
+        }
+    }catch(error){
+        console.log("API Error:", error);
+        return {
+            redirect: {
+                destination: "/404",
+                permanent: false,
+            },
+        };
+    }
 
+    
+    // dev
+    // uid = '279d0664343d1bba04';    
+    uid = 'a0565c5d4697e8b1b9';
     let isLogin = false;
     let isMember = false;
     let licenseKey = '';
     let siteId = await siteid();
     
+    // uid = 'a0565c5d4697e8b1b9';
     // Validating User ID
     isLogin = validateUserId(uid);
 
@@ -121,8 +169,7 @@ export async function getServerSideProps(context) {
                 
             }
         }
-    }
-
+    }    
     // Pass the login status as a prop to the component.
     return { props: {
         isLogin: isLogin,
@@ -190,7 +237,7 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey}) {
             console.log("Error fetching site information:", error);
         }
     };
-
+    isMember = true;
     useEffect(() => {
         if(!isLogin){
             router.push('/');

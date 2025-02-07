@@ -1,0 +1,56 @@
+.loginRequiredOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loginRequiredContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 320px;
+}
+
+.loginRequiredContent h2 {
+    color: #333;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.closeLoginRequiredButton {
+    padding: 8px 12px; /* Smaller padding for smaller buttons */
+    font-size: 14px; /* Smaller font size */
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.closeLoginRequiredButton {
+    background-color: #ff5e57;
+    color: white;
+    border: none;
+}
+
+.closeLoginRequiredButton:hover {
+    background-color: #ff3c3c;
+}
+.modalMessage {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+  }

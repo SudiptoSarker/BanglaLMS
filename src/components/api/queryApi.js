@@ -228,3 +228,9 @@ export const deleteDataFromMemberTable = async (siteid, muid,ci) => {
     const values = [];
     return await calltoApi(query,values);
 };
+export const getPaymentData = async (paymentCode) => {    
+    // const query = `select * from paymenttype where code=${paymentCode}`;
+    const query = `select * from paymenttype`;
+    const values = [];
+    return await calltoApi(query,values);
+};

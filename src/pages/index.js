@@ -52,7 +52,7 @@ export async function getServerSideProps(context) {
      let logincat = query.logincat || null;
     // dev
     // uid = '279d0664343d1bba04';
-    // uid = 'a0565c5d4697e8b1b9';
+    uid = 'a0565c5d4697e8b1b9';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -214,7 +214,7 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
                     isMopita ? (
                         <SubscriptionButton key={index} data={option} user={userId} />
                     ) : (
-                        <ShortcutSubscription key={index} data={option} user={userId} />
+                        <ShortcutSubscription key={index} data={option} user={userId} isLogin={isLogin}/>
                     )
                 )
             }
@@ -237,9 +237,9 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
                     loginData.map((option, index) => (
                         <LoginButton key={index} data={option} />
                     ))
-                ) : (
+                ) : (                    
                     loginData.map((option, index) => (
-                        <ShortcutLogin key={index} data={option} />
+                        <ShortcutLogin key={index} data={option}/>
                     ))
                 )
             ) : (

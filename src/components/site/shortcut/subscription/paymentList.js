@@ -1,45 +1,98 @@
 import { useState } from "react";
 import styles from "./paymentList.module.css";
+import { getPaymentData } from "@/components/api/queryApi";
 
-export default function PaymentList({ isOpen, onClose, onSelectPayment }) {
+export default function PaymentList({ isOpen, onClose, paymentMethods = [], formId, ci }) {
+  console.log("Payment Methods:",paymentMethods);
   if (!isOpen) return null;
 
   const [selectedMethod, setSelectedMethod] = useState(null);
-  const paymentMethods = [
-    { id: "credit_card", name: "Credit Card" },
-    { id: "paypal", name: "PayPal" },
-    { id: "bank_transfer", name: "Bank Transfer" }
-  ];
 
-  // Close the modal when clicked outside the modal content
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();
     }
   };
 
+  // const handleConfirm = async () => {
+  //   if (selectedMethod) {           
+  //     const siteMode = 0;
+  //     const serviceID = ci;
+  //     const payType = selectedMethod;
+
+  //     console.log("Form ID:", formId);
+  //     console.log("CI Value:", ci);
+  //     console.log("Selected Payment Method:", selectedMethod);      
+
+  //     const response = await fetch(`/api/mopita/beforepay?siteMode=${siteMode}&service=${serviceID}&type=${payType}&action=reg`)
+  //     const responseJsonData = await response.json();
+  //     let responseCode = responseJsonData.result.result.code;
+  //     responseCode = "I000"
+  //     if( responseCode == "I000"){
+  //       document.getElementById(formId).submit();
+  //     }else{
+  //       console.log(responseJsonData.result.result.args);        
+  //     }      
+  //   }
+  // };
+
+  const handleConfirm = async () => {
+    if (selectedMethod) {     
+      const selectedPayment = paymentMethods.find(method => method.paytype_info.paytype === selectedMethod);
+      const siteMode = 0;
+      const serviceID = ci;
+      const payType = selectedMethod;
+  
+      console.log("Form ID:", formId);
+      console.log("CI Value:", ci);
+      console.log("Selected Payment Method:", selectedMethod);      
+      console.log("Selected Payment Link:", selectedPayment.paytype_info.payment_link);
+  
+      const response = await fetch(`/api/mopita/beforepay?siteMode=${siteMode}&service=${serviceID}&type=${payType}&action=reg`)
+      const responseJsonData = await response.json();
+      let responseCode = responseJsonData.result.result.code;
+      responseCode = "I000"
+  
+      if (responseCode === "I000") {
+        const formElement = document.getElementById(formId);
+        if (formElement && selectedPayment?.paytype_info.payment_link) {
+          formElement.action = selectedPayment.paytype_info.payment_link; // Set the new action URL
+          formElement.submit();
+        } else {
+          console.error("Form element or payment link is missing.");
+        }
+      } else {
+        console.log(responseJsonData.result.result.args);        
+      }      
+    }
+  };
+  
   return (
     <div className={styles.paymentModalOverlay} onClick={handleOverlayClick}>
       <div className={styles.paymentModalContent}>
         <h2>Select Payment Method</h2>
-        {paymentMethods.map((method) => (
-          <button
-            key={method.id}
-            className={`${styles.paymentOption} ${
-              selectedMethod === method.id ? styles.selectedPayment : ""
-            }`}
-            onClick={() => setSelectedMethod(method.id)}
-          >
-            {method.name}
-          </button>
-        ))}
+        {paymentMethods.length > 0 ? (
+          paymentMethods.map((method, index) => (
+            <button
+              key={index}
+              className={`${styles.paymentOption} ${
+                selectedMethod === method.paytype_info.paytype ? styles.selectedPayment : ""
+              }`}
+              onClick={() => setSelectedMethod(method.paytype_info.paytype)}
+            >
+              {method.paytype_info.paytype_name}
+            </button>
+          ))
+        ) : (
+          <p>No payment methods available.</p>
+        )}
         <div className={styles.buttonContainer}>
           <button className={styles.closePaymentButton} onClick={onClose}>
             Close
           </button>
           <button
             className={styles.confirmButton}
-            onClick={() => onSelectPayment(selectedMethod)}
+            onClick={handleConfirm}
             disabled={!selectedMethod}
           >
             Confirm
