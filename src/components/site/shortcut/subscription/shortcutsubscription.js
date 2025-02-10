@@ -157,7 +157,7 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
   };
 
   const handleCloseModal = () => setModalOpen(false);
-  const handleCloseLoginModal = () => setLoginModalOpen(false);
+  const handleCloseLoginModal = () => setLoginModalOpen(false);  
 
   return (  
     <>        

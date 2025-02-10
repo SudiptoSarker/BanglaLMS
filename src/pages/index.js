@@ -52,7 +52,7 @@ export async function getServerSideProps(context) {
      let logincat = query.logincat || null;
     // dev
     // uid = '279d0664343d1bba04';
-    uid = 'a0565c5d4697e8b1b9';
+    // uid = 'a0565c5d4697e8b1b9';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);

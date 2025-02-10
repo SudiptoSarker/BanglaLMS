@@ -18,7 +18,7 @@ export default async function handler(req, res) {
             throw new Error('Missing required parameters');
         }
 
-        const apiBaseURL = siteMode === '1' ? MopitaAPIBaseURL.production : MopitaAPIBaseURL.staging; // determine API base URL based on site mode
+        const apiBaseURL = siteMode === '1' ? MopitaAPIBaseURL.production : MopitaAPIBaseURL.staging; // determine API base URL based on site mode        
         const apiURL = apiBaseURL + 'iai-api/pub/payment.get_after_info'; // construct API URL
 
         // fomat date time for JP timezone

@@ -90,7 +90,7 @@ export async function getServerSideProps(context) {
     
     // dev
     // uid = '279d0664343d1bba04';    
-    uid = 'a0565c5d4697e8b1b9';
+    // uid = 'a0565c5d4697e8b1b9';
     let isLogin = false;
     let isMember = false;
     let licenseKey = '';
@@ -237,7 +237,7 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey}) {
             console.log("Error fetching site information:", error);
         }
     };
-    isMember = true;
+    // isMember = true;
     useEffect(() => {
         if(!isLogin){
             router.push('/');
