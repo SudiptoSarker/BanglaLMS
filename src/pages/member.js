@@ -18,19 +18,13 @@ export async function getServerSideProps(context) {
     let uid = query.uid;
     let ci = query.ci;
     let logincat = query.logincat || null;
-
     let ordid = query.ordid || null;    
-    // ordid = "2024121227644be99dc9edb0f9";
-
     let isLogin = false;
     let isMember = false;
     let isMopita = true;
     let licenseKey = '';
     let isAfterApiSucess = true;
-
     let siteId = await siteid(); 
-    // ci = "R000002770";   
-    // uid = '279d0664343d1bba04';
     isLogin = validateUserId(uid);
 
     if(isLogin){
@@ -47,24 +41,7 @@ export async function getServerSideProps(context) {
                     try {
                         let afterPayResponse = await fetch(
                             `/api/mopita/afterpay?siteMode=0&order=${ordid}`
-                        );                                            
-                        // let afterPayResponse = {
-                        //     json: async () => ({
-                        //         success: true,
-                        //         result: {
-                        //             buyid: "2024121227644be99dc9edb0f9",
-                        //             service_name: "[STG]バングラライセンス管理システム 550円（税込）",
-                        //             amount: "550",
-                        //             buy_date: "20250205",
-                        //             reentryflg: "1",
-                        //             campaigntype: "0",
-                        //             result: {
-                        //                 code: "I0000",
-                        //                 args: "successfully completed"
-                        //             }
-                        //         }
-                        //     })
-                        // };
+                        );                                                                   
                                             
                         const afterPayData = await afterPayResponse.json(); // Parse response                                       
                         if (afterPayData?.result?.result?.code === "I000") {                                    

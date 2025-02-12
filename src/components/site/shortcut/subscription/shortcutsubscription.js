@@ -22,10 +22,8 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
 
   const [isModalOpen, setModalOpen] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
-  const [selectedPaymentOption, setSelectedPaymentOption] = useState('');
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [loginCat, setLoginCat] = useState('');
-  const [paymentTypeData, setPaymentTypeData] = useState([]);
 
   // Get the 'logincat' cookie value when the component mounts
   useEffect(() => {
@@ -36,7 +34,7 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
   }, []);
 
   const toggleModal = async (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault(); 
     if (!isLogin) {
       setLoginModalOpen(true); // Open the login modal
       return;
@@ -48,73 +46,7 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
     if (ciValue && user) {
       // Call the handleSubscriptionPurchase function with ciValue and user
       const result = await handleSubscriptionPurchase(ciValue, user);
-      // let tempData = {
-      //   "result": {
-      //       "paytypelist": [
-      //           {
-      //               "paytype_info": {
-      //                   "paytype": "00",
-      //                   "paytype_name": "",
-      //                   // "paytype_name": "クレジットカード決済",
-      //                   "runningflg": "1",
-      //                   "stoptext": null,
-      //                   "displaycode": "1",
-      //                   "selectflg": "0",
-      //                   "linktype": "0"
-      //               }
-      //           }
-      //           ,
-      //           {
-      //               "paytype_info": {
-      //                   "paytype": "01",
-      //                   "paytype_name": "MasterCard",
-      //                   "runningflg": "1",
-      //                   "stoptext": null,
-      //                   "displaycode": "1",
-      //                   "selectflg": "0",
-      //                   "linktype": "0"
-      //               }
-      //           }
-      //       ],
-      //       "message_list": [
-      //           {
-      //               "line_list": [
-      //                   {
-      //                       "message_info": {
-      //                           "message": "各支払い方法については"
-      //                       }
-      //                   },
-      //                   {
-      //                       "message_info": {
-      //                           "message": "Q&A",
-      //                           "link_url": "http://mti7.okbiz.okwave.jp/faq/show/3591?site_domain=mopitafaq001"
-      //                       }
-      //                   },
-      //                   {
-      //                       "message_info": {
-      //                           "message": "をご確認ください。"
-      //                       }
-      //                   }
-      //               ]
-      //           }
-      //       ],
-      //       "result": {
-      //           "code": "I000",
-      //           "args": [
-      //               ""
-      //           ]
-      //       }
-      //   },
-      //   "data": {
-      //       "iai_aver": "1.0",
-      //       "iai_akey": "597e2b0fdb6cef96cb",
-      //       "iai_atms": "20250127195740000",
-      //       "iai_rid": "R000002769",
-      //       "iai_muid": "a0565c5d4697e8b1b9",
-      //       "iai_uagt": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
-      //   }
-      // }
-      
+            
       if (result?.result?.paytypelist) {
         const response1 = result.result.paytypelist;        
         
@@ -132,24 +64,13 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
               }
           };
         });
-        setPaymentMethods(response3);
-        console.log('response3: ',response3);
-        // setPaymentTypeData(response.data);
-
-        // fetchPaymentTypeData("00");       
-        // setPaymentMethods(tempData.result.paytypelist); // Store the paytypelist
+        setPaymentMethods(response3);       
       }      
     } else {
       console.warn("CI value or user is missing");
     }  
     setModalOpen(!isModalOpen);
-  };
-  
-
-  const handleOptionClick = (option) => {
-    setSelectedPaymentOption(option); // Set the selected option
-    document.getElementById(data.formId).submit(); // Submit the form
-  };
+  };  
 
   const handleCloseModal = () => setModalOpen(false);
   const handleCloseLoginModal = () => setLoginModalOpen(false);  

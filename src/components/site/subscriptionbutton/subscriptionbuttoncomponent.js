@@ -1,6 +1,5 @@
 import React from 'react';
 import styles from './subscriptionbutton.module.css';
-import Cookies from 'js-cookie';
 
 function SubscriptionButton({ data }) {  
   return (  

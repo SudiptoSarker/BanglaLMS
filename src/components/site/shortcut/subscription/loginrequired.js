@@ -1,4 +1,3 @@
-import { useState } from "react";
 import styles from "./loginrequired.module.css";
 
 export default function LoginRequired({ isOpen, onClose }) {

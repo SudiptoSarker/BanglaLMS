@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styles from "./paymentList.module.css";
-import { getPaymentData } from "@/components/api/queryApi";
 
 export default function PaymentList({ isOpen, onClose, paymentMethods = [], formId, ci }) {
   console.log("Payment Methods:",paymentMethods);
@@ -13,28 +12,6 @@ export default function PaymentList({ isOpen, onClose, paymentMethods = [], form
       onClose();
     }
   };
-
-  // const handleConfirm = async () => {
-  //   if (selectedMethod) {           
-  //     const siteMode = 0;
-  //     const serviceID = ci;
-  //     const payType = selectedMethod;
-
-  //     console.log("Form ID:", formId);
-  //     console.log("CI Value:", ci);
-  //     console.log("Selected Payment Method:", selectedMethod);      
-
-  //     const response = await fetch(`/api/mopita/beforepay?siteMode=${siteMode}&service=${serviceID}&type=${payType}&action=reg`)
-  //     const responseJsonData = await response.json();
-  //     let responseCode = responseJsonData.result.result.code;
-  //     responseCode = "I000"
-  //     if( responseCode == "I000"){
-  //       document.getElementById(formId).submit();
-  //     }else{
-  //       console.log(responseJsonData.result.result.args);        
-  //     }      
-  //   }
-  // };
 
   const handleConfirm = async () => {
     if (selectedMethod) {     

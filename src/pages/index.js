@@ -50,9 +50,6 @@ export async function getServerSideProps(context) {
     // Extract user ID (uid) from the query parameters.
      let uid = query.uid;
      let logincat = query.logincat || null;
-    // dev
-    // uid = '279d0664343d1bba04';
-    // uid = 'a0565c5d4697e8b1b9';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -87,7 +84,6 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
-    const [isProduction,setIsProduction] =useState(true);
     const [isMopita,setIsMopita] =useState(true);
 
     let loginCatCookieData = Cookies.get('logincat') || null;
@@ -97,7 +93,6 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
 
         logincat = loginCatCookieData;
     }
-    // console.log(logincat);
 
     // Function to fetch subscription data for the site.
     const getSiteInfoData = async (siteId) => {                
@@ -105,9 +100,7 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
             const response = await getSiteInfo(siteId);            
             if (response?.data?.length > 0) {
                 const siteInfo = response.data[0]; 
-                setIsProduction(siteInfo.isProduction);
-                setIsMopita(false);
-                // setIsMopita(siteInfo.isMopita);
+                setIsMopita(siteInfo.isMopita);
             }
             
         } catch (error) {
@@ -129,7 +122,6 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
         try {            
             const response = await fetchLoginData(siteId,"LoginSection");           
             setLoginData(response.data);
-            // setLoginData(tempData);
         } catch (error) {
             console.log("Error fetching subscription data:", error);
         }
@@ -174,12 +166,6 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
         getSiteInformation();        
     }, []); 
 
-    // Main render function for the landing page.
-    // isLogin = true;
-    // console.log('isProduction: ',isProduction);
-    // console.log('isMopita: ',isMopita);
-
-    
     return (
         <Layout>  
             <HeaderComponent  />                     
@@ -246,7 +232,6 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
                 <LogoutButton />
             )}
          
-
         </Layout>
     );
 }

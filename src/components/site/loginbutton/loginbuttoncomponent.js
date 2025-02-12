@@ -2,8 +2,6 @@ import React from "react";
 import styles from './loginbutton.module.css';
 import Cookies from 'js-cookie';
 import { useState,useEffect } from 'react';
-import { Content } from "@builder.io/react";
-
 
 /**
  * The LoginButton component renders a login form for users who are not already authenticated. 

@@ -5,7 +5,7 @@ import styles from './shortcutlogin.module.css';
 import { fetchShortcutLoginURL } from "@/components/api/queryApi";
 
 /**
- * The GoogleLoginButton component renders a login form for users who are not already authenticated. 
+ * The ShortcutLogin component renders a login form for users who are not already authenticated. 
  */
 function ShortcutLogin({ data }) {     
   const [shortUrl,setShortUrl] = useState('');

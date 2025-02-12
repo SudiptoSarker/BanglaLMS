@@ -28,14 +28,14 @@
 
 .buttonContainer {
     display: flex;
-    justify-content: flex-end; /* Align buttons to the right */
+    justify-content: flex-end; 
     gap: 10px;
     margin-top: 10px;
 }
 
 .closeLoginRequiredButton {
-    padding: 8px 12px; /* Smaller padding for smaller buttons */
-    font-size: 14px; /* Smaller font size */
+    padding: 8px 12px; 
+    font-size: 14px;
     border-radius: 5px;
     cursor: pointer;
 }
