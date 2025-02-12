@@ -88,3 +88,37 @@
 .backButton:hover {
     background-color: #57a057; /* Darker shade on hover for back button */
 }
+.errorMessage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffecec; /* Light red background */
+    color: #b1252a; /* Dark red text */
+    font-size: 16px;
+    font-weight: 600;
+    padding: 12px 20px;
+    border: 1px solid #b1252a;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(177, 37, 42, 0.2);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+
+    /* Centering with extra spacing */
+    position: fixed;
+    top: 55%; /* Adjusted from 50% to give more space above */
+    left: 50%;
+    transform: translate(-50%, -45%);
+}
+
+.errorMessage p {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.errorMessage p::before {
+    content: "⚠️"; /* Warning icon */
+    font-size: 20px;
+}

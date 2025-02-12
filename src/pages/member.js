@@ -1,127 +1,98 @@
 'use client'
-// React core imports for managing component state and side effects.
 import { useEffect, useState } from "react";
-
-// Main layout component wrapping the page structure.
 import Layout from "@/components/site/layout/layout";
-
-// Header component
 import HeaderComponent from "@/components/site/header/headercomponent";
-
-// Components for notifications and announcements.
 import NotificationComponent from "@/components/site/notificationbanner/notificationcomponent";
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
-
-// Feature-related components.
 import FeatureSection from "@/components/site/feature/featurecomponent";
-
-// Member-related components.
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
-
-// Subscription-related components.
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
-
-// API utility functions for fetching site-related data.
 import { fetchSubscriptionData, fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import Cookies from 'js-cookie';
-
-// Helper utilities.
 import { siteid,validateUserId,isNullOrEmpty,checkSubscriptionByService } from '@/helper/helper';
-
-// Router for handling client-side navigation in Next.js.
 import { useRouter } from "next/router";
 import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTable } from "@/components/api/queryApi";
-
 import styles from '../components/site/member/memberpage.module.css';
-
-// Server-side function to fetch initial props during SSR.
 export async function getServerSideProps(context) {
     const {query} = context;
     let uid = query.uid;
     let ci = query.ci;
     let logincat = query.logincat || null;
 
-    let ordid = query.ordid || null;
-    ordid = "0iUNJX+dz+fpf3GbYXoDdG8Acexp+QlL1uAQ+XVx2oY=";
-    ci = "R000002750";
-    let payType = "00";
-    try{
-        if(ordid){            
-            const response = await fetch(`/api/mopita/afterpay?siteMode=0&service=${ci}&type=${payType}&order=${ordid}&action=reg`)
-            // const response = {
-            //     "success": true,
-            //     "result": {
-            //         "buyid": "20250205a54bd78326ca565703",
-            //         "service_name": "[STG]バングラライセンス管理システム　550円（税込）",
-            //         "amount": "550",
-            //         "buy_date": "20250205",
-            //         "reentryflg": "1",
-            //         "campaigntype": "0",
-            //         "result": {
-            //             "code": "I000",
-            //             "args": [
-            //                 "Some error message here"
-            //             ]
-            //         }
-            //     }
-            // }
-            // const result = await response.json();
-            // alert("result: "+JSON.stringify(result));
-             // Check if response code is not "I000"
-             if (response.result?.result?.code !== "I000") {
-                return {
-                    redirect: {
-                        destination: "/404",
-                        permanent: false,
-                    },
-                };
-            }
-        }
-    }catch(error){
-        console.log("API Error:", error);
-        return {
-            redirect: {
-                destination: "/404",
-                permanent: false,
-            },
-        };
-    }
+    let ordid = query.ordid || null;    
+    // ordid = "2024121227644be99dc9edb0f9";
 
-    
-    // dev
-    // uid = '279d0664343d1bba04';    
-    // uid = 'a0565c5d4697e8b1b9';
     let isLogin = false;
     let isMember = false;
+    let isMopita = true;
     let licenseKey = '';
-    let siteId = await siteid();
-    
-    // uid = 'a0565c5d4697e8b1b9';
-    // Validating User ID
+    let isAfterApiSucess = true;
+
+    let siteId = await siteid(); 
+    // ci = "R000002770";   
+    // uid = '279d0664343d1bba04';
     isLogin = validateUserId(uid);
 
-    //dev
-    //isLogin = true;
-
     if(isLogin){
-
+        let siteDataList = await getSiteInfo(siteId);                        
+        let siteData = siteDataList.data[0];   
+        isMopita = siteData.isMopita;
+        
         if(!isNullOrEmpty(ci)){
             const subscriptionData =  await checkSubscriptionByService(uid,ci);
+            
             if(subscriptionData != null && subscriptionData != undefined){
-                isMember = true;
-                if(subscriptionData.licensekey != null){
+                isMember = true;               
+                if(!isMopita && ordid){      
+                    try {
+                        let afterPayResponse = await fetch(
+                            `/api/mopita/afterpay?siteMode=0&order=${ordid}`
+                        );                                            
+                        // let afterPayResponse = {
+                        //     json: async () => ({
+                        //         success: true,
+                        //         result: {
+                        //             buyid: "2024121227644be99dc9edb0f9",
+                        //             service_name: "[STG]バングラライセンス管理システム 550円（税込）",
+                        //             amount: "550",
+                        //             buy_date: "20250205",
+                        //             reentryflg: "1",
+                        //             campaigntype: "0",
+                        //             result: {
+                        //                 code: "I0000",
+                        //                 args: "successfully completed"
+                        //             }
+                        //         }
+                        //     })
+                        // };
+                                            
+                        const afterPayData = await afterPayResponse.json(); // Parse response                                       
+                        if (afterPayData?.result?.result?.code === "I000") {                                    
+                            if (afterPayData.result.buyid === ordid) {
+                                isAfterApiSucess = true;
+                            } else {
+                                isAfterApiSucess = false;
+                            }
+                        } else {
+                            isAfterApiSucess = false;
+                        }
+                    } catch (error) {
+                        console.error("Error in payment processing:", error);
+                        isAfterApiSucess = false;
+                    }            
+                }
+                else{
+                    isAfterApiSucess = true;
+                }
+
+                if(subscriptionData.licensekey != null){                    
                     licenseKey = subscriptionData.licensekey;
                 }
                 else{
                     try{
-                        let siteDataList = await getSiteInfo(siteId);
-                        let siteData = siteDataList.data[0];
-        
-                        if(siteData.source.toLowerCase() == 'webapi'){
-                            
-                            let _url = siteData.reglink;
-                            
-        
+                                                     
+                        if(siteData.source.toLowerCase() == 'webapi'){                            
+                            let _url = siteData.reglink;                                    
                             _url = _url.replace('{cs}',subscriptionData.cs);
                             _url = _url.replace('{ci}',subscriptionData.ci);
                             _url = _url.replace('{uid}',uid);
@@ -162,30 +133,27 @@ export async function getServerSideProps(context) {
                     catch(error){
                         console.log(error);
                         licenseKey = 'You have already subscribed, but license key is unavailable right now. Please try again later.';
-                    }
-                   
-    
+                    }                       
                 }
                 
             }
         }
-    }    
-    // Pass the login status as a prop to the component.
-    return { props: {
+    }  
+
+    return { props: {        
         isLogin: isLogin,
         logincat: logincat,
         isMember: isMember,
-        licenseKey: licenseKey
+        licenseKey: licenseKey,
+        isAfterApiSucess:isAfterApiSucess,
     } };
 }
 
-export default function MemberPage({isLogin,logincat,isMember,licenseKey}) {     
+export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfterApiSucess}) {     
     const router = useRouter(); // Router instance for navigation control.
-
-    // State variables for managing data and application behavior.
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [notifications, setNotifications] = useState([]);
-    const [announcements, setAnnouncements] = useState([]);
+    const [announcements, setAnnouncements] = useState([]);    
 
     let loginCatCookieData = Cookies.get('logincat') || null;
     if(logincat){
@@ -237,7 +205,7 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey}) {
             console.log("Error fetching site information:", error);
         }
     };
-    // isMember = true;
+
     useEffect(() => {
         if(!isLogin){
             router.push('/');
@@ -247,9 +215,11 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey}) {
         }
         getSiteInformation();
     }, [router]);
-
+  
     return (
         <Layout>  
+            {isAfterApiSucess ? (
+                <>
             {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
             {isLogin && isMember && (
                 <MemberPageComponent licenseKey={licenseKey} />  
@@ -294,7 +264,19 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey}) {
                 >
                     Top
                 </button>                       
-            </div>                                  
+            </div>    
+            </>
+            ) : (              
+                <>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <br/>
+                    <div className={styles.errorMessage}>
+                        <p>⚠️ Something went wrong. Please try again later.</p>
+                    </div>
+                </>  
+            )}                              
         </Layout>
     );
 }

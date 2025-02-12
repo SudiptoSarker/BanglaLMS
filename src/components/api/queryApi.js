@@ -183,6 +183,20 @@ export const getSiteInfo = async (siteId)=>{
     return await calltoApi(query,values);
 };
 
+//get member table data by siteid,uid and licensekey
+export const fetchMemberData = async (siteId,muid,licenseKey)=>{
+    // const query = `
+    //         SELECT * FROM [dbo].[membertable]
+    //         WHERE ismember = 1 and siteid=${siteId} and muid='${muid}' and licensekey='${licenseKey}'`;
+    const query = `
+            SELECT mt.*, s.isMopita
+            FROM [dbo].[membertable] AS mt
+            INNER JOIN sites AS s ON s.id = mt.siteid
+            WHERE mt.ismember = 1 and mt.siteid=${siteId} and muid='${muid}' and licensekey='${licenseKey}'`;
+    const values = [];
+    return await calltoApi(query,values);
+};
+
 export const updateLicenseKey = async (id, licenseKey, validity) => {    
     let updateQuery = `update membertable set licensekey = '${licenseKey}', validity = '${validity}' where id = ${id}; SELECT @@ROWCOUNT  AS affectedRow;`;
 
