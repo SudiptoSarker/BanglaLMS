@@ -46,7 +46,7 @@ export async function getServerSideProps(context) {
                                             
                         const afterPayData = await afterPayResponse.json(); // Parse response                                       
                         if (afterPayData?.result?.result?.code === "I000") {                                    
-                            if (afterPayData.result.buyid === ordid) {
+                            if (afterPayData.result.buyid === subscriptionData.orderId) {
                                 isAfterApiSucess = true;
                             } else {
                                 isAfterApiSucess = false;
@@ -197,45 +197,45 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfter
     return (
         <Layout>  
             {isAfterApiSucess ? (
-                <>
-            {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
-            {isLogin && isMember && (
-                <MemberPageComponent licenseKey={licenseKey} />  
-            )} 
+            <>
+                {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
+                {isLogin && isMember && (
+                    <MemberPageComponent licenseKey={licenseKey} />  
+                )} 
 
-            {/* Header section */}
-            <HeaderComponent  />   
+                {/* Header section */}
+                <HeaderComponent  />   
 
-            {/* Notification section */}          
-            {notifications.map((notification, index) => (
-                <NotificationComponent
-                key={index}
-                text={notification.text}
-                href={notification.link}
-                />
-            ))}    
-
-            {/* Announcement section */}                                                
-            {announcements.map((announcement, index) => (
-                <AnnounceComponent 
+                {/* Notification section */}          
+                {notifications.map((notification, index) => (
+                    <NotificationComponent
                     key={index}
-                    {...announcement}          
-                />
-            ))}
+                    text={notification.text}
+                    href={notification.link}
+                    />
+                ))}    
 
-            {/* Feature section */}        
-            <FeatureSection  />                              
+                {/* Announcement section */}                                                
+                {announcements.map((announcement, index) => (
+                    <AnnounceComponent 
+                        key={index}
+                        {...announcement}          
+                    />
+                ))}
 
-            <div className={styles.buttonContainer}>
-                {/* Back button to return to the previous page */}
-                <button
-                    className={styles.backButton}
-                    type="button"
-                    onClick={() => router.push('/top')}
-                >
-                    Top
-                </button>                       
-            </div>    
+                {/* Feature section */}        
+                <FeatureSection  />                              
+
+                <div className={styles.buttonContainer}>
+                    {/* Back button to return to the previous page */}
+                    <button
+                        className={styles.backButton}
+                        type="button"
+                        onClick={() => router.push('/top')}
+                    >
+                        Top
+                    </button>                       
+                </div>    
             </>
             ) : (              
                 <>
