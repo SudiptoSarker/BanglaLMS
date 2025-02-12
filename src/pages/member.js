@@ -15,8 +15,9 @@ import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTa
 import styles from '../components/site/member/memberpage.module.css';
 export async function getServerSideProps(context) {
     const {query} = context;
-    let uid = query.uid;
+    let uid = query.uid;    
     let ci = query.ci;
+    // ci = "R000002770";   
     let logincat = query.logincat || null;
     let ordid = query.ordid || null;    
     let isLogin = false;
@@ -223,14 +224,7 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfter
             ))}
 
             {/* Feature section */}        
-            <FeatureSection  />     
-
-            {/* Show subscription buttons if authenticated but not subscribed to the service */}
-            {(isLogin && !isMember) && (
-                subscriptionData.map((option, index) => (
-                    <SubscriptionButton key={index} data={option} />
-                ))
-            )}     
+            <FeatureSection  />                              
 
             <div className={styles.buttonContainer}>
                 {/* Back button to return to the previous page */}

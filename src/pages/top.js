@@ -22,9 +22,10 @@ import TopPageComponent from "@/components/site/top/toppagecomponent";
 
 // Subscription-related component.
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
+import ShortcutSubscription from "@/components/site/shortcut/subscription/shortcutsubscription";
 
 // API utility functions for fetching site-related data.
-import { fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResourceCatByUid } from "@/components/api/queryApi";
+import { fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResourceCatByUid,getSiteInfo } from "@/components/api/queryApi";
 
 // Helper utilities.
 import { siteid,validateUserId,checkSubscription } from '@/helper/helper';
@@ -43,9 +44,7 @@ export async function getServerSideProps(context) {
     // Extract user ID (uid) from the query parameters.
     let uid = query.uid;
     let logincat = query.logincat || null;
-    // dev
     // uid = '279d0664343d1bba04';
-
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
 
@@ -65,6 +64,7 @@ export async function getServerSideProps(context) {
     
     // Pass the login status as a prop to the component.
     return { props: {
+        userId: uid,
         isLogin: isLogin,
         logincat: logincat,
         isMember: isMember,
@@ -73,13 +73,14 @@ export async function getServerSideProps(context) {
     } };
 }
 
-export default function TopPage({isLogin,logincat,isMember,skippableCategories,skippableResources}) {
+export default function TopPage({userId,isLogin,logincat,isMember,skippableCategories,skippableResources}) {
     const router = useRouter(); // Router instance for navigation control.
     
     // State variables to store various data sets.
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
+    const [isMopita,setIsMopita] =useState(true);
 
     let loginCatCookieData = Cookies.get('logincat') || null;
     if(logincat){
@@ -88,6 +89,20 @@ export default function TopPage({isLogin,logincat,isMember,skippableCategories,s
 
         logincat = loginCatCookieData;
     }
+
+    // Function to fetch subscription data for the site.
+    const getSiteInfoData = async (siteId) => {                
+        try {            
+            const response = await getSiteInfo(siteId);            
+            if (response?.data?.length > 0) {
+                const siteInfo = response.data[0]; 
+                setIsMopita(siteInfo.isMopita);
+            }
+            
+        } catch (error) {
+            console.log("Error fetching subscription data:", error);
+        }
+    };
 
     // Function to fetch subscription data for a specific site ID.
     const getSubscriptionData = async (siteId) => {
@@ -123,7 +138,7 @@ export default function TopPage({isLogin,logincat,isMember,skippableCategories,s
     const getSiteInformation = async () => {
         try {
              const siteId = await siteid();   
-
+             getSiteInfoData(siteId);
              getSubscriptionData(siteId);       
              getNotifications(siteId);
              getAnnouncements(siteId);        
@@ -169,13 +184,17 @@ export default function TopPage({isLogin,logincat,isMember,skippableCategories,s
 
             {/* Display subscription options if user is authenticated but not subscribed. */}                        
             {(isLogin) && (
-                subscriptionData.map((option, index) => {
-                    if(!skippableCategories.includes(option.category)){
-                        return <SubscriptionButton key={index} data={option} />
-                    }
-                })
-            )}
-
+                subscriptionData
+                    .filter(option => !skippableCategories.includes(option.category))
+                    .map((option, index) =>
+                        isMopita ? (
+                            <SubscriptionButton key={index} data={option} user={userId} />
+                        ) : (
+                            <ShortcutSubscription key={index} data={option} user={userId} isLogin={isLogin}/>
+                        )
+                    )
+            )}            
+            
             {/* Display TopPageComponent if user is authenticated and subscribed. */}
             {isLogin && isMember && (
                 <>

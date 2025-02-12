@@ -10,7 +10,8 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
   const handleSubscriptionPurchase = async (resource, user) => {
     try{
       if(resource && user){
-        const paylist = await fetch(`/api/mopita/paylist?serviceID=${resource}&user=${user}`);
+        // const paylist = await fetch(`/api/mopita/paylist?serviceID=${resource}&user=${user}`);
+        const paylist = await fetch(`/api/mopita/paylist?siteMode=0&service=${resource}`)
         const result = await paylist.json();
         return result;
       }
