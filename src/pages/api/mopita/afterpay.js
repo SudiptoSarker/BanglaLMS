@@ -11,10 +11,10 @@ export default async function handler(req, res) {
         const access_key = process.env.NEXT_PUBLIC_MOPITA_ACCESS_KEY; // get access key from environment variable
         const secret_key = process.env.NEXT_PUBLIC_MOPITA_SECURITY_KEY; // get secret key from environment variable
 
-        const { service, siteMode, action, type, order } = req.query; // extract information from query parameters
+        const { siteMode, order } = req.query; // extract information from query parameters
 
         // Validate required parameters
-        if(!access_key || !secret_key || !service || !siteMode || !action || !type || !order) {
+        if(!access_key || !secret_key || !siteMode || !order) {
             throw new Error('Missing required parameters');
         }
 
@@ -49,9 +49,6 @@ export default async function handler(req, res) {
             'iai_atms': formattedDate,
 
             'iai_ordid': order,
-            'iai_rid': service,
-            'iai_paytype': type,
-            'iai_act': action,
         }
 
         // Request Encoded
