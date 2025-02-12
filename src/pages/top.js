@@ -24,6 +24,9 @@ import TopPageComponent from "@/components/site/top/toppagecomponent";
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import ShortcutSubscription from "@/components/site/shortcut/subscription/shortcutsubscription";
 
+// Logout components.
+import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+
 // API utility functions for fetching site-related data.
 import { fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResourceCatByUid,getSiteInfo } from "@/components/api/queryApi";
 
@@ -43,6 +46,7 @@ export async function getServerSideProps(context) {
 
     // Extract user ID (uid) from the query parameters.
     let uid = query.uid || null;
+    // uid = '279d0664343d1bba04';  
     let logincat = query.logincat || null;
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -209,6 +213,7 @@ export default function TopPage({userId,isLogin,logincat,isMember,skippableCateg
                 </>  
             )}
 
+            {isLogin && <LogoutButton />}
             <br />
         </Layout>
     );

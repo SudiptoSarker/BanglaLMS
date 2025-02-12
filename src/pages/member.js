@@ -6,6 +6,10 @@ import NotificationComponent from "@/components/site/notificationbanner/notifica
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
+
+// Logout components.
+import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+
 import { fetchSubscriptionData, fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import Cookies from 'js-cookie';
 import { siteid,validateUserId,isNullOrEmpty,checkSubscriptionByService } from '@/helper/helper';
@@ -14,7 +18,8 @@ import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTa
 import styles from '../components/site/member/memberpage.module.css';
 export async function getServerSideProps(context) {
     const {query} = context;
-    let uid = query.uid;    
+    let uid = query.uid;  
+    // uid = '279d0664343d1bba04';  
     let ci = query.ci;
     // ci = "R000002770";   
     let logincat = query.logincat || null;
@@ -127,7 +132,8 @@ export async function getServerSideProps(context) {
     } };
 }
 
-export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfterApiSucess}) {     
+export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfterApiSucess}) {  
+    isAfterApiSucess = false;   
     const router = useRouter(); // Router instance for navigation control.
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [notifications, setNotifications] = useState([]);
@@ -247,7 +253,8 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfter
                         <p>⚠️ Something went wrong. Please try again later.</p>
                     </div>
                 </>  
-            )}                              
+            )}   
+            {isLogin && <LogoutButton />}
         </Layout>
     );
 }

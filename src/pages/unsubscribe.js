@@ -7,6 +7,9 @@ import Layout from "@/components/site/layout/layout";
 // Unsubscribe component
 import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribecomponent";
 
+// Logout components.
+import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+
 // API utility functions for fetching data.
 import { fetchSubscriptionData,getServiceList } from "@/components/api/queryApi";
 import { siteid,validateUserId } from '@/helper/helper';
@@ -21,7 +24,7 @@ export async function getServerSideProps(context) {
 
     // Extract user ID (uid) from the query parameters.
     let uid = query.uid;
-
+    // uid = '279d0664343d1bba04';
     // dev
     // uid = '279d0664343d1bba04';
 
@@ -70,7 +73,7 @@ export default function UnsubscribePage({isLogin,userId}) {
     useEffect(() => {
         // If user is not logged in, redirect the user to the login page.
         if(!isLogin){
-            // router.push('/');
+            router.push('/');
         }
         // Call function to fetch site-related information.        
         getSiteInformation();
@@ -82,7 +85,8 @@ export default function UnsubscribePage({isLogin,userId}) {
         // Main layout wrapping the page structure.
         <Layout>          
             {/* Render each unsubscription option using the UnsubscribeComponent. */}                               
-            <UnsubscribeComponent data={unSubscriptionData} />              
+            <UnsubscribeComponent data={unSubscriptionData} />     
+            {isLogin && <LogoutButton />}         
         </Layout>
     );
 }
