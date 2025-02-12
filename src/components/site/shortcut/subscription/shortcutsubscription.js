@@ -6,12 +6,11 @@ import PaymentList from './paymentList';
 import LoginRequired  from './loginrequired';
 import { getPaymentData } from "@/components/api/queryApi";
 
-function ShortcutSubscription({ data, user = null, isLogin }) {
+function ShortcutSubscription({ data, user = null, isLogin,siteMode }) {
   const handleSubscriptionPurchase = async (resource, user) => {
     try{
       if(resource && user){
-        // const paylist = await fetch(`/api/mopita/paylist?serviceID=${resource}&user=${user}`);
-        const paylist = await fetch(`/api/mopita/paylist?siteMode=0&service=${resource}`)
+        const paylist = await fetch(`/api/mopita/paylist?siteMode=${siteMode}&service=${resource}`)
         const result = await paylist.json();
         return result;
       }
@@ -49,13 +48,13 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
       const result = await handleSubscriptionPurchase(ciValue, user);
             
       if (result?.result?.paytypelist) {
-        const response1 = result.result.paytypelist;        
+        const paylistResponse = result.result.paytypelist;        
         
-        const response = await getPaymentData();    
-        const response2 = response.data;
+        const payTypeResponse = await getPaymentData();    
+        const payTypeData = payTypeResponse.data;
 
-        const response3 = response1.map(item => {
-          const matchingPayment = response2.find(pay => pay.code === item.paytype_info.paytype);
+        const filteredPaylistData = paylistResponse.map(item => {
+          const matchingPayment = payTypeData.find(pay => pay.code === item.paytype_info.paytype);
       
           return {
               paytype_info: {
@@ -65,7 +64,7 @@ function ShortcutSubscription({ data, user = null, isLogin }) {
               }
           };
         });
-        setPaymentMethods(response3);       
+        setPaymentMethods(filteredPaylistData);       
       }      
     } else {
       console.warn("CI value or user is missing");

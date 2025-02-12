@@ -42,9 +42,8 @@ export async function getServerSideProps(context) {
     let siteId = await siteid();
 
     // Extract user ID (uid) from the query parameters.
-    let uid = query.uid;
+    let uid = query.uid || null;
     let logincat = query.logincat || null;
-    // uid = '279d0664343d1bba04';
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
 
@@ -81,6 +80,7 @@ export default function TopPage({userId,isLogin,logincat,isMember,skippableCateg
     const [announcements, setAnnouncements] = useState([]);
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [isMopita,setIsMopita] =useState(true);
+    const [siteMode,setSiteMode] =useState(0);
 
     let loginCatCookieData = Cookies.get('logincat') || null;
     if(logincat){
@@ -96,7 +96,8 @@ export default function TopPage({userId,isLogin,logincat,isMember,skippableCateg
             const response = await getSiteInfo(siteId);            
             if (response?.data?.length > 0) {
                 const siteInfo = response.data[0]; 
-                setIsMopita(siteInfo.isMopita);
+                setIsMopita(siteInfo.isMopita);                
+                setSiteMode(siteInfo.isProduction ? 1 : 0);                
             }
             
         } catch (error) {
@@ -190,7 +191,7 @@ export default function TopPage({userId,isLogin,logincat,isMember,skippableCateg
                         isMopita ? (
                             <SubscriptionButton key={index} data={option} user={userId} />
                         ) : (
-                            <ShortcutSubscription key={index} data={option} user={userId} isLogin={isLogin}/>
+                            <ShortcutSubscription key={index} data={option} user={userId} isLogin={isLogin} siteMode={siteMode}/>
                         )
                     )
             )}            

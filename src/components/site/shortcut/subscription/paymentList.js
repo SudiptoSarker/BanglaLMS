@@ -1,8 +1,7 @@
 import { useState } from "react";
 import styles from "./paymentList.module.css";
 
-export default function PaymentList({ isOpen, onClose, paymentMethods = [], formId, ci }) {
-  console.log("Payment Methods:",paymentMethods);
+export default function PaymentList({ isOpen, onClose, paymentMethods = [], formId, ci,siteMode }) {
   if (!isOpen) return null;
 
   const [selectedMethod, setSelectedMethod] = useState(null);
@@ -15,19 +14,13 @@ export default function PaymentList({ isOpen, onClose, paymentMethods = [], form
 
   const handleConfirm = async () => {
     if (selectedMethod) {     
-      const selectedPayment = paymentMethods.find(method => method.paytype_info.paytype === selectedMethod);
-      const siteMode = 0;
+      const selectedPayment = paymentMethods.find(method => method.paytype_info.paytype === selectedMethod);      
       const serviceID = ci;
       const payType = selectedMethod;
-  
-      console.log("Form ID:", formId);
-      console.log("CI Value:", ci);
-      console.log("Selected Payment Method:", selectedMethod);      
-      console.log("Selected Payment Link:", selectedPayment.paytype_info.payment_link);
-  
-      const response = await fetch(`/api/mopita/beforepay?siteMode=${siteMode}&service=${serviceID}&type=${payType}&action=reg`)
-      const responseJsonData = await response.json();
-      let responseCode = responseJsonData.result.result.code;
+
+      const beforePayResponse = await fetch(`/api/mopita/beforepay?siteMode=${siteMode}&service=${serviceID}&type=${payType}&action=reg`)
+      const jsonData = await beforePayResponse.json();
+      let responseCode = jsonData.result.result.code;
       responseCode = "I000"
   
       if (responseCode === "I000") {
@@ -39,7 +32,7 @@ export default function PaymentList({ isOpen, onClose, paymentMethods = [], form
           console.error("Form element or payment link is missing.");
         }
       } else {
-        console.log(responseJsonData.result.result.args);        
+        console.log(jsonData.result.result.args);        
       }      
     }
   };

@@ -138,11 +138,7 @@ export const fetchNotificationsAndAnnouncements = async (siteId, sectionname) =>
     const values = [];
     return await calltoApi(query,values);
 };
-export const fetchNotifications = async (siteId, sectionname) => {
-    const query = `SELECT * FROM [dbo].[${siteId}_textlinks] WHERE section LIKE '${sectionname}_%'`;    
-    const values = [];
-    return await calltoApi(query,values);
-};
+
 /**
  * Retrieves planner's Footer data to show on the page.
  * Planner's Footer data filter by site primary key and planner's design section name.
@@ -158,6 +154,7 @@ export const getMemberList = async (siteId,ci,uid) => {
     const values = [];
     return await calltoApi(query,values);
 };
+
 export const insertMember = async (memberObject) => {
     let insertQuery = `insert into membertable (siteid,ci,muid,orderId,ordertime,paytype,ismember,licensekey,validity,cs,category) values
                         ('${memberObject.siteId}','${memberObject.ci}','${memberObject.uid}','${memberObject.orderId}','${memberObject.orderTime}','${memberObject.payType}',${memberObject.isMember},null, null,'${memberObject.cs}',${memberObject.category}); SELECT SCOPE_IDENTITY() AS newId;`;
@@ -165,6 +162,7 @@ export const insertMember = async (memberObject) => {
     const values = [];
     return await calltoApi(insertQuery,values);
 };
+
 export const createUserLog = async (userLog) => {    
     let query = `
                 INSERT INTO userlogs (muid, pagelink, activity, time)
@@ -179,20 +177,6 @@ export const getSiteInfo = async (siteId)=>{
             SELECT id, name, source, reglink, rellink, sourcetable AS tableName,isProduction,isMopita
             FROM [dbo].[sites]
             WHERE active = 1 and id=${siteId}`;
-    const values = [];
-    return await calltoApi(query,values);
-};
-
-//get member table data by siteid,uid and licensekey
-export const fetchMemberData = async (siteId,muid,licenseKey)=>{
-    // const query = `
-    //         SELECT * FROM [dbo].[membertable]
-    //         WHERE ismember = 1 and siteid=${siteId} and muid='${muid}' and licensekey='${licenseKey}'`;
-    const query = `
-            SELECT mt.*, s.isMopita
-            FROM [dbo].[membertable] AS mt
-            INNER JOIN sites AS s ON s.id = mt.siteid
-            WHERE mt.ismember = 1 and mt.siteid=${siteId} and muid='${muid}' and licensekey='${licenseKey}'`;
     const values = [];
     return await calltoApi(query,values);
 };
@@ -231,6 +215,7 @@ export const getMemberResourceCatByUid = async (uid,siteId) => {
     const values = [];
     return await calltoApi(query,values);
 };
+
 export const getServiceList = async (siteId,uid) => {    
     const query = `select ci from membertable where siteid='${siteId}' and muid='${uid}' and ismember=1`;
     const values = [];
@@ -242,8 +227,8 @@ export const deleteDataFromMemberTable = async (siteid, muid,ci) => {
     const values = [];
     return await calltoApi(query,values);
 };
-export const getPaymentData = async (paymentCode) => {    
-    // const query = `select * from paymenttype where code=${paymentCode}`;
+
+export const getPaymentData = async (paymentCode) => {        
     const query = `select * from paymenttype`;
     const values = [];
     return await calltoApi(query,values);

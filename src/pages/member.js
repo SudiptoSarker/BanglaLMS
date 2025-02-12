@@ -6,7 +6,6 @@ import NotificationComponent from "@/components/site/notificationbanner/notifica
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
-import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import { fetchSubscriptionData, fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import Cookies from 'js-cookie';
 import { siteid,validateUserId,isNullOrEmpty,checkSubscriptionByService } from '@/helper/helper';
@@ -23,6 +22,7 @@ export async function getServerSideProps(context) {
     let isLogin = false;
     let isMember = false;
     let isMopita = true;
+    let siteMode = 0;
     let licenseKey = '';
     let isAfterApiSucess = true;
     let siteId = await siteid(); 
@@ -31,8 +31,8 @@ export async function getServerSideProps(context) {
     if(isLogin){
         let siteDataList = await getSiteInfo(siteId);                        
         let siteData = siteDataList.data[0];   
-        isMopita = siteData.isMopita;
-        
+        isMopita = siteData.isMopita;              
+        siteMode = siteData.isProduction ? 1 : 0;
         if(!isNullOrEmpty(ci)){
             const subscriptionData =  await checkSubscriptionByService(uid,ci);
             
@@ -41,7 +41,7 @@ export async function getServerSideProps(context) {
                 if(!isMopita && ordid){      
                     try {
                         let afterPayResponse = await fetch(
-                            `/api/mopita/afterpay?siteMode=0&order=${ordid}`
+                            `/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
                         );                                                                   
                                             
                         const afterPayData = await afterPayResponse.json(); // Parse response                                       

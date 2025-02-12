@@ -86,6 +86,7 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [loginData, setLoginData] = useState([]);
     const [isMopita,setIsMopita] =useState(true);
+    const [siteMode,setSiteMode] =useState(0);
 
     let loginCatCookieData = Cookies.get('logincat') || null;
     if(logincat){
@@ -102,6 +103,7 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
             if (response?.data?.length > 0) {
                 const siteInfo = response.data[0]; 
                 setIsMopita(siteInfo.isMopita);
+                setSiteMode(siteInfo.isProduction ? 1 : 0);                     
             }
             
         } catch (error) {
@@ -201,7 +203,7 @@ export default function HomePage({ userId,isLogin, logincat, isMember,skippableC
                     isMopita ? (
                         <SubscriptionButton key={index} data={option} user={userId} />
                     ) : (
-                        <ShortcutSubscription key={index} data={option} user={userId} isLogin={isLogin}/>
+                        <ShortcutSubscription key={index} data={option} user={userId} isLogin={isLogin} siteMode={siteMode}/>
                     )
                 )
             }
