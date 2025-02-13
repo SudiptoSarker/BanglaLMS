@@ -92,8 +92,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffecec; /* Light red background */
-    color: #b1252a; /* Dark red text */
+    background-color: #ffecec; 
+    color: #b1252a; 
     font-size: 16px;
     font-weight: 600;
     padding: 12px 20px;
@@ -104,9 +104,8 @@
     max-width: 600px;
     width: 100%;
 
-    /* Centering with extra spacing */
-    position: fixed;
-    top: 55%; /* Adjusted from 50% to give more space above */
+    position: relative;
+    top: 23px; 
     left: 50%;
     transform: translate(-50%, -45%);
 }

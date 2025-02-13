@@ -19,9 +19,9 @@ import styles from '../components/site/member/memberpage.module.css';
 export async function getServerSideProps(context) {
     const {query} = context;
     let uid = query.uid;  
-    // uid = '279d0664343d1bba04';  
+    uid = '279d0664343d1bba04';  
     let ci = query.ci;
-    // ci = "R000002770";   
+    ci = "R000002770";   
     let logincat = query.logincat || null;
     let ordid = query.ordid || null;    
     let isLogin = false;
@@ -132,7 +132,8 @@ export async function getServerSideProps(context) {
     } };
 }
 
-export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfterApiSucess}) {           
+export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfterApiSucess}) {       
+    isAfterApiSucess = false;
     const router = useRouter(); // Router instance for navigation control.
     const [subscriptionData, setSubscriptionData] = useState([]);
     const [notifications, setNotifications] = useState([]);
