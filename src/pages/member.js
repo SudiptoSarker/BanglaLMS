@@ -17,7 +17,7 @@ import { useRouter } from "next/router";
 import { getSiteInfo,updateLicenseKey,getLicenseList,deactivateLicenseInSourceTable } from "@/components/api/queryApi";
 import styles from '../components/site/member/memberpage.module.css';
 export async function getServerSideProps(context) {
-    const {query} = context;
+    const {req, query} = context;
     let uid = query.uid;  
     uid = '279d0664343d1bba04';  
     let ci = query.ci;
@@ -43,11 +43,12 @@ export async function getServerSideProps(context) {
             
             if(subscriptionData != null && subscriptionData != undefined){
                 isMember = true;               
-                // if(!isMopita && ordid){      
-                //     try {
-                //         let afterPayResponse = await fetch(
-                //             `https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
-                //         );                                                                   
+                if(!isMopita && ordid){    
+                    const baseURL = `https://${process.env.NEXT_PUBLIC_DOMAIN}`;
+                    try {
+                        let afterPayResponse = await fetch(
+                            `${baseURL}/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
+                        );                                                                   
                                             
                 //         const afterPayData = await afterPayResponse.json(); // Parse response                                       
                 //         if (afterPayData?.result?.result?.code === "I000") {                                    
