@@ -21,7 +21,6 @@ export default function PaymentList({ isOpen, onClose, paymentMethods = [], form
       const beforePayResponse = await fetch(`/api/mopita/beforepay?siteMode=${siteMode}&service=${serviceID}&type=${payType}&action=reg`)
       const jsonData = await beforePayResponse.json();
       let responseCode = jsonData.result.result.code;
-      responseCode = "I000"
   
       if (responseCode === "I000") {
         const formElement = document.getElementById(formId);
