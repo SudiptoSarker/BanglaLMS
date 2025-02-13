@@ -51,11 +51,12 @@ export async function getServerSideProps(context) {
                                             
                         const afterPayData = await afterPayResponse.json(); // Parse response                                       
                         if (afterPayData?.result?.result?.code === "I000") {                                    
-                            if (afterPayData.result.buyid === subscriptionData.orderId) {
-                                isAfterApiSucess = true;
-                            } else {
-                                isAfterApiSucess = false;
-                            }
+                            // if (afterPayData.result.buyid === subscriptionData.orderId) {
+                            //     isAfterApiSucess = true;
+                            // } else {
+                            //     isAfterApiSucess = false;
+                            // }
+                            isAfterApiSucess = true;
                         } else {
                             isAfterApiSucess = false;
                         }
