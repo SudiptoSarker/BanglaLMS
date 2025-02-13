@@ -19,9 +19,9 @@ import styles from '../components/site/member/memberpage.module.css';
 export async function getServerSideProps(context) {
     const {query} = context;
     let uid = query.uid;  
-    // uid = '279d0664343d1bba04';  
+    uid = '279d0664343d1bba04';  
     let ci = query.ci;
-    // ci = "R000002770";   
+    ci = "R000002770";   
     let logincat = query.logincat || null;
     let ordid = query.ordid || null;    
     let isLogin = false;
@@ -43,31 +43,31 @@ export async function getServerSideProps(context) {
             
             if(subscriptionData != null && subscriptionData != undefined){
                 isMember = true;               
-                if(!isMopita && ordid){      
-                    try {
-                        let afterPayResponse = await fetch(
-                            `/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
-                        );                                                                   
+                // if(!isMopita && ordid){      
+                //     try {
+                //         let afterPayResponse = await fetch(
+                //             `https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
+                //         );                                                                   
                                             
-                        const afterPayData = await afterPayResponse.json(); // Parse response                                       
-                        if (afterPayData?.result?.result?.code === "I000") {                                    
-                            // if (afterPayData.result.buyid === subscriptionData.orderId) {
-                            //     isAfterApiSucess = true;
-                            // } else {
-                            //     isAfterApiSucess = false;
-                            // }
-                            isAfterApiSucess = true;
-                        } else {
-                            isAfterApiSucess = false;
-                        }
-                    } catch (error) {
-                        console.error("Error in payment processing:", error);
-                        isAfterApiSucess = false;
-                    }            
-                }
-                else{
-                    isAfterApiSucess = true;
-                }
+                //         const afterPayData = await afterPayResponse.json(); // Parse response                                       
+                //         if (afterPayData?.result?.result?.code === "I000") {                                    
+                //             // if (afterPayData.result.buyid === subscriptionData.orderId) {
+                //             //     isAfterApiSucess = true;
+                //             // } else {
+                //             //     isAfterApiSucess = false;
+                //             // }
+                //             isAfterApiSucess = true;
+                //         } else {
+                //             isAfterApiSucess = false;
+                //         }
+                //     } catch (error) {
+                //         console.error("Error in payment processing:", error);
+                //         isAfterApiSucess = false;
+                //     }            
+                // }
+                // else{
+                //     isAfterApiSucess = true;
+                // }
 
                 if(subscriptionData.licensekey != null){                    
                     licenseKey = subscriptionData.licensekey;
@@ -146,6 +146,29 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfter
 
         logincat = loginCatCookieData;
     }
+
+    const getAfterPaymentData = async (ordid) => {
+        try {
+            let afterPayResponse = await fetch(
+                `https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
+            );                                                                   
+                                
+            const afterPayData = await afterPayResponse.json(); // Parse response                                       
+            if (afterPayData?.result?.result?.code === "I000") {                                    
+                // if (afterPayData.result.buyid === subscriptionData.orderId) {
+                //     isAfterApiSucess = true;
+                // } else {
+                //     isAfterApiSucess = false;
+                // }
+                isAfterApiSucess = true;
+            } else {
+                isAfterApiSucess = false;
+            }
+        } catch (error) {
+            console.error("Error in payment processing:", error);
+            isAfterApiSucess = false;
+        }    
+    };
 
     // Fetch subscription data from the API.
     const getSubscriptionData = async (siteId) => {
