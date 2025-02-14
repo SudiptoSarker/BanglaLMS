@@ -113,7 +113,7 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isMopit
     const router = useRouter();
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);    
-    const [isAfterApiSucess, setIsAfterApiSucess] = useState(null);     
+    const [isAfterApiSucess, setIsAfterApiSucess] = useState(true);     
     const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     let loginCatCookieData = Cookies.get('logincat') || null;
@@ -128,7 +128,7 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isMopit
         try {
             let afterPayResponse = await fetch(
                 `/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
-            );                                                                   
+            );                                                                 
                                 
             const afterPayData = await afterPayResponse.json();                         
             if (afterPayData?.result?.result?.code === "I000") {                                                    
@@ -174,11 +174,13 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isMopit
 
             getNotifications(siteId);
             getAnnouncements(siteId);
+            setTimeout(() => {
+                setIsPageLoaded(true);
+            }, 1000);
+            
         } catch (error) {
             console.log("Error fetching site information:", error);
-        }finally {            
-            setIsPageLoaded(true); 
-        }  
+        } 
     };
 
     useEffect(() => {
@@ -196,10 +198,6 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isMopit
             {!isPageLoaded ? (
                 <div className={styles.loaderContainer}>
                     <img src="/loader.gif" alt="Loading..." className={styles.loader} />
-                </div>
-            ) : isAfterApiSucess === null ? ( // Prevent rendering until we have a definite true/false
-                <div className={styles.loaderContainer}>
-                    <img src="/loader.gif" alt="Checking status..." className={styles.loader} />
                 </div>
             ) : isAfterApiSucess ? (
                 <>
