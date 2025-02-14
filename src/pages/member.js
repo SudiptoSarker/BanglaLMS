@@ -19,17 +19,18 @@ import styles from '../components/site/member/memberpage.module.css';
 export async function getServerSideProps(context) {
     const {req, query} = context;
     let uid = query.uid;  
-    uid = '279d0664343d1bba04';  
+    //dev testing
+    // uid = '279d0664343d1bba04';  
     let ci = query.ci;
-    ci = "R000002770";   
+    //dev testing
+    // ci = "R000002770";   
     let logincat = query.logincat || null;
     let ordid = query.ordid || null;    
     let isLogin = false;
     let isMember = false;
     let isMopita = true;
     let siteMode = 0;
-    let licenseKey = '';
-    let isAfterApiSucess = true;
+    let licenseKey = '';    
     let siteId = await siteid(); 
     isLogin = validateUserId(uid);
 
@@ -42,51 +43,7 @@ export async function getServerSideProps(context) {
             const subscriptionData =  await checkSubscriptionByService(uid,ci);
             
             if(subscriptionData != null && subscriptionData != undefined){
-                isMember = true;               
-                if(!isMopita && ordid){    
-                    const baseURL = `https://${process.env.NEXT_PUBLIC_DOMAIN}`;
-                    // try {
-                    //     // let afterPayResponse = await fetch(
-                    //     //     `${baseURL}/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
-                    //     // );                                                                   
-                    //     let afterPayResponse = await fetch(`https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=0&order=aKOrnVMQRmbpAbdQYV27SnqEw3O4OWZQWMlTHSBWlqs=`);       
-                    //     const afterPayData = await afterPayResponse.json(); // Parse response                                       
-                    //     if (afterPayData?.result?.result?.code === "I000") {                                    
-                    //         // if (afterPayData.result.buyid === subscriptionData.orderId) {
-                    //         //     isAfterApiSucess = true;
-                    //         // } else {
-                    //         //     isAfterApiSucess = false;
-                    //         // }
-                    //         isAfterApiSucess = true;
-                    //     } else {
-                    //         isAfterApiSucess = false;
-                    //     }
-                    // } catch (error) {
-                    //     console.error("Error in payment processing:", error);
-                    //     isAfterApiSucess = false;
-                    // }     
-                    
-                    try {
-                        let afterPayResponse = await fetch(`https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=0&order=aKOrnVMQRmbpAbdQYV27SnqEw3O4OWZQWMlTHSBWlqs=`);
-                        let textResponse = await afterPayResponse.text(); // Get raw response
-                        console.log("Raw API Response:", textResponse); // Log response before parsing
-                        
-                        const afterPayData = JSON.parse(textResponse); // Now try parsing it manually
-                        if (afterPayData?.result?.result?.code === "I000") {                                    
-                            isAfterApiSucess = true;
-                        } else {
-                            isAfterApiSucess = false;
-                        }
-                    } catch (error) {
-                        console.error("Error in payment processing:", error);
-                        isAfterApiSucess = false;
-                    }
-                    
-                }
-                else{
-                    isAfterApiSucess = true;
-                }
-
+                isMember = true;                              
                 if(subscriptionData.licensekey != null){                    
                     licenseKey = subscriptionData.licensekey;
                 }
@@ -146,15 +103,18 @@ export async function getServerSideProps(context) {
         logincat: logincat,
         isMember: isMember,
         licenseKey: licenseKey,
-        isAfterApiSucess:isAfterApiSucess,
+        isMopita:isMopita,
+        ordid:ordid,
+        siteMode:siteMode,
     } };
 }
 
-export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfterApiSucess}) {           
-    const router = useRouter(); // Router instance for navigation control.
-    const [subscriptionData, setSubscriptionData] = useState([]);
+export default function MemberPage({isLogin,logincat,isMember,licenseKey,isMopita,ordid,siteMode}) {           
+    const router = useRouter();
     const [notifications, setNotifications] = useState([]);
     const [announcements, setAnnouncements] = useState([]);    
+    const [isAfterApiSucess, setIsAfterApiSucess] = useState(null);     
+    const [isPageLoaded, setIsPageLoaded] = useState(false);
 
     let loginCatCookieData = Cookies.get('logincat') || null;
     if(logincat){
@@ -164,37 +124,22 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfter
         logincat = loginCatCookieData;
     }
 
-    const getAfterPaymentData = async (ordid) => {
+    const getAfterPaymentData = async (siteMode,ordid) => {        
         try {
             let afterPayResponse = await fetch(
-                `https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
+                `/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
             );                                                                   
                                 
-            const afterPayData = await afterPayResponse.json(); // Parse response                                       
-            if (afterPayData?.result?.result?.code === "I000") {                                    
-                // if (afterPayData.result.buyid === subscriptionData.orderId) {
-                //     isAfterApiSucess = true;
-                // } else {
-                //     isAfterApiSucess = false;
-                // }
-                isAfterApiSucess = true;
+            const afterPayData = await afterPayResponse.json();                         
+            if (afterPayData?.result?.result?.code === "I000") {                                                    
+                setIsAfterApiSucess(true);
             } else {
-                isAfterApiSucess = false;
+                setIsAfterApiSucess(false);
             }
         } catch (error) {
             console.error("Error in payment processing:", error);
-            isAfterApiSucess = false;
-        }    
-    };
-
-    // Fetch subscription data from the API.
-    const getSubscriptionData = async (siteId) => {
-        try {
-            const response = await fetchSubscriptionData(siteId, "DeviceSubscriptionButton");
-            setSubscriptionData(response.data);
-        } catch (error) {
-            console.log("Error fetching subscription data:", error);
-        }
+            setIsAfterApiSucess(false);
+        }  
     };
     
     // Fetch notifications data from the API.
@@ -218,16 +163,22 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfter
     };
 
     // Retrieve all site information (subscription, notifications, announcements).
-    const getSiteInformation = async () => {
+    const getSiteInformation = async () => {        
+        setIsPageLoaded(false); 
         try {
             const siteId = await siteid();
+            
+            if(!isMopita && ordid){
+                getAfterPaymentData(siteMode,ordid);
+            }
 
-            getSubscriptionData(siteId);
             getNotifications(siteId);
             getAnnouncements(siteId);
         } catch (error) {
             console.log("Error fetching site information:", error);
-        }
+        }finally {            
+            setIsPageLoaded(true); 
+        }  
     };
 
     useEffect(() => {
@@ -241,68 +192,46 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isAfter
     }, [router]);
   
     return (
-        <Layout>  
-            {isAfterApiSucess ? (
-            <>
-                {/* Show MemberPageComponent only if authenticated and subscribed to the service */}
-                {isLogin && isMember && (
-                    <MemberPageComponent licenseKey={licenseKey} />  
-                )} 
-
-                {/* Header section */}
-                <HeaderComponent  />   
-
-                {/* Notification section */}          
-                {notifications.map((notification, index) => (
-                    <NotificationComponent
-                    key={index}
-                    text={notification.text}
-                    href={notification.link}
-                    />
-                ))}    
-
-                {/* Announcement section */}                                                
-                {announcements.map((announcement, index) => (
-                    <AnnounceComponent 
-                        key={index}
-                        {...announcement}          
-                    />
-                ))}
-
-                {/* Feature section */}        
-                <FeatureSection  />                              
-
-                <div className={styles.buttonContainer}>
-                    {/* Back button to return to the previous page */}
-                    <button
-                        className={styles.backButton}
-                        type="button"
-                        onClick={() => router.push('/top')}
-                    >
-                        Top
-                    </button>                       
-                </div>    
-            </>
-            ) : (              
-                <>                    
+        <Layout>
+            {!isPageLoaded ? (
+                <div className={styles.loaderContainer}>
+                    <img src="/loader.gif" alt="Loading..." className={styles.loader} />
+                </div>
+            ) : isAfterApiSucess === null ? ( // Prevent rendering until we have a definite true/false
+                <div className={styles.loaderContainer}>
+                    <img src="/loader.gif" alt="Checking status..." className={styles.loader} />
+                </div>
+            ) : isAfterApiSucess ? (
+                <>
+                    {isLogin && isMember && <MemberPageComponent licenseKey={licenseKey} />}
+                    <HeaderComponent />
+                    {notifications.map((notification, index) => (
+                        <NotificationComponent key={index} text={notification.text} href={notification.link} />
+                    ))}
+                    {announcements.map((announcement, index) => (
+                        <AnnounceComponent key={index} {...announcement} />
+                    ))}
+                    <FeatureSection />
+                    <div className={styles.buttonContainer}>
+                        <button className={styles.backButton} type="button" onClick={() => router.push('/top')}>
+                            Top
+                        </button>
+                    </div>
+                    {isLogin && <LogoutButton />}
+                </>
+            ) : (
+                <>
                     <div className={styles.errorMessage}>
                         <p>⚠️ Something went wrong. Please try again later.</p>
                     </div>
-
                     <div className={styles.buttonContainer}>
-                    {/* Back button to return to the previous page */}
-                    <button
-                        className={styles.backButton}
-                        type="button"
-                        onClick={() => router.push('/top')}
-                    >
-                        Top
-                    </button>                       
-                </div>  
-                </>  
-            )}   
-            
-            {isLogin && <LogoutButton />}
+                        <button className={styles.backButton} type="button" onClick={() => router.push('/top')}>
+                            Top
+                        </button>
+                    </div>
+                    {isLogin && <LogoutButton />}
+                </>
+            )}            
         </Layout>
     );
 }
