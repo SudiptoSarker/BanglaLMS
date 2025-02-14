@@ -45,30 +45,47 @@ export async function getServerSideProps(context) {
                 isMember = true;               
                 if(!isMopita && ordid){    
                     const baseURL = `https://${process.env.NEXT_PUBLIC_DOMAIN}`;
+                    // try {
+                    //     // let afterPayResponse = await fetch(
+                    //     //     `${baseURL}/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
+                    //     // );                                                                   
+                    //     let afterPayResponse = await fetch(`https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=0&order=aKOrnVMQRmbpAbdQYV27SnqEw3O4OWZQWMlTHSBWlqs=`);       
+                    //     const afterPayData = await afterPayResponse.json(); // Parse response                                       
+                    //     if (afterPayData?.result?.result?.code === "I000") {                                    
+                    //         // if (afterPayData.result.buyid === subscriptionData.orderId) {
+                    //         //     isAfterApiSucess = true;
+                    //         // } else {
+                    //         //     isAfterApiSucess = false;
+                    //         // }
+                    //         isAfterApiSucess = true;
+                    //     } else {
+                    //         isAfterApiSucess = false;
+                    //     }
+                    // } catch (error) {
+                    //     console.error("Error in payment processing:", error);
+                    //     isAfterApiSucess = false;
+                    // }     
+                    
                     try {
-                        let afterPayResponse = await fetch(
-                            `${baseURL}/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
-                        );                                                                   
-                                            
-                //         const afterPayData = await afterPayResponse.json(); // Parse response                                       
-                //         if (afterPayData?.result?.result?.code === "I000") {                                    
-                //             // if (afterPayData.result.buyid === subscriptionData.orderId) {
-                //             //     isAfterApiSucess = true;
-                //             // } else {
-                //             //     isAfterApiSucess = false;
-                //             // }
-                //             isAfterApiSucess = true;
-                //         } else {
-                //             isAfterApiSucess = false;
-                //         }
-                //     } catch (error) {
-                //         console.error("Error in payment processing:", error);
-                //         isAfterApiSucess = false;
-                //     }            
-                // }
-                // else{
-                //     isAfterApiSucess = true;
-                // }
+                        let afterPayResponse = await fetch(`https://stgbanglalms.mopita.com/api/mopita/afterpay?siteMode=0&order=aKOrnVMQRmbpAbdQYV27SnqEw3O4OWZQWMlTHSBWlqs=`);
+                        let textResponse = await afterPayResponse.text(); // Get raw response
+                        console.log("Raw API Response:", textResponse); // Log response before parsing
+                        
+                        const afterPayData = JSON.parse(textResponse); // Now try parsing it manually
+                        if (afterPayData?.result?.result?.code === "I000") {                                    
+                            isAfterApiSucess = true;
+                        } else {
+                            isAfterApiSucess = false;
+                        }
+                    } catch (error) {
+                        console.error("Error in payment processing:", error);
+                        isAfterApiSucess = false;
+                    }
+                    
+                }
+                else{
+                    isAfterApiSucess = true;
+                }
 
                 if(subscriptionData.licensekey != null){                    
                     licenseKey = subscriptionData.licensekey;
@@ -119,8 +136,7 @@ export async function getServerSideProps(context) {
                         console.log(error);
                         licenseKey = 'You have already subscribed, but license key is unavailable right now. Please try again later.';
                     }                       
-                }
-                
+                }                
             }
         }
     }  
