@@ -8,7 +8,7 @@ import UnsubscribedComponent from "@/components/site/unsubscription/unsubscribed
 
 
 // Logout components.
-import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+import LogoutButton from '@/components/site/logoutbutton/logoutbutton';
 
 // API utility functions for fetching data.
 import { fetchSubscriptionData,getServiceList } from "@/components/api/queryApi";

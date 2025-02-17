@@ -21,10 +21,10 @@ import ShortcutSubscription from "@/components/site/shortcut/subscription/shortc
 
 // Login components.
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
-import ShortcutLogin from '@/components/site/shortcut/login/shortcutlogincomponent';
+import ShortcutLogin from '@/components/site/shortcut/login/shortcutlogin';
 
 // Logout components.
-import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+import LogoutButton from '@/components/site/logoutbutton/logoutbutton';
 
 // Top-page components.
 import TopPageComponent from "@/components/site/top/toppagecomponent";

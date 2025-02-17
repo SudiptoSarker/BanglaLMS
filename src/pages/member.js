@@ -8,7 +8,7 @@ import FeatureSection from "@/components/site/feature/featurecomponent";
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
 
 // Logout components.
-import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+import LogoutButton from '@/components/site/logoutbutton/logoutbutton';
 
 import { fetchSubscriptionData, fetchNotificationsAndAnnouncements } from "@/components/api/queryApi";
 import Cookies from 'js-cookie';

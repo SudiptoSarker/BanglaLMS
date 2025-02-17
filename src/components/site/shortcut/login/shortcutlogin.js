@@ -10,14 +10,16 @@ import { fetchShortcutLoginURL } from "@/components/api/queryApi";
 function ShortcutLogin({ data }) {     
   const [shortUrl,setShortUrl] = useState('');
   const [srcMrkt,setSrcMrkt] = useState('');  
+  const [loginCat,setLogincat] = useState('');  
 
   const getShortcutLoginURL = async (loginOption) => {                
     try {            
         const response = await fetchShortcutLoginURL(loginOption);        
         if (response?.data?.length > 0) {
-            const loginInfo = response.data[0];  // Extract the first object from response.data array
+            const loginInfo = response.data[0];  // Extract the first object from response.data array            
             setShortUrl(loginInfo.link);   
             setSrcMrkt(loginInfo.srcMrkt);
+            setLogincat(loginInfo.logincat);
         }
         
     } catch (error) {
@@ -38,7 +40,7 @@ function ShortcutLogin({ data }) {
   }, []); 
   return (       
     <section>
-      {data?.formid && shortUrl && data?.nl && data?.cl && data?.fl && srcMrkt ? (
+      {data?.formid && shortUrl && data?.nl && data?.cl && data?.fl && loginCat ? (
         <form id={data.formid} method="post" action={shortUrl}>
           <p>
           <button className={styles.googleLoginBtn} type="submit">
@@ -56,6 +58,7 @@ function ShortcutLogin({ data }) {
           <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />
           <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />
           <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value={srcMrkt} />
+          <input type="hidden" name="iai_logincat" className={styles.hiddenInput} value={loginCat} />
         </form>
       ) : null}
     </section>

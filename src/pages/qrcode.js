@@ -9,8 +9,8 @@ import SubscriptionInfo from "@/components/site/subscriptioninformation/subscrip
 import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptionbuttoncomponent";
 import ShortcutSubscription from "@/components/site/shortcut/subscription/shortcutsubscription";
 import LoginButton from "@/components/site/loginbutton/loginbuttoncomponent";
-import ShortcutLogin from '@/components/site/shortcut/login/shortcutlogincomponent';
-import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+import ShortcutLogin from '@/components/site/shortcut/login/shortcutlogin';
+import LogoutButton from '@/components/site/logoutbutton/logoutbutton';
 import TopPageComponent from "@/components/site/top/toppagecomponent";
 import { fetchLoginData, fetchSubscriptionData, fetchNotificationsAndAnnouncements, getMemberResourceCatByUid, getSiteInfo } from "@/components/api/queryApi";
 import { siteid, validateUserId, checkSubscription } from '@/helper/helper';

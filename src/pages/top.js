@@ -25,7 +25,7 @@ import SubscriptionButton from "@/components/site/subscriptionbutton/subscriptio
 import ShortcutSubscription from "@/components/site/shortcut/subscription/shortcutsubscription";
 
 // Logout components.
-import LogoutButton from '@/components/site/logoutbutton/logoutbuttoncomponent';
+import LogoutButton from '@/components/site/logoutbutton/logoutbutton';
 
 // API utility functions for fetching site-related data.
 import { fetchSubscriptionData,fetchNotificationsAndAnnouncements,getMemberResourceCatByUid,getSiteInfo } from "@/components/api/queryApi";
