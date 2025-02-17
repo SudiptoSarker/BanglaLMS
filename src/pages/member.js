@@ -127,9 +127,8 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isMopit
     const getAfterPaymentData = async (siteMode,ordid) => {        
         try {
             let afterPayResponse = await fetch(
-                `/api/mopita/afterpay?siteMode=${siteMode}&order=${ordid}`
-            );                                                                 
-                                
+                `/api/mopita/afterpay?siteMode=${siteMode}&order=${encodeURIComponent(ordid)}`
+            );                                              
             const afterPayData = await afterPayResponse.json();                         
             if (afterPayData?.result?.result?.code === "I000") {                                                    
                 setIsAfterApiSucess(true);
