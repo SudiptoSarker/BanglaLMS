@@ -41,8 +41,9 @@ function ShortcutSubscription({ data, user = null, isLogin,siteMode }) {
     }
   
     // Get the value of the hidden input field with name="ci"
-    const ciValue = document.querySelector(`input[name="ci"]`)?.value;
-  
+    // const ciValue = document.querySelector(`input[name="ci"]`)?.value;
+    const ciValue = data.ci;
+    
     if (ciValue && user) {
       // Call the handleSubscriptionPurchase function with ciValue and user
       const result = await handleSubscriptionPurchase(ciValue, user);
