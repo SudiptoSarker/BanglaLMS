@@ -29,12 +29,21 @@ export default function TestPage({siteMode}) {
         console.log(result);       
     }
 
+    const handleIDCheck = async (muid) => {
+        const response = await fetch(`/api/mopita/idcheck?siteMode=${siteMode}&muid=${muid}`)
+        const result = await response.json();
+        console.log(result);       
+    }
+
     return (
         // Main layout wrapping the page structure.
         <Layout>                 
-            <button onClick={() => handlePaylist('R000002750')}>Paylist</button>
+            {/* <button onClick={() => handlePaylist('R000002750')}>Paylist</button>
             <button onClick={() => handleBeforePay('R000002750', '00')}>Before Pay</button>         
-            <button onClick={() => handleAfterPay('R000002750', '00', '0iUNJX%2Bdz%2Bfpf3GbYXoDdG8Acexp%2BQlL1uAQ%2BXVx2oY%3D')}>After Pay</button>         
+            <button onClick={() => handleAfterPay('R000002750', '00', '0iUNJX%2Bdz%2Bfpf3GbYXoDdG8Acexp%2BQlL1uAQ%2BXVx2oY%3D')}>After Pay</button>          */}
+
+            <input type="text" placeholder="Mopita ID" id="muid" name="muid"/>
+            <button onClick={() => handleIDCheck(document.getElementById('muid').value)}>MUID Check</button>
                       
         </Layout>
     );
