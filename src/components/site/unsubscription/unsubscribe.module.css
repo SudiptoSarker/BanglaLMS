@@ -1,60 +1,59 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center align items */
+  align-items: center; 
   max-width: 906px;
-  margin: 0 auto; /* Center the container */
-  padding: 20px; /* Add padding around the container */
+  margin: 0 auto; 
+  padding: 20px; 
   color: #000;
   font-family: 'Inter', sans-serif;
 }
 
 .title {
-  color: rgba(0, 128, 0, 0.8); /* Slightly darker green */
-  font-size: 24px; /* Increased font size */
+  color: rgba(0, 128, 0, 0.8);
+  font-size: 24px; 
   line-height: 1.2;
   text-align: center;
-  margin-bottom: 20px; /* Space below title */
+  margin-bottom: 20px;
 }
 
 .warning {
   text-align: center;
-  font-size: 15px; /* Slightly larger font size */
-  color: #b1252a; /* Red color for warning */
-  margin: 20px 0; /* Space above and below */
-  padding: 0 15px; /* Add padding for small screens */
+  font-size: 15px; 
+  color: #b1252a; 
+  margin: 20px 0;
+  padding: 0 15px; 
 }
 
 .featureSection {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the feature section */
+  align-items: center;
   width: 100%;
-  margin-top: 20px; /* Adjust margin for spacing */
-  padding: 0 20px; /* Padding for responsiveness */
+  margin-top: 20px; 
+  padding: 0 20px; 
 }
 
 .featureTitle {
-  font-size: 24px; /* Font size for feature title */
-  color: rgba(0, 128, 0, 0.8); /* Darker green */
+  font-size: 24px; 
+  color: rgba(0, 128, 0, 0.8); 
   text-align: center;
-  margin-bottom: 15px; /* Space below title */
+  margin-bottom: 15px;
 }
 
 .featureList {
-  list-style-type: disc; /* Use bullet points */
-  padding-left: 20px; /* Indent the list */
-  text-align: left; /* Left-align list items for readability */
-  margin: 0; /* Remove default margin */
-  color: #333; /* Darker color for text */
-  font-size: 15px; /* Consistent font size */
+  list-style-type: disc; 
+  padding-left: 20px; 
+  text-align: left; 
+  margin: 0; 
+  color: #333; 
+  font-size: 15px; 
 }
-
 .cancellationSection {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center align the cancellation section */
-  margin-top: 40px; /* Space above section */
+  align-items: center; 
+  margin-top: 40px; 
 }
 
 .cancellationTitle {
@@ -69,60 +68,49 @@
 .cancellationInstructions,
 .farewell {
   text-align: center;
-  margin: 15px 0; /* Space above and below */
-  font-size: 15px; /* Consistent font size */
+  margin: 15px 0; 
+  font-size: 15px; 
 }
 
 .buttonContainer {
   display: flex;
-  flex-direction: column; /* Stack buttons vertically */
-  align-items: center; /* Center buttons */
-  margin-top: 30px; /* Space above button container */
+  flex-direction: column; 
+  align-items: center; 
+  margin-top: 30px; 
 }
 .button {
-  border-radius: 10px; /* Rounded corners */
-  background-color: #66b574; /* Green background */
-  min-height: 40px; /* Decrease the minimum height */
-  width: 200px; /* Full width on small screens */
-  max-width: 400px; /* Increase max width */
-  color: #fff; /* White text */
+  border-radius: 10px;
+  background-color: #66b574; 
+  min-height: 40px; 
+  width: 200px;
+  max-width: 400px; 
+  color: #fff; 
   text-align: center;
-  padding: 5px; /* Reduced padding for smaller height */
-  border: 2px solid #55a063; /* Border with a slightly darker shade */
+  padding: 5px; 
+  border: 2px solid #55a063; 
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover */
-  margin-bottom: 15px; /* Space between buttons */
-  font-size: 15px; /* Consistent font size for buttons */
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 15px; 
+  font-size: 15px; 
 }
-
-/* .backButton {
-  composes: button;
-} */
 .backButton {
-  /* Directly include styles from .button */
-  border-radius: 10px; /* Rounded corners */
-  background-color: #66b574; /* Green background */
-  min-height: 40px; /* Decrease the minimum height */
-  width: 200px; /* Full width on small screens */
-  max-width: 400px; /* Increase max width */
-  color: #fff; /* White text */
+  border-radius: 10px; 
+  background-color: #66b574; 
+  min-height: 40px; 
+  width: 200px; 
+  max-width: 400px; 
+  color: #fff;
   text-align: center;
-  padding: 5px; /* Reduced padding for smaller height */
-  border: 2px solid #55a063; /* Border with a slightly darker shade */
+  padding: 5px; 
+  border: 2px solid #55a063; 
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover */
-  margin-bottom: 15px; /* Space between buttons */
-  font-size: 15px; /* Consistent font size for buttons */
+  transition: background-color 0.3s, transform 0.2s;
+  margin-bottom: 15px; 
+  font-size: 15px; 
 }
-/* .cancelButton {
-  composes: button; 
-  background-color: #b1252a;
-  border: 2px solid #9f1d2b;
-} */
 .cancelButton {
-  /* Copy and modify styles from .button */
-  border-radius: 10px; /* Rounded corners */
-  background-color: #b1252a; /* Red background for cancel button */
+  border-radius: 10px;
+  background-color: #b1252a;
   min-height: 40px;
   width: 200px;
   max-width: 400px;
@@ -137,15 +125,15 @@
 }
 .backButton:hover,
 .cancelButton:hover {
-  transform: translateY(-2px); /* Slight lift effect on hover */
+  transform: translateY(-2px); 
 }
 
 .backButton:hover {
-  background-color: #57a057; /* Darker shade on hover for back button */
+  background-color: #57a057; 
 }
 
 .cancelButton:hover {
-  background-color: #a1191f; /* Darker shade on hover for cancel button */
+  background-color: #a1191f;
 }
 
 @media (max-width: 768px) {
@@ -155,21 +143,21 @@
   .thankYouMessage,
   .cancellationInstructions,
   .farewell {
-    font-size: 15px; /* Responsive font size */
-    padding: 0 10px; /* Padding for small screens */
+    font-size: 15px; 
+    padding: 0 10px; 
   }
 
   .button {
-    width: 90%; /* More flexible button width */
+    width: 90%; 
   }
 }
 
 @media (max-width: 480px) {
   .title {
-    font-size: 24px; /* Smaller title on mobile */
+    font-size: 24px; 
   }
 
   .button {
-    width: 90%; /* More flexible button width */
+    width: 90%; 
   }
 }

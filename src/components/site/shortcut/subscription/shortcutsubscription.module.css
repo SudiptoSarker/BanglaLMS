@@ -1,51 +1,91 @@
 .button {
-    border-radius: 8px;
-    background-color: rgba(92, 76, 76, 0.57);
-    width: 100%; 
-    max-width: 619px;
-    color: #fff;
-    text-align: center;
-    padding: 15px 20px; 
-    font: 700 14px/1 Inter, sans-serif;
-    border: 1px solid #b1252a;
-    margin: 0 auto 20px auto; 
-    display: flex; 
-    justify-content: center; 
-    align-items: center; 
-    cursor: pointer;
-    white-space: nowrap;
-    overflow: hidden; 
-    text-overflow: ellipsis; 
+  border-radius: 8px;
+  background-color: rgba(92, 76, 76, 0.57);
+  width: 100%;
+  max-width: 619px;
+  color: #fff;
+  text-align: center;
+  padding: 15px 20px;
+  font: 700 14px/1 Inter, sans-serif;
+  border: 1px solid #b1252a;
+  margin: 0 auto 20px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  background-color: rgba(255, 255, 255, 0.8); 
+  border-radius: 50%; 
+  padding: 4px; 
+}
+.deviceInfo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  white-space: nowrap;
+}
+.deviceLabel {
+  font: 11px Abel, sans-serif;
+  margin: 0;
+}
+.deviceCount {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.countNumber {
+  font: 28px Abel, sans-serif;
+}
+.countUnit {
+  font: 11px Abel, sans-serif;
+}
+.subscriptionInfo {
+  margin-top: 0;
+  font: 11px Abel, sans-serif;
+  white-space: nowrap;
+}
+.loaderOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; 
+}
+.loaderContent {
+  text-align: center;
+}
+.loader {
+  width: 50px; 
+  height: 50px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .deviceInfo {
-    display: flex;
-    gap: 10px; 
-    align-items: center; 
-    white-space: nowrap;
+  100% {
+    transform: rotate(360deg);
   }
-  
-  .deviceLabel {
-    font: 11px Abel, sans-serif;
-    margin: 0; 
-  }
-  
-  .deviceCount {
-    display: flex;
-    gap: 3px;
-    align-items: center; 
-  }
-  
-  .countNumber {
-    font: 28px Abel, sans-serif;
-  }
-  
-  .countUnit {
-    font: 11px Abel, sans-serif;
-  }
-  
-  .subscriptionInfo {
-    margin-top: 0; 
-    font: 11px Abel, sans-serif;
-    white-space: nowrap; 
-  }
+}
+
+.loaderContent p {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #333;
+}

@@ -24,7 +24,7 @@ function ServiceConfirm() {
   const decodedToken = tokenData?.token ? atob(decodeURIComponent(tokenData.token)) : 'N/A';
 
   // Set countdown duration (e.g., 2 minutes)
-  const countdownDuration = 300; // in seconds
+  const countdownDuration = 60; // in seconds
 
   // Calculate dynamic thresholds for timer status
   const dangerThreshold = countdownDuration * 0.2; // Last 20% of the countdown
@@ -64,14 +64,11 @@ function ServiceConfirm() {
   const fetchMemberDetails = async () => {
     try {
       const response = await fetchMemberData(decodedToken); // Pass the decoded token as a parameter
-      console.log('API Response:', response);
       if (response?.data?.length > 0) {
         const memberData = response.data[0]; // Extract the first object from response.data array
-        console.log('Member Data:', memberData);
 
         // Extract ordertime and format it as 'YYYY-MM-DD'
         const orderTime = memberData.ordertime;
-        console.log('orderTime:', orderTime);
         const formattedJoiningDate = formatDate(orderTime);
         setJoiningDate(formattedJoiningDate);
 

@@ -10,7 +10,6 @@
     align-items: center;
     z-index: 1000;
 }
-
 .paymentModalContent {
     background: #fff;
     padding: 20px;
@@ -19,13 +18,11 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 320px;
 }
-
 .paymentModalContent h2 {
     color: #333;
     margin-bottom: 15px;
     font-size: 20px;
 }
-
 .paymentOption {
     display: block;
     width: 100%;
@@ -38,11 +35,9 @@
     font-size: 16px;
     transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
-
 .paymentOption:hover {
     background-color: #ddd;
 }
-
 .selectedPayment {
     background: gray;
     color: white;
@@ -51,26 +46,22 @@
     transform: scale(1.05);
     transition: all 0.2s ease-in-out;
 }
-
 .selectedPayment:hover {
     background: gray;
     box-shadow: 0 0 15px gray;
     transform: scale(1.08);
 }
-
 .selectedPayment:active {
     background: gray; 
     box-shadow: 0 2px 6px gray; 
     transform: scale(1.03);
 }
-
 .buttonContainer {
     display: flex;
     justify-content: flex-end; 
     gap: 10px;
     margin-top: 10px;
 }
-
 .confirmButton,
 .closePaymentButton {
     padding: 8px 12px; 
@@ -78,24 +69,48 @@
     border-radius: 5px;
     cursor: pointer;
 }
-
 .confirmButton {
     background-color: #28a745;
     color: white;
     border: none;
 }
-
 .confirmButton:disabled {
     background-color: #ccc;
     cursor: not-allowed;
 }
-
 .closePaymentButton {
     background-color: #ff5e57;
     color: white;
     border: none;
 }
-
 .closePaymentButton:hover {
     background-color: #ff3c3c;
 }
+.loaderOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(255, 255, 255, 0.8); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001; 
+  }
+  
+  .loader {
+    width: 40px; 
+    height: 40px;
+  }
+  
+  .confirmButton {
+    position: relative; 
+  }
+  
+  .confirmButton img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
