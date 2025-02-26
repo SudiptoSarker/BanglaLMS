@@ -51,12 +51,12 @@ function AnshinStoreQRCode({ licenseKey }) {
     const now = new Date();
     setScannedTime(encodeURIComponent(now.toISOString())); // Store time in ISO format for accuracy
 
-    const interval = setInterval(() => {
-      const now = new Date();
-      setScannedTime(encodeURIComponent(now.toISOString()));
-    }, 1000);
+    // const interval = setInterval(() => {
+    //   const now = new Date();
+    //   setScannedTime(encodeURIComponent(now.toISOString()));
+    // }, 1000);
 
-    return () => clearInterval(interval);
+    // return () => clearInterval(interval);
   }, []);
 
   // Update current time every second

@@ -1,20 +1,19 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center the content */
+  align-items: center; 
   justify-content: center;
-  max-width: 600px; /* Increased max-width for larger screens */
+  max-width: 600px; 
   width: 100%;
   margin: 0 auto;
-  padding: 20px; /* Added padding for breathing space */
-  color: #333; /* Slightly darker text color for readability */
+  padding: 20px; 
+  color: #333; 
   font-family: 'Inter', sans-serif;
   text-align: center;
 }
-
 .confirmationImage {
-  width: 80%; /* Make image more responsive */
-  max-width: 400px; /* Set max-width for larger screens */
+  width: 80%; 
+  max-width: 400px; 
   margin-top: 20px;
   object-fit: contain;
   object-position: center;
@@ -23,21 +22,21 @@
 .contentWrapper {
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center-align content */
+  align-items: center;
   width: 100%;
   margin-top: 40px;
   padding: 0 20px;
 }
 
 .title {
-  font-size: 28px; /* Increase font size for title */
-  color: rgba(0, 128, 0, 0.85); /* Darker green for emphasis */
+  font-size: 28px;
+  color: rgba(0, 128, 0, 0.85); 
   margin-bottom: 20px;
 }
 
 .thankYouMessage {
-  font-size: 18px; /* Standardize font size for message */
-  color: #555; /* Softer color for secondary text */
+  font-size: 18px;
+  color: #555; 
   margin-bottom: 40px; /* Increased margin for better spacing */
 }
 
