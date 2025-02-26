@@ -1,0 +1,74 @@
+.container {
+    display: flex;
+    max-width: 600px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inter', sans-serif;
+    color: #000;
+    font-weight: 700;
+    text-align: center;
+    padding: 30px;
+    margin: 0 auto;
+    margin-bottom: 30px;
+    background: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .qrContainer {
+    margin-top: 20px;
+    padding: 15px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+  }
+  
+  .countdown {
+    margin-top: 15px;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .timer {
+    color: #e63946;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  
+  .expired {
+    color: #b1252a;
+    font-weight: bold;
+  }
+  
+  .timeDisplay {
+    margin-top: 10px;
+    font-size: 16px;
+    color: red;
+    font-weight: 600;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f1f1f1;
+  }
+  .time {
+    display: inline-block;
+    transition: all 0.3s ease-in-out; 
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+    .qrContainer {
+      padding: 10px;
+    }
+    .countdown, .timeDisplay {
+      font-size: 16px;
+    }
+  }
+  

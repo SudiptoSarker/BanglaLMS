@@ -34,16 +34,24 @@ function ShortcutLogin({ data }) {
             console.log("Error fetching subscription data:", error);
         }
   };
-
+  
   useEffect(() => {
-    getShortcutLoginInfo();
-  }, []); 
+    if (data?.loginOption && data.loginOption.trim() && data.loginOption !== "null") {
+      getShortcutLoginInfo();
+    }    
+  }, [data?.loginOption]);
+  
   return (       
     <section>
-      {data?.formid && shortUrl && data?.nl && data?.cl && data?.fl && loginCat ? (
+      {(typeof data?.formid === "string" && data.formid.trim() &&
+        typeof shortUrl === "string" && shortUrl.trim() &&
+        typeof data?.nl === "string" && data.nl.trim() &&
+        typeof data?.cl === "string" && data.cl.trim() &&
+        typeof data?.fl === "string" && data.fl.trim() &&
+        typeof loginCat === "string" && loginCat.trim()) ? (
         <form id={data.formid} method="post" action={shortUrl}>
           <p>
-          <button className={styles.googleLoginBtn} type="submit">
+            <button className={styles.googleLoginBtn} type="submit">
               {data.buttonhtml ? (
                 <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
               ) : (
@@ -58,11 +66,10 @@ function ShortcutLogin({ data }) {
           <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />
           <input type="hidden" name="iai_shortening" className={styles.hiddenInput} value="1" />
           <input type="hidden" name="iai_src_mrkt" className={styles.hiddenInput} value={srcMrkt} />
-          <input type="hidden" name="iai_logincat" className={styles.hiddenInput} value={loginCat} />
+          <input type="hidden" name="iai_logincat" className={styles.hiddenInput} value={loginCat} />          
         </form>
       ) : null}
     </section>
-
   );
 }
 
