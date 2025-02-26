@@ -233,3 +233,14 @@ export const getPaymentData = async (paymentCode) => {
     const values = [];
     return await calltoApi(query,values);
 };
+export const fetchQRCodeData = async (siteId,section) => {    
+    const query = `select * from [${siteId}_memberqrcode]  where siteid='${siteId}' and section='${section}'`;
+    const values = [];
+    return await calltoApi(query,values);
+};
+
+export const fetchMemberData = async (licenseKey) => {    
+    const query = `select * from membertable where licensekey= '${licenseKey}' `;
+    const values = [];
+    return await calltoApi(query,values);
+};

@@ -18,28 +18,30 @@ function LoginButton({ data }) {
       }
   },[]);
 
+  console.log('data: ',data?.submitlink);
   return (    
     <section>      
-      {data?.formid && data?.submitlink && data?.nl ? (
+      {(typeof data?.formid === "string" && data.formid.trim() && 
+        typeof data?.submitlink === "string" && data.submitlink.trim() && data.submitlink !== "null" && 
+        typeof data?.nl === "string" && data.nl.trim() && data.nl !== "null") ? (
         <form id={data.formid} method="post" action={data.submitlink}>
-              <p>                      
-                <button className={styles.loginForm} type="submit">              
-                  {data.buttonhtml ? (
-                    // If custom button HTML is provided, render it using dangerouslySetInnerHTML
-                    <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
-                  ) : (            
-                    // Default button text                     
-                    <>              
-                      <p>Login</p> 
-                    </>       
-                  )}
-                </button>
-              </p>
-              {/* Hidden input field to include additional form data */}
-              <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />                
-          </form>
-       ) : null}
+          <p>                      
+            <button className={styles.loginForm} type="submit">              
+              {data.buttonhtml ? (
+                <div dangerouslySetInnerHTML={{ __html: data.buttonhtml }} />
+              ) : (            
+                <>              
+                  <p>Login</p> 
+                </>       
+              )}
+            </button>
+          </p>
+          {/* Hidden input field to include additional form data */}
+          <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />                
+        </form>
+      ) : null}
     </section>
+
   );
 }
 

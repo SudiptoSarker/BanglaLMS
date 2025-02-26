@@ -6,6 +6,7 @@ import NotificationComponent from "@/components/site/notificationbanner/notifica
 import AnnounceComponent from "@/components/site/announcebanner/announcecomponent";
 import FeatureSection from "@/components/site/feature/featurecomponent";
 import MemberPageComponent from "@/components/site/member/memberpagecomponent";
+import AnshinStoreQRCode from "@/components/site/anshinstore/qrcode";
 
 // Logout components.
 import LogoutButton from '@/components/site/logoutbutton/logoutbutton';
@@ -199,8 +200,15 @@ export default function MemberPage({isLogin,logincat,isMember,licenseKey,isMopit
                     <img src="/loader.gif" alt="Loading..." className={styles.loader} />
                 </div>
             ) : isAfterApiSucess ? (
-                <>
-                    {isLogin && isMember && <MemberPageComponent licenseKey={licenseKey} />}
+                <>                    
+                    {isLogin && isMember && (
+                        <>
+                            <MemberPageComponent licenseKey={licenseKey} />
+                            <AnshinStoreQRCode licenseKey={licenseKey} />
+                        </>
+                    )}
+
+
                     <HeaderComponent />
                     {notifications.map((notification, index) => (
                         <NotificationComponent key={index} text={notification.text} href={notification.link} />

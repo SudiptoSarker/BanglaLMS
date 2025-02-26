@@ -10,7 +10,9 @@ function ShortcutSubscription({ data, user = null, isLogin,siteMode }) {
   const handleSubscriptionPurchase = async (resource, user) => {
     try{
       if(resource && user){
-        const paylist = await fetch(`/api/mopita/paylist?siteMode=${siteMode}&service=${resource}`)
+        // const paylist = await fetch(`/api/mopita/paylist?siteMode=${siteMode}&service=${resource}`)
+        const paylist = await fetch(`https://stgbanglalms.mopita.com/api/mopita/paylist?siteMode=0&service=R000002750`)
+        
         const result = await paylist.json();
         return result;
       }
@@ -109,6 +111,7 @@ function ShortcutSubscription({ data, user = null, isLogin,siteMode }) {
         <input type="hidden" name="nl" className={styles.hiddenInput} value={data.nl} />
         <input type="hidden" name="cl" className={styles.hiddenInput} value={data.cl} />
         <input type="hidden" name="fl" className={styles.hiddenInput} value={data.fl} />
+        <input type="hidden" name="iai_paytype" className={styles.hiddenInput} value="14" />
       </form>
     ) : null}                
       {isModalOpen && (
