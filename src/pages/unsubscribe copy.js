@@ -11,7 +11,7 @@ import UnsubscribeComponent from "@/components/site/unsubscription/unsubscribeco
 import LogoutButton from '@/components/site/logoutbutton/logoutbutton';
 
 // API utility functions for fetching data.
-import { fetchSubscriptionData,getServiceList,getSiteInfo,getPaymentData } from "@/components/api/queryApi";
+import { fetchSubscriptionData,getServiceList,getSiteInfo } from "@/components/api/queryApi";
 import { siteid,validateUserId } from '@/helper/helper';
 
 // Router for handling client-side navigation in Next.js.
@@ -26,7 +26,7 @@ export async function getServerSideProps(context) {
     let uid = query.uid;
     // uid = '279d0664343d1bba04';
     // dev
-    // uid = '279d0664343d1bba04';
+    uid = '279d0664343d1bba04';
 
     // Validate the user ID: null check,char length check, empty check.
     isLogin = validateUserId(uid);
@@ -56,44 +56,6 @@ export default function UnsubscribePage({isLogin,userId}) {
             console.log("Error fetching subscription data:", error);
         }
     };
-    function updateSubmitLinks(subscribedData, memberResponse, paymentTypeResponse, isMopita) {
-        if (isMopita) return subscribedData; // No changes if isMopita is true
-    
-        // Ensure paymentTypeResponse.data is an array
-        if (!paymentTypeResponse || !Array.isArray(paymentTypeResponse.data)) {
-            console.error("Invalid paymentTypeResponse format:", paymentTypeResponse);
-            return subscribedData;
-        }
-    
-        // Extract data from memberResponse
-        const members = Array.isArray(memberResponse?.data) ? memberResponse.data : [];
-        if (members.length === 0) {
-            console.error("Invalid or empty memberResponse format:", memberResponse);
-            return subscribedData;
-        }
-    
-        // Create a mapping of payment codes to rel_link from paymentTypeResponse.data
-        console.log("paymentTypeResponse", paymentTypeResponse);
-        const paymentTypeMap = {};
-        paymentTypeResponse.data.forEach(payment => {
-            paymentTypeMap[payment.code] = payment.rel_link;
-        });
-    
-        // Iterate through subscribedData and update submitlink if needed
-        return subscribedData.map(subscription => {
-            const member = members.find(m => m.ci === subscription.ci);
-            
-            if (member) {
-                const paytype = member.paytype;
-                if (paymentTypeMap[paytype] && (!subscription.submitlink || subscription.submitlink === "null")) {
-                    return { ...subscription, submitlink: paymentTypeMap[paytype] };
-                }
-            }
-            return subscription;
-        });
-    }
-    
-    
     
     // Function to fetch unsubscription-related data based on the site ID.
     const getSubscriptionData = async (siteId) => {
@@ -101,15 +63,18 @@ export default function UnsubscribePage({isLogin,userId}) {
             const response = await fetchSubscriptionData(siteId,"unsubscriptionbutton");
             
             let subscribedData = response.data;
-            const memberResponse = await getServiceList(siteId,userId);          
+            const memberResponse = await getServiceList(siteId,userId);   
+            console.log("memberResponse",memberResponse); //R000002770
+            //R000002770         
             const ciValues = memberResponse.data.map(item => item.ci);
-            const paymentType = memberResponse.data.map(item => item.paytype);        
-            const paymentTypeResponse = await getPaymentData();
-            
-            const updatedSubscribedData = updateSubmitLinks(subscribedData, memberResponse, paymentTypeResponse, isMopita);
-            console.log("updatedSubscribedData",updatedSubscribedData);
+            const paymentType = memberResponse.data.map(item => item.paytype);
 
-            subscribedData = subscribedData.filter(item => ciValues.includes(item.ci));          
+            console.log("ciValues",ciValues);
+            console.log("paymentType",paymentType);
+            console.log("isMopita",isMopita);
+
+            subscribedData = subscribedData.filter(item => ciValues.includes(item.ci));
+            console.log("subscribedData",subscribedData);            
             setUnubscriptionData(subscribedData);
         } catch (error) {
             console.log("Error fetching subscription data:", error);
@@ -123,6 +88,7 @@ export default function UnsubscribePage({isLogin,userId}) {
             if (response?.data?.length > 0) {
                 const siteInfo = response.data[0]; 
                 setIsMopita(siteInfo.isMopita);
+                setSiteMode(siteInfo.isProduction ? 1 : 0);                     
             }
             
         } catch (error) {

@@ -221,7 +221,7 @@ export const getMemberResourceCatByUid = async (uid,siteId) => {
 };
 
 export const getServiceList = async (siteId,uid) => {    
-    const query = `select ci from membertable where siteid='${siteId}' and muid='${uid}' and ismember=1`;
+    const query = `select * from membertable where siteid='${siteId}' and muid='${uid}' and ismember=1`;
     const values = [];
     return await calltoApi(query,values);
 };
@@ -232,7 +232,7 @@ export const deleteDataFromMemberTable = async (siteid, muid,ci) => {
     return await calltoApi(query,values);
 };
 
-export const getPaymentData = async (paymentCode) => {        
+export const getPaymentData = async () => {        
     const query = `select * from paymenttype`;
     const values = [];
     return await calltoApi(query,values);
