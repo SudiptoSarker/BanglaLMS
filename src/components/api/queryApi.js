@@ -154,7 +154,11 @@ export const getMemberList = async (siteId,ci,uid) => {
     const values = [];
     return await calltoApi(query,values);
 };
-
+export const getMemberListByOrderId = async (siteId,ci,uid,orderId) => {    
+    const query = `select * from membertable where ci = '${ci}' and siteid='${siteId}' and muid='${uid}' and orderId = '${orderId}'`;
+    const values = [];
+    return await calltoApi(query,values);
+};
 export const insertMember = async (memberObject) => {
     let insertQuery = `insert into membertable (siteid,ci,muid,orderId,ordertime,paytype,ismember,licensekey,validity,cs,category) values
                         ('${memberObject.siteId}','${memberObject.ci}','${memberObject.uid}','${memberObject.orderId}','${memberObject.orderTime}','${memberObject.payType}',${memberObject.isMember},null, null,'${memberObject.cs}',${memberObject.category}); SELECT SCOPE_IDENTITY() AS newId;`;
