@@ -148,13 +148,6 @@ export default function ServerTest({isLogin,isMember,licenseKey}) {
         let result = await res.json();
         console.log(result);
     }
-    const handleBeforePayAPI = async()=>{
-        const res = await fetch('/api/mopita-before-pay-api');
-
-          let result = await res.json();
-          console.log(result);
-    }
-
 
     useEffect(() => {
         if(!isLogin){
