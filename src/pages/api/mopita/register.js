@@ -36,6 +36,9 @@ export default async function handler(req, res) {
     try{
 
         let jsonBody = req.body;
+        // let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002770","act":"reg","cs":"20250318181514694","iai_tms":"20250318181514694","iai_paytype":"00","iai_ordid":"2025031873dc1bbb3ce44cf301","arg":""}
+        // console.log('jsonBody',jsonBody);
+        
          cs = jsonBody.cs;
          ci = jsonBody.ci;
          uid = jsonBody.uid;
@@ -45,13 +48,13 @@ export default async function handler(req, res) {
          payType=jsonBody.iai_paytype;
 
         //dev code
-        // cs = '2292932R750';
-        // ci = '2292932R850';
-        // uid = '01675203399';
+        // cs = '20250318181514694';
+        // ci = 'R000002770';
+        // uid = '279d0664343d1bba04';
         // act = 'reg';
-        // orderId = 'ord-2';
-        // orderTime='1.42';
-        // payType='card';
+        // orderId = '2025031873dc1bbb3ce44cf301';
+        // orderTime='20250318181514694';
+        // payType='00';
 
        
         if(isNullOrEmpty(cs) || isNullOrEmpty(ci) || isNullOrEmpty(uid) || isNullOrEmpty(orderId)){
