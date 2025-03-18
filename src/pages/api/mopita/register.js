@@ -22,6 +22,7 @@ export default async function handler(req, res) {
         });
     }
 
+    let siteId = await siteid();
     let isMember = false;
     let activity='request';
 
@@ -66,13 +67,12 @@ export default async function handler(req, res) {
         res.status(200).send('NG¥n');
     }
 
-     // check member by order id
-     //let memberListByOrderId = await getMemberListByOrderId(siteId,ci,uid,orderId);
-     let members = await getMemberList(siteId,ci,uid);
+    // check member
+    let memberList = await getMemberList(siteId,ci,uid);
 
      if(act=='chk'){
-        if(members.data.length > 0){
-                let firstMember = members[0];
+        if(memberList.data.length > 0){
+                let firstMember = memberList[0];
                 if(firstMember.licensekey != null && firstMember.licensekey.length > 0){
                     res.status(200).send('OK¥n');
                 }
@@ -88,12 +88,6 @@ export default async function handler(req, res) {
             // dev
             //let jsonBody = {"uid":"279d0664343d1bba04","ci":"R000002750","act":"reg","cs":"20241001000000000","iai_tms":"20240904192455905","iai_paytype":"00","iai_ordid":"202409046fc1693bf60e81e074","arg":""};
             // let jsonBody = JSON.parse(req.body);
-        
-            
-            let siteId = await siteid();
-
-            // check member
-            let memberList = await getMemberList(siteId,ci,uid);
 
             if(memberList.data.length > 0){
                 isMember = true;
